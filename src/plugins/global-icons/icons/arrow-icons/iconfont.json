@@ -1,0 +1,205 @@
+{
+  "id": "4542648",
+  "name": "arrow",
+  "font_family": "xedia",
+  "css_prefix_text": "rogaluna-icon-",
+  "description": "箭头图标集",
+  "glyphs": [
+    {
+      "icon_id": "5387571",
+      "name": "箭头_列表向右",
+      "font_class": "jiantou_liebiaoxiangyou",
+      "unicode": "eb03",
+      "unicode_decimal": 60163
+    },
+    {
+      "icon_id": "5387573",
+      "name": "箭头_列表收起",
+      "font_class": "jiantou_liebiaoshouqi",
+      "unicode": "eb04",
+      "unicode_decimal": 60164
+    },
+    {
+      "icon_id": "5387574",
+      "name": "箭头_列表向左",
+      "font_class": "jiantou_liebiaoxiangzuo",
+      "unicode": "eb05",
+      "unicode_decimal": 60165
+    },
+    {
+      "icon_id": "5387575",
+      "name": "箭头_切换向下",
+      "font_class": "jiantou_qiehuanxiangxia",
+      "unicode": "eb06",
+      "unicode_decimal": 60166
+    },
+    {
+      "icon_id": "5387576",
+      "name": "箭头_列表展开",
+      "font_class": "jiantou_liebiaozhankai",
+      "unicode": "eb07",
+      "unicode_decimal": 60167
+    },
+    {
+      "icon_id": "5387577",
+      "name": "箭头_切换右",
+      "font_class": "jiantou_qiehuanyou",
+      "unicode": "eb08",
+      "unicode_decimal": 60168
+    },
+    {
+      "icon_id": "5387578",
+      "name": "箭头_切换向上",
+      "font_class": "jiantou_qiehuanxiangshang",
+      "unicode": "eb09",
+      "unicode_decimal": 60169
+    },
+    {
+      "icon_id": "5387579",
+      "name": "箭头_切换左",
+      "font_class": "jiantou_qiehuanzuo",
+      "unicode": "eb0a",
+      "unicode_decimal": 60170
+    },
+    {
+      "icon_id": "5387583",
+      "name": "箭头_向右",
+      "font_class": "jiantou_xiangyou",
+      "unicode": "eb0b",
+      "unicode_decimal": 60171
+    },
+    {
+      "icon_id": "5387584",
+      "name": "箭头_向左",
+      "font_class": "jiantou_xiangzuo",
+      "unicode": "eb0c",
+      "unicode_decimal": 60172
+    },
+    {
+      "icon_id": "5387585",
+      "name": "箭头_向右两次",
+      "font_class": "jiantou_xiangyouliangci",
+      "unicode": "eb0d",
+      "unicode_decimal": 60173
+    },
+    {
+      "icon_id": "5387586",
+      "name": "箭头_上下切换",
+      "font_class": "jiantou_shangxiaqiehuan",
+      "unicode": "eb0e",
+      "unicode_decimal": 60174
+    },
+    {
+      "icon_id": "5387587",
+      "name": "箭头_页面_向上",
+      "font_class": "jiantou_yemian_xiangshang",
+      "unicode": "eb0f",
+      "unicode_decimal": 60175
+    },
+    {
+      "icon_id": "5387588",
+      "name": "箭头_向下",
+      "font_class": "jiantou_xiangxia",
+      "unicode": "eb10",
+      "unicode_decimal": 60176
+    },
+    {
+      "icon_id": "5387589",
+      "name": "箭头_向上",
+      "font_class": "jiantou_xiangshang",
+      "unicode": "eb11",
+      "unicode_decimal": 60177
+    },
+    {
+      "icon_id": "5387590",
+      "name": "箭头_向左两次",
+      "font_class": "jiantou_xiangzuoliangci",
+      "unicode": "eb12",
+      "unicode_decimal": 60178
+    },
+    {
+      "icon_id": "5387591",
+      "name": "箭头_页面_向下",
+      "font_class": "jiantou_yemian_xiangxia",
+      "unicode": "eb13",
+      "unicode_decimal": 60179
+    },
+    {
+      "icon_id": "5387592",
+      "name": "箭头_页面_向右",
+      "font_class": "jiantou_yemian_xiangyou",
+      "unicode": "eb14",
+      "unicode_decimal": 60180
+    },
+    {
+      "icon_id": "5387593",
+      "name": "箭头_右上",
+      "font_class": "jiantou_youshang",
+      "unicode": "eb15",
+      "unicode_decimal": 60181
+    },
+    {
+      "icon_id": "5387594",
+      "name": "箭头_左上",
+      "font_class": "jiantou_zuoshang",
+      "unicode": "eb16",
+      "unicode_decimal": 60182
+    },
+    {
+      "icon_id": "5387595",
+      "name": "箭头_右下",
+      "font_class": "jiantou_youxia",
+      "unicode": "eb17",
+      "unicode_decimal": 60183
+    },
+    {
+      "icon_id": "5387596",
+      "name": "箭头_左右切换",
+      "font_class": "jiantou_zuoyouqiehuan",
+      "unicode": "eb18",
+      "unicode_decimal": 60184
+    },
+    {
+      "icon_id": "5387600",
+      "name": "箭头_左下",
+      "font_class": "jiantou_zuoxia",
+      "unicode": "eb19",
+      "unicode_decimal": 60185
+    },
+    {
+      "icon_id": "5387601",
+      "name": "箭头_页面_向左",
+      "font_class": "jiantou_yemian_xiangzuo",
+      "unicode": "eb1a",
+      "unicode_decimal": 60186
+    },
+    {
+      "icon_id": "5387611",
+      "name": "选择器收起",
+      "font_class": "xuanzeqishouqi",
+      "unicode": "eb1b",
+      "unicode_decimal": 60187
+    },
+    {
+      "icon_id": "5387613",
+      "name": "向左",
+      "font_class": "xiangzuo",
+      "unicode": "eb1c",
+      "unicode_decimal": 60188
+    },
+    {
+      "icon_id": "5387614",
+      "name": "选择器下一个",
+      "font_class": "xuanzeqixiayige",
+      "unicode": "eb1d",
+      "unicode_decimal": 60189
+    },
+    {
+      "icon_id": "5387615",
+      "name": "选择器展开",
+      "font_class": "xuanzeqizhankai",
+      "unicode": "eb1e",
+      "unicode_decimal": 60190
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+@font-face {
+  font-family: "xedia"; /* Project id 4510490 */
+  /* Color fonts */
+  src: 
+       url('iconfont.woff2?t=1714059581194') format('woff2'),
+       url('iconfont.woff?t=1714059581194') format('woff'),
+       url('iconfont.ttf?t=1714059581194') format('truetype');
+}
+
+.xedia {
+  font-family: "xedia" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.rogaluna-icon-file-b-:before {
+  content: "\e652";
+}
+
+.rogaluna-icon-file-b-1:before {
+  content: "\e653";
+}
+
+.rogaluna-icon-file-b-2:before {
+  content: "\e654";
+}
+
+.rogaluna-icon-file-b-3:before {
+  content: "\e655";
+}
+
+.rogaluna-icon-file-b-4:before {
+  content: "\e656";
+}
+
+.rogaluna-icon-file-b-5:before {
+  content: "\e657";
+}
+
+.rogaluna-icon-file-b-6:before {
+  content: "\e658";
+}
+
+.rogaluna-icon-file-b-7:before {
+  content: "\e659";
+}
+
+.rogaluna-icon-file-b-8:before {
+  content: "\e65a";
+}
+
+.rogaluna-icon-file-b-9:before {
+  content: "\e65b";
+}
+
+.rogaluna-icon-file-b-11:before {
+  content: "\e65d";
+}
+
+.rogaluna-icon-file-b-13:before {
+  content: "\e65f";
+}
+
+.rogaluna-icon-file-b-14:before {
+  content: "\e660";
+}
+
+.rogaluna-icon-file-b-15:before {
+  content: "\e661";
+}
+
+.rogaluna-icon-file-b-16:before {
+  content: "\e662";
+}
+
+.rogaluna-icon-file-b-17:before {
+  content: "\e663";
+}
+
+.rogaluna-icon-file-b-19:before {
+  content: "\e665";
+}
+
+.rogaluna-icon-file-s-:before {
+  content: "\e666";
+}
+
+.rogaluna-icon-file-s-1:before {
+  content: "\e667";
+}
+
+.rogaluna-icon-file-s-2:before {
+  content: "\e668";
+}
+
+.rogaluna-icon-file-s-3:before {
+  content: "\e669";
+}
+
+.rogaluna-icon-file-s-4:before {
+  content: "\e66a";
+}
+
+.rogaluna-icon-file-s-5:before {
+  content: "\e66b";
+}
+
+.rogaluna-icon-file-s-6:before {
+  content: "\e66c";
+}
+
+.rogaluna-icon-file-s-7:before {
+  content: "\e66d";
+}
+
+.rogaluna-icon-file-s-8:before {
+  content: "\e66e";
+}
+
+.rogaluna-icon-file-s-9:before {
+  content: "\e66f";
+}
+
+.rogaluna-icon-file-s-10:before {
+  content: "\e670";
+}
+
+.rogaluna-icon-file-s-11:before {
+  content: "\e671";
+}
+
+.rogaluna-icon-file-s-12:before {
+  content: "\e672";
+}
+
+.rogaluna-icon-file-s-13:before {
+  content: "\e673";
+}
+
+.rogaluna-icon-file-s-15:before {
+  content: "\e675";
+}
+
+.rogaluna-icon-file-s-16:before {
+  content: "\e676";
+}
+
+.rogaluna-icon-file-s-17:before {
+  content: "\e677";
+}
+
+.rogaluna-icon-file-s-20:before {
+  content: "\e67a";
+}
+

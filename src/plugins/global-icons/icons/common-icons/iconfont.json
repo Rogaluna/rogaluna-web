@@ -1,0 +1,86 @@
+{
+  "id": "4511547",
+  "name": "common",
+  "font_family": "xedia",
+  "css_prefix_text": "rogaluna-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "23729524",
+      "name": "file_transfer",
+      "font_class": "file_transfer",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "6151260",
+      "name": "pause circle",
+      "font_class": "pausecircle",
+      "unicode": "e80d",
+      "unicode_decimal": 59405
+    },
+    {
+      "icon_id": "6151262",
+      "name": "play circle",
+      "font_class": "playcircle",
+      "unicode": "e80f",
+      "unicode_decimal": 59407
+    },
+    {
+      "icon_id": "5589028",
+      "name": "delete2",
+      "font_class": "delete",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "5589009",
+      "name": "classification",
+      "font_class": "classification",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "5589022",
+      "name": "upload",
+      "font_class": "upload",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "5589024",
+      "name": "fenlei",
+      "font_class": "fenlei",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "5589039",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "5589043",
+      "name": "Refresh",
+      "font_class": "Refresh",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "5589045",
+      "name": "download",
+      "font_class": "download",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "5589051",
+      "name": "scanning",
+      "font_class": "scanning",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+@font-face {
+  font-family: "xedia"; /* Project id 4524729 */
+  /* Color fonts */
+  src: 
+       url('iconfont.woff2?t=1716381918635') format('woff2'),
+       url('iconfont.woff?t=1716381918635') format('woff'),
+       url('iconfont.ttf?t=1716381918635') format('truetype');
+}
+
+.xedia {
+  font-family: "xedia" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.rogaluna-icon-chat-3:before {
+  content: "\e6ac";
+}
+
+.rogaluna-icon-email:before {
+  content: "\e638";
+}
+
+.rogaluna-icon-tools-hardware:before {
+  content: "\e882";
+}
+
+.rogaluna-icon-changpianCD:before {
+  content: "\e6b7";
+}
+
+.rogaluna-icon-cpp:before {
+  content: "\e609";
+}
+
+.rogaluna-icon-zhuangtai_guizi:before {
+  content: "\e600";
+}
+
+.rogaluna-icon-CLOUD_DISK:before {
+  content: "\eb3f";
+}
+

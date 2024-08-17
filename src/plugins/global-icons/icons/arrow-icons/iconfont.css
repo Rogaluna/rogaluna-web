@@ -1,0 +1,129 @@
+@font-face {
+  font-family: "xedia"; /* Project id 4542648 */
+  /* Color fonts */
+  src: 
+       url('iconfont.woff2?t=1715432733022') format('woff2'),
+       url('iconfont.woff?t=1715432733022') format('woff'),
+       url('iconfont.ttf?t=1715432733022') format('truetype');
+}
+
+.xedia {
+  font-family: "xedia" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.rogaluna-icon-jiantou_liebiaoxiangyou:before {
+  content: "\eb03";
+}
+
+.rogaluna-icon-jiantou_liebiaoshouqi:before {
+  content: "\eb04";
+}
+
+.rogaluna-icon-jiantou_liebiaoxiangzuo:before {
+  content: "\eb05";
+}
+
+.rogaluna-icon-jiantou_qiehuanxiangxia:before {
+  content: "\eb06";
+}
+
+.rogaluna-icon-jiantou_liebiaozhankai:before {
+  content: "\eb07";
+}
+
+.rogaluna-icon-jiantou_qiehuanyou:before {
+  content: "\eb08";
+}
+
+.rogaluna-icon-jiantou_qiehuanxiangshang:before {
+  content: "\eb09";
+}
+
+.rogaluna-icon-jiantou_qiehuanzuo:before {
+  content: "\eb0a";
+}
+
+.rogaluna-icon-jiantou_xiangyou:before {
+  content: "\eb0b";
+}
+
+.rogaluna-icon-jiantou_xiangzuo:before {
+  content: "\eb0c";
+}
+
+.rogaluna-icon-jiantou_xiangyouliangci:before {
+  content: "\eb0d";
+}
+
+.rogaluna-icon-jiantou_shangxiaqiehuan:before {
+  content: "\eb0e";
+}
+
+.rogaluna-icon-jiantou_yemian_xiangshang:before {
+  content: "\eb0f";
+}
+
+.rogaluna-icon-jiantou_xiangxia:before {
+  content: "\eb10";
+}
+
+.rogaluna-icon-jiantou_xiangshang:before {
+  content: "\eb11";
+}
+
+.rogaluna-icon-jiantou_xiangzuoliangci:before {
+  content: "\eb12";
+}
+
+.rogaluna-icon-jiantou_yemian_xiangxia:before {
+  content: "\eb13";
+}
+
+.rogaluna-icon-jiantou_yemian_xiangyou:before {
+  content: "\eb14";
+}
+
+.rogaluna-icon-jiantou_youshang:before {
+  content: "\eb15";
+}
+
+.rogaluna-icon-jiantou_zuoshang:before {
+  content: "\eb16";
+}
+
+.rogaluna-icon-jiantou_youxia:before {
+  content: "\eb17";
+}
+
+.rogaluna-icon-jiantou_zuoyouqiehuan:before {
+  content: "\eb18";
+}
+
+.rogaluna-icon-jiantou_zuoxia:before {
+  content: "\eb19";
+}
+
+.rogaluna-icon-jiantou_yemian_xiangzuo:before {
+  content: "\eb1a";
+}
+
+.rogaluna-icon-xuanzeqishouqi:before {
+  content: "\eb1b";
+}
+
+.rogaluna-icon-xiangzuo:before {
+  content: "\eb1c";
+}
+
+.rogaluna-icon-xuanzeqixiayige:before {
+  content: "\eb1d";
+}
+
+.rogaluna-icon-xuanzeqizhankai:before {
+  content: "\eb1e";
+}
+
