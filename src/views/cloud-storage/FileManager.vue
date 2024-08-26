@@ -2,6 +2,8 @@
   <div style="display: flex; flex-direction: column; height: 100%;">
     <header-tool-bar></header-tool-bar>
     <file-operate-panel style="flex-grow: 1;"></file-operate-panel>
+    <download-panel/>
+    <upload-panel/>
   </div>
 </template>
 
@@ -11,6 +13,9 @@ import { EventBus } from './bus/fileManager.js';
 import HeaderToolBar from './file-manager/components/HeaderToolBar.vue'
 import FileOperatePanel from './file-manager/components/FileOperatePanel.vue';
 
+import DownloadPanel from './file-manager/components/DownloadPanel.vue';
+import UploadPanel from './file-manager/components/UploadPanel.vue';
+
 export default {
   provide() {
     return {
@@ -19,7 +24,9 @@ export default {
   },
   components: { 
     HeaderToolBar,
-    FileOperatePanel
+    FileOperatePanel,
+    DownloadPanel,
+    UploadPanel
   },
   computed: {
 

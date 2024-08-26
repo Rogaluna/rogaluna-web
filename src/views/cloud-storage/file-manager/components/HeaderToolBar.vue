@@ -140,7 +140,7 @@ export default {
           text: "上传列表",
           icon: "xedia rogaluna-icon-upload",
           onclick: ()=>{
-            this.$emit('show-upload-list')
+            this.eventBus.sharedState.isUploadPanelVisible = true;
           },
           value: this.uploadDot
         },
@@ -148,7 +148,7 @@ export default {
           text: "下载列表",
           icon: "xedia rogaluna-icon-download",
           onclick: ()=>{
-            this.$emit('show-download-list')
+            this.eventBus.sharedState.isDownloadPanelVisible = true;
           },
           value: this.downloadDot
         },
@@ -184,18 +184,21 @@ export default {
       } else {
         const paths = this.editablePath.split('/').filter(p => p.trim() !== '');
         const breadcrumbs = paths.map(text => ({ text }));
-        this.eventBus.sharedState.dir = breadcrumbs;
+        // this.eventBus.sharedState.dir = breadcrumbs;
+        this.eventBus.setDir(breadcrumbs);
         this.hideInput();
       }
     },
     handleGoBack(){
       if (this.eventBus.sharedState.dir.length > 1) {
         const breadcrumbsSegment = this.eventBus.sharedState.dir.slice(0, this.eventBus.sharedState.dir.length - 1);
-        this.eventBus.sharedState.dir = breadcrumbsSegment;
+        // this.eventBus.sharedState.dir = breadcrumbsSegment;
+        this.eventBus.setDir(breadcrumbsSegment);
       }
     },
     handleGoRoot() {
-      this.eventBus.sharedState.dir = [{text: 'root'}];
+      // this.eventBus.sharedState.dir = [{text: 'root'}];
+      this.eventBus.setDir([{text: 'root'}]);
     },
     handleBreadcrumbClick(item) {
       // 点击路径编辑器

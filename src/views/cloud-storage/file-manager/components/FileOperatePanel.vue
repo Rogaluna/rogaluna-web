@@ -95,6 +95,7 @@ export default {
           // }
           {
             label: '上传文件',
+            icon: 'xedia rogaluna-icon-upload',
             value: '1',
             handler: () => {
               this.$rogalunaWidgets.showFileSelector({}, (files) => {
@@ -113,9 +114,10 @@ export default {
             label: '打开文件夹',
             value: '1',
             handler: () => {
-              this.eventBus.sharedState.dir.push({
-                text: this.menus.contextObject.name
-              });
+              // this.eventBus.sharedState.dir.push({
+              //   text: this.menus.contextObject.name
+              // });
+              this.eventBus.pushDir({text: this.menus.contextObject.name});
             }
           }
         ],

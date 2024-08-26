@@ -7,6 +7,11 @@ export const EventBus = new Vue({
       dir: [{
         text: "root"
       }],
+      isUploadPanelVisible: false,
+      isDownloadPanelVisible: false,
+      historyDir: [ // 历史记录，用于前进后退，需要做出大小限制
+
+      ]
     }
   },
   computed: {
@@ -21,6 +26,14 @@ export const EventBus = new Vue({
       }
 
       return newPath;
+    }
+  },
+  methods: {
+    setDir(newDir) {
+      this.sharedState.dir = newDir;
+    },
+    pushDir(DirSeg) {
+      setDir(this.sharedState.dir.push(DirSeg));
     }
   }
 });
