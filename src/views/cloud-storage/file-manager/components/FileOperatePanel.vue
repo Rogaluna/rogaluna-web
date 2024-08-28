@@ -124,6 +124,7 @@ export default {
         file: [
           {
             label: '下载文件',
+            icon: 'xedia rogaluna-icon-download',
             value: '1',
             handler: () => {
               this.downloadFile();
@@ -171,7 +172,7 @@ export default {
         getFileListAPI(this.eventBus.formattedDir)
           .then(response => {
             this.items = response;
-            console.log(this.items);
+            console.log('getFileListAPI', this.items);
             stopLoading();
           })
       })

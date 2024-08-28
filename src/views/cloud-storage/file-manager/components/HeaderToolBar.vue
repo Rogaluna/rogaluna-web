@@ -112,13 +112,13 @@ export default {
           text: "返回",
           icon: "xedia rogaluna-icon-jiantou_xiangzuo",
           onclick: ()=>{
-            
+            this.eventBus.undo();
           }
         },{
           text: "前进",
           icon: "xedia rogaluna-icon-jiantou_xiangyou",
           onclick: ()=>{
-            
+            this.eventBus.redo();
           }
         },{
           text: "上一级",

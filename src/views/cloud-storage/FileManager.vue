@@ -31,6 +31,14 @@ export default {
   computed: {
 
   },
+  watch: {
+    'eventBus.sharedState.isUploadPanelVisible': {
+      handler(newVal, oldVal) {
+        
+      },
+      deep: true, // 使得监听器可以检测数组或对象的变化
+    }
+  },
   data() {
     return {
       breadcrumbs: [],
