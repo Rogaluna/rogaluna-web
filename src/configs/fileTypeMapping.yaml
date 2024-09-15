@@ -1,6 +1,13 @@
 dir: 文件夹
-txt: 纯文本文件
-jpg: 图片
+txt: txt 纯文本文件
+json: json 文件
+jpg: jpg 图片
+mp3: mp3 音频
+flac: Flac 高清音频
 pdf: PDF 文件
+docx: Word 文档
+doc: Word 文档
 xls: Excel 工作表
 xlsx: Excel 工作表
+zip: zip 压缩文件
+exe: exe 可执行文件

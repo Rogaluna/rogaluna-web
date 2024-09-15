@@ -59,7 +59,7 @@ import RogalunaTr from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaTr.vue
 
 import FileListItem from './FileListItem.vue';
 import getFileListAPI from '@/plugins/axios/api/cloud-storage/getFileList';
-import getFileAPI from '@/plugins/axios/api/cloud-storage/getFile';
+import fetchFileDirectLinkAPI from '@/plugins/axios/api/cloud-storage/fetchFileDirectLink'
 import postFileAPI from '@/plugins/axios/api/cloud-storage/postFile';
 
 export default {
@@ -178,13 +178,19 @@ export default {
       })
     },
     downloadFile() {
-      this.$rogalunaWidgets.showLoading(null, (stopLoading) => {
-        const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
-        getFileAPI(targetPath)
-          .then(response => {
+      // this.$rogalunaWidgets.showLoading(null, (stopLoading) => {
+      //   const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
+      //   // getFileAPI(targetPath)
+      //   //   .then(response => {
 
-            stopLoading();
-          })
+      //   //     stopLoading();
+      //   //   })
+      //   asyncDownload(targetPath)
+      // })
+      const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
+      fetchFileDirectLinkAPI(targetPath)
+      .then(response => {
+        console.log(response);
       })
     },
 

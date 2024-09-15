@@ -4,7 +4,7 @@ const getFileListAPI = async (filePath) => {
   
   try {
       // 使用 URL 参数对象传递查询参数
-      const response = await axiosInstance.get('/fileStorage/getFileList', {
+      const response = await axiosInstance.get('/api/fileStorage/getFileList', {
           params: {
               directory: filePath
           }
