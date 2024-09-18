@@ -127,7 +127,11 @@ export default {
             icon: 'xedia rogaluna-icon-download',
             value: '1',
             handler: () => {
-              this.downloadFile();
+              const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
+              fetchFileDirectLinkAPI(targetPath)
+              .then(response => {
+                console.log(response);
+              })
             }
           }
         ]
@@ -177,24 +181,6 @@ export default {
           })
       })
     },
-    downloadFile() {
-      // this.$rogalunaWidgets.showLoading(null, (stopLoading) => {
-      //   const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
-      //   // getFileAPI(targetPath)
-      //   //   .then(response => {
-
-      //   //     stopLoading();
-      //   //   })
-      //   asyncDownload(targetPath)
-      // })
-      const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
-      fetchFileDirectLinkAPI(targetPath)
-      .then(response => {
-        console.log(response);
-      })
-    },
-
-
     formatDate(dateStr) {
       const date = new Date(dateStr);
       const year = date.getFullYear();
