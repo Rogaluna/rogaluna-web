@@ -11,7 +11,7 @@
       <v-card-text>
         <v-form @submit.prevent="login">
           <v-text-field
-            v-model="username"
+            v-model="usernameOrId"
             label="用户名/ID"
             outlined
             required
@@ -45,20 +45,28 @@ import loginAPI from '@/plugins/axios/api/account/login';
 export default {
   data() {
     return {
-      username: '',
+      usernameOrId: '',
       password: '',
     };
   },
   methods: {
-    login() {
-      loginAPI(this.username, this.password)
-
-      // if (this.username === 'admin' && this.password === 'password') {
-      //   localStorage.setItem('token', 'your-token');
-      //   this.$router.push({ name: 'Home' });
-      // } else {
-      //   alert('Invalid credentials');
-      // }
+    async login() {
+      const result = await loginAPI(this.usernameOrId, this.password)
+      console.log(`result`, result);
+      if (result.success) {
+        // 检查是否存在重定向路径
+        const redirect = this.$route.query.redirect;
+        if (redirect) {
+          // 如果有重定向路径，跳转到目标路径
+          console.log(`redirect`, redirect);
+          this.$router.push(redirect)
+        } else {
+          // 否则跳转到 home
+          this.$router.push({ name: 'home' })
+        }
+      } else {
+        this.$rogalunaWidgets.showSnackbar(result.message, 5000);
+      }
     },
     goToRegister() {
       this.$router.push({ name: 'register' });

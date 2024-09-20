@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import RogalunaContextMenu from './widgets/sundries/RogalunaContextMenu.vue';
 import RogalunaLoading from './widgets/sundries/RogalunaLoading.vue';
+import RogalunaSnackbar from './widgets/sundries/RogalunaSnackbar.vue';
 
 const ContextMenuConstructor = Vue.extend(RogalunaContextMenu);
 const LoadingConstructor = Vue.extend(RogalunaLoading);
+const SnackbarConstructor = Vue.extend(RogalunaSnackbar);
 
 export const RogalunaWidgetsPlugin = {
   install(Vue, { vuetify }) {
@@ -78,6 +80,29 @@ export const RogalunaWidgetsPlugin = {
         };
 
         input.click();
+      },
+
+      // 消息条
+      showSnackbar(message, timeout = 3000) {
+        const snackbarInstance = new SnackbarConstructor({
+          vuetify,
+          propsData: {
+            message,
+            timeout
+          }
+        });
+
+        const component = snackbarInstance.$mount();
+        document.body.appendChild(component.$el);
+
+        // 自动移除 Snackbar 实例
+        setTimeout(() => {
+          snackbarInstance.show = false;
+          setTimeout(() => {
+            component.$destroy();
+            document.body.removeChild(component.$el);
+          }, 300);
+        }, timeout);
       }
     };
   }

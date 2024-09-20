@@ -50,7 +50,7 @@ export default {
         }, 
         {
           name: '音乐台',
-          routerName: 'music-collection',
+          routerName: 'music-station',
           iconClass: 'xedia rogaluna-icon-changpianCD'
         },
         {

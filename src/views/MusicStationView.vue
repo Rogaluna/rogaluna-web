@@ -22,14 +22,19 @@ export default {
     return {
       navItems: [
         {
-          name: '文件',
+          name: '音乐台',
           routerName: 'file-manager',
           iconClass: 'mdi-folder',
         },
         {
-          name: '云计算机',
-          routerName: 'cloud-computer',
-          iconClass: 'xedia rogaluna-icon-zhuangtai_guizi',
+          name: '收藏品',
+          routerName: 'file-manager',
+          iconClass: 'mdi-folder',
+        },
+        {
+          name: '最近播放',
+          routerName: 'file-manager',
+          iconClass: 'mdi-folder',
         }
       ],
     };
