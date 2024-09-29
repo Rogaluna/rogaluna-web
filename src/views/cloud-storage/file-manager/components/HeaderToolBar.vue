@@ -15,9 +15,12 @@
               v-bind="attrs"
               v-on="on"
               @click="item.onclick">
-              <v-icon>
-                {{ item.icon }}
-              </v-icon>
+              <svg class="__icon__s"
+                aria-hidden="true"
+                icon
+                style="font-size: smaller;">
+                <use :xlink:href="item.icon"></use>
+              </svg>
             </v-btn>
           </template>
           <span>{{ item.text }}</span>
@@ -62,9 +65,12 @@
                 color="red"
                 overlap
               >
-                <v-icon>
-                  {{ item.icon }}
-                </v-icon>
+                <svg class="__icon__s"
+                  aria-hidden="true"
+                  icon
+                  style="font-size: smaller;">
+                  <use :xlink:href="item.icon"></use>
+                </svg>
               </v-badge>
             </v-btn>
           </template>
@@ -110,26 +116,26 @@ export default {
       preButtons: [
         {
           text: "返回",
-          icon: "xedia rogaluna-icon-jiantou_xiangzuo",
+          icon: "#rogaluna-icon-jiantou_xiangzuo",
           onclick: ()=>{
             this.eventBus.undo();
           }
         },{
           text: "前进",
-          icon: "xedia rogaluna-icon-jiantou_xiangyou",
+          icon: "#rogaluna-icon-jiantou_xiangyou",
           onclick: ()=>{
             this.eventBus.redo();
           }
         },{
           text: "上一级",
-          icon: "xedia rogaluna-icon-jiantou_xiangshang",
+          icon: "#rogaluna-icon-jiantou_xiangshang",
           onclick: ()=>{
             this.handleGoBack()
           }
         },
         {
           text: "返回Root",
-          icon: "xedia rogaluna-icon-home",
+          icon: "#rogaluna-icon-home",
           onclick: ()=>{
             this.handleGoRoot()
           }
@@ -138,7 +144,7 @@ export default {
       postButtons: [
         {
           text: "上传列表",
-          icon: "xedia rogaluna-icon-upload",
+          icon: "#rogaluna-icon-upload",
           onclick: ()=>{
             this.eventBus.sharedState.isUploadPanelVisible = true;
           },
@@ -146,7 +152,7 @@ export default {
         },
         {
           text: "下载列表",
-          icon: "xedia rogaluna-icon-download",
+          icon: "#rogaluna-icon-download",
           onclick: ()=>{
             this.eventBus.sharedState.isDownloadPanelVisible = true;
           },

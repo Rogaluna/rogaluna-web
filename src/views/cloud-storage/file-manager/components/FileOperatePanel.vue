@@ -61,6 +61,9 @@ import FileListItem from './FileListItem.vue';
 import getFileListAPI from '@/plugins/axios/api/cloud-storage/getFileList';
 import fetchFileDirectLinkAPI from '@/plugins/axios/api/cloud-storage/fetchFileDirectLink'
 import postFileAPI from '@/plugins/axios/api/cloud-storage/postFile';
+import createFolderAPI from '@/plugins/axios/api/cloud-storage/createFolder';
+
+import NewFolderDialog from './NewFolderDialog.vue';
 
 export default {
   components: { 
@@ -95,17 +98,39 @@ export default {
           // }
           {
             label: '上传文件',
-            icon: 'xedia rogaluna-icon-upload',
+            icon: '#rogaluna-icon-upload',
             value: '1',
             handler: () => {
               this.$rogalunaWidgets.showFileSelector({}, (files) => {
                 const file = files[0];
-                postFileAPI(file, this.eventBus.formattedDir)
+                postFileAPI(file, this.eventBus.currentFolderUid)
                   .then(response => {
                     console.log(response);
                     this.fetchData();
                   })
               })
+            }
+          },
+          {
+            label: '新建文件夹',
+            icon: '#rogaluna-icon-file',
+            value: '2',
+            handler: () => {
+              this.$rogalunaWidgets.showDialog(
+                NewFolderDialog,
+                { title: '新对话框', message: '这是一个动态创建的新对话框' },
+                { 
+                  confirm: (formData) => { 
+                    
+                    createFolderAPI(this.eventBus.currentFolderUid, formData.folderName)
+                      .then(response => {
+                        console.log(response);
+                        this.fetchData();
+                      })  
+                  }, 
+                  cancel: () => { console.log('用户点击了取消'); } 
+                } // 事件回调
+              )
             }
           }
         ],
@@ -173,10 +198,10 @@ export default {
       // 异步数据获取
       this.$rogalunaWidgets.showLoading(this.$refs.fileOperatePanel, (stopLoading) => {
 
-        getFileListAPI(this.eventBus.formattedDir)
-          .then(response => {
-            this.items = response;
-            console.log('getFileListAPI', this.items);
+        getFileListAPI(this.eventBus.currentFolderUid) // 当前文件夹 uid 是空的，则默认会获取到根目录
+          .then(response => { // 获取的回复将包括文件列表和当前目录的uid
+            this.eventBus.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
+            this.items = response.data;
             stopLoading();
           })
       })

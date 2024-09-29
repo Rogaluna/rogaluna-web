@@ -10,8 +10,15 @@
         @click="item.handler"
       >
         <v-list-item-icon v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
+          <!-- <v-icon>{{ item.icon }}</v-icon> -->
+          <svg class="__icon__m item-icon"
+            aria-hidden="true"
+            icon
+            :style="item.iconStyle">
+            <use :xlink:href="item.icon"></use>
+          </svg>
         </v-list-item-icon>
+        
         <v-list-item-title align="left">{{ item.label }}</v-list-item-title>
       </v-list-item>
     </v-list>
@@ -45,6 +52,11 @@ export default {
 };
 </script>
 
-<style scoped>
-/* 你可以在这里添加自定义样式 */
+<style lang="scss" scoped>
+
+.item-icon {
+  width: 2em;
+  height: auto;
+}
+
 </style>

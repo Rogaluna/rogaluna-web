@@ -103,6 +103,42 @@ export const RogalunaWidgetsPlugin = {
             document.body.removeChild(component.$el);
           }, 300);
         }, timeout);
+      },
+
+      /**
+       * 动态创建对话框
+       * @param {Object} DialogComponent 组件的路径或组件名称（需使用 import() 动态引入）
+       * @param {Object} props 对话框需要的props
+       * @param {Object} events 对话框的事件回调函数，如 confirm 和 cancel
+       */
+      async showDialog(DialogComponent, props = {}, events = {}) {
+        // 创建对话框组件构造器
+        const DialogConstructor = Vue.extend(DialogComponent);
+
+        const dialogInstance = new DialogConstructor({
+          vuetify,
+          propsData: props
+        });
+
+        // 绑定传入的事件回调
+        Object.keys(events).forEach(event => {
+          dialogInstance.$on(event, events[event]);
+        });
+
+        // 挂载并显示对话框
+        const component = dialogInstance.$mount();
+        document.body.appendChild(component.$el);
+
+        // 销毁对话框实例
+        const destroyDialog = () => {
+          dialogInstance.$destroy();
+          if (component.$el && component.$el.parentNode) {
+            component.$el.parentNode.removeChild(component.$el);
+          }
+        };
+
+        // 监听关闭对话框的事件（假设对话框组件内部有 'close' 事件）
+        dialogInstance.$on('close', destroyDialog);
       }
     };
   }

@@ -2,9 +2,9 @@
   font-family: "xedia"; /* Project id 4511547 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1722261270454') format('woff2'),
-       url('iconfont.woff?t=1722261270454') format('woff'),
-       url('iconfont.ttf?t=1722261270454') format('truetype');
+       url('iconfont.woff2?t=1727201367712') format('woff2'),
+       url('iconfont.woff?t=1727201367712') format('woff'),
+       url('iconfont.ttf?t=1727201367712') format('truetype');
 }
 
 .xedia {
@@ -15,16 +15,40 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.rogaluna-icon-shuqian:before {
+  content: "\e7d2";
+}
+
+.rogaluna-icon-xiezuo:before {
+  content: "\e60d";
+}
+
+.rogaluna-icon-Checkout:before {
+  content: "\e62d";
+}
+
+.rogaluna-icon-tushuguan:before {
+  content: "\e6af";
+}
+
+.rogaluna-icon-file:before {
+  content: "\e611";
+}
+
+.rogaluna-icon-a-order-recentlysearch:before {
+  content: "\e66d";
+}
+
+.rogaluna-icon-Collection:before {
+  content: "\e627";
+}
+
+.rogaluna-icon-more:before {
+  content: "\e629";
+}
+
 .rogaluna-icon-file_transfer:before {
   content: "\e60f";
-}
-
-.rogaluna-icon-pausecircle:before {
-  content: "\e80d";
-}
-
-.rogaluna-icon-playcircle:before {
-  content: "\e80f";
 }
 
 .rogaluna-icon-delete:before {

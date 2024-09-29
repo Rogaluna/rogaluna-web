@@ -6,25 +6,67 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "25537572",
+      "name": "书签",
+      "font_class": "shuqian",
+      "unicode": "e7d2",
+      "unicode_decimal": 59346
+    },
+    {
+      "icon_id": "9670411",
+      "name": "写作",
+      "font_class": "xiezuo",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "5589029",
+      "name": "Check out",
+      "font_class": "Checkout",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "9789446",
+      "name": "图书馆",
+      "font_class": "tushuguan",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "23729593",
+      "name": "file",
+      "font_class": "file",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "24276135",
+      "name": "order-recently search",
+      "font_class": "a-order-recentlysearch",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "5589020",
+      "name": "Collection",
+      "font_class": "Collection",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "5589023",
+      "name": "more",
+      "font_class": "more",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
       "icon_id": "23729524",
       "name": "file_transfer",
       "font_class": "file_transfer",
       "unicode": "e60f",
       "unicode_decimal": 58895
-    },
-    {
-      "icon_id": "6151260",
-      "name": "pause circle",
-      "font_class": "pausecircle",
-      "unicode": "e80d",
-      "unicode_decimal": 59405
-    },
-    {
-      "icon_id": "6151262",
-      "name": "play circle",
-      "font_class": "playcircle",
-      "unicode": "e80f",
-      "unicode_decimal": 59407
     },
     {
       "icon_id": "5589028",

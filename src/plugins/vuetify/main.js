@@ -9,6 +9,7 @@ Vue.use(Vuetify);
 export default new Vuetify({
     theme: {
       dark: true, // 使用dark主题
+      use: 'dark',
       themes: themes
     },
     lang: {

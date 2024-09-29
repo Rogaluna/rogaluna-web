@@ -1,9 +1,9 @@
 import { axiosInstance } from "../../main"
 import { BASE_HTTP_URL } from "../../configs/baseUrl";
+import Cookies from 'js-cookie';
 
 const fetchFileDirectLinkAPI = async (filePath) => {
   try {
-
 		// 创建一个 FormData 对象
     const formData = new FormData();
     formData.append('filePath', filePath); // 添加 filePath 到表单数据中
@@ -12,6 +12,7 @@ const fetchFileDirectLinkAPI = async (filePath) => {
 		const response = await axiosInstance.post('/api/fileStorage/fetchFileDirectLink', formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // 设置请求头
+				'Authorization': Cookies.get('token')
       },
     });
 

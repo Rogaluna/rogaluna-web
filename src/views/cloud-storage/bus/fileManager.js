@@ -5,6 +5,7 @@ export const EventBus = new Vue({
     sharedState: {
       isVisible: true,
       dir: [],
+      currentFolderUid: '',
       isUploadPanelVisible: false,
       isDownloadPanelVisible: false,
       historyDir: [], // 历史记录，用于前进后退，需要做出大小限制

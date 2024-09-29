@@ -14,9 +14,12 @@
               v-on="on"
               @click="handleItemClick(item)"
               >
-                <div style="font-size: larger;" :class="item.iconClass">
-
-                </div>
+                <svg class="__icon__s"
+                  aria-hidden="true"
+                  icon
+                  style="font-size: large;">
+                  <use :xlink:href="item.iconClass"></use>
+                </svg>
               </div>
             </template>
             <span>{{ item.name }}</span>
@@ -39,34 +42,35 @@ export default {
     return {
       items: [
         {
+          name: '设置',
+          routerName: 'setting',
+          iconClass: '#rogaluna-icon-tools-hardware'
+        }, 
+        {
           name: '文件传输',
           routerName: 'file-transfer',
-          iconClass: 'xedia rogaluna-icon-file_transfer'
+          iconClass: '#rogaluna-icon-file_transfer'
         }, 
         {
           name: '云存储',
           routerName: 'cloud-storage',
-          iconClass: 'xedia rogaluna-icon-CLOUD_DISK'
+          iconClass: '#rogaluna-icon-CLOUD_DISK'
         }, 
         {
           name: '音乐台',
           routerName: 'music-station',
-          iconClass: 'xedia rogaluna-icon-changpianCD'
+          iconClass: '#rogaluna-icon-changpianCD'
         },
         {
           name: '邮箱',
           routerName: 'e-mail',
-          iconClass: 'xedia rogaluna-icon-email'
+          iconClass: '#rogaluna-icon-email'
         },
         {
-          name: '编码手册',
-          routerName: 'code-book',
-          iconClass: 'xedia rogaluna-icon-cpp'
+          name: '图书馆',
+          routerName: 'library',
+          iconClass: '#rogaluna-icon-tushuguan'
         },
-        // {
-        //     routerName: 'useful-tools',
-        //     iconClass: 'xedia rogaluna-icon-tools-hardware'
-        // }
       ]
     }
   },

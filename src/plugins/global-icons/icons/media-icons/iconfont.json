@@ -1,0 +1,86 @@
+{
+  "id": "4693063",
+  "name": "media",
+  "font_family": "xedia",
+  "css_prefix_text": "rogaluna-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8106237",
+      "name": "play",
+      "font_class": "play",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "8106273",
+      "name": "timeout",
+      "font_class": "timeout",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "8106226",
+      "name": "musiclist",
+      "font_class": "musiclist",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "8106229",
+      "name": "loop",
+      "font_class": "loop",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "8106230",
+      "name": "nextsong",
+      "font_class": "nextsong",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "8106238",
+      "name": "brightness2",
+      "font_class": "brightness",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "8106249",
+      "name": "previous",
+      "font_class": "previous",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "8106254",
+      "name": "singlecycle",
+      "font_class": "singlecycle",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "8106259",
+      "name": "soundsize",
+      "font_class": "soundsize",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "8106294",
+      "name": "random",
+      "font_class": "random",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "10678424",
+      "name": "master ctrl",
+      "font_class": "masterctrl",
+      "unicode": "e6df",
+      "unicode_decimal": 59103
+    }
+  ]
+}

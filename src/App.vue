@@ -45,4 +45,64 @@ body {
         height: 100%;
     }
 }
+
+.__icon__es {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.__icon__s {
+  width: 2em;
+  height: 2em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.__icon__m {
+  width: 3em;
+  height: 3em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.__icon__l {
+  width: 4em;
+  height: 4em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.__icon__el {
+  width: 5em;
+  height: 5em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+}
 </style>

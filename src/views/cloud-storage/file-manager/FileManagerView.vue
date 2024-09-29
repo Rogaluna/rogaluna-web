@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import { EventBus } from './bus/fileManager.js';
+import { EventBus } from '../bus/fileManager.js';
 
-import HeaderToolBar from './file-manager/components/HeaderToolBar.vue'
-import FileOperatePanel from './file-manager/components/FileOperatePanel.vue';
+import HeaderToolBar from './components/HeaderToolBar.vue'
+import FileOperatePanel from './components/FileOperatePanel.vue';
 
-import DownloadPanel from './file-manager/components/DownloadPanel.vue';
-import UploadPanel from './file-manager/components/UploadPanel.vue';
+import DownloadPanel from './components/DownloadPanel.vue';
+import UploadPanel from './components/UploadPanel.vue';
 
 export default {
   provide() {

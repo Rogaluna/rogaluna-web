@@ -1,10 +1,12 @@
 import { axiosInstance } from "../../main"
 import { CHUNK_SIZE } from "../../configs/axiosConfigs";
-import AsyncTask from "../../module/tasks/AsyncTask";
-import generateMD5 from "../../module/functions/generateMD5";
-import generateUid from "../../module/functions/generateUid";
+import Cookies from 'js-cookie';
 
-const postFileAPI = async (file, targetPath) => {
+import AsyncTask from "../../module/tasks/AsyncTask";
+import { generateMD5 , generateFileMD5 } from "../../module/functions/generateMD5";
+// import generateUid from "../../module/functions/generateUid";
+
+const postFileAPI = async (file, parentUid) => {
 
   // 延迟函数
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -14,13 +16,14 @@ const postFileAPI = async (file, targetPath) => {
     try {
       const formData = new FormData();
       formData.append('uid', uid);
+      formData.append('parentUid', parentUid); // 父文件夹uid
       formData.append('fileName', encodeURIComponent(file.name)); // 文件名
-      formData.append('targetPath', encodeURIComponent(targetPath)); // 目标路径
       formData.append('totalChunks', totalChunks);
 
       const response = await axiosInstance.post('/api/fileStorage/mergeFile', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': Cookies.get('token')
         }
       });
 
@@ -36,7 +39,7 @@ const postFileAPI = async (file, targetPath) => {
     const totalSize = file.size;
     const totalChunks = Math.ceil(totalSize / CHUNK_SIZE); // 计算总的块数
 
-    const uuid = generateUid();
+    const uuid = await generateFileMD5(file);
 
     for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
       const start = chunkIndex * CHUNK_SIZE;
@@ -64,7 +67,8 @@ const postFileAPI = async (file, targetPath) => {
           // 发送当前块的 POST 请求
           const response = await axiosInstance.post('/api/fileStorage/postFile', formData, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+              'Content-Type': 'multipart/form-data',
+              'Authorization': Cookies.get('token')
             }
           });
   

@@ -1,12 +1,16 @@
 import { axiosInstance } from "../../main"
+import Cookies from 'js-cookie';
 
-const getFileListAPI = async (filePath) => {
+const getFileListAPI = async (folderUid) => {
   
   try {
       // 使用 URL 参数对象传递查询参数
       const response = await axiosInstance.get('/api/fileStorage/getFileList', {
           params: {
-              directory: filePath
+              directory: folderUid
+          },
+          headers: {
+            'Authorization': Cookies.get('token')
           }
       });
       // 返回文件列表

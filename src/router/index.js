@@ -2,9 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Cookies from 'js-cookie';
 
+import { routes as accountRoutes } from './account/index'
 import { routes as fileTransferRoutes } from './file-transfer/index'
 import { routes as cloudStorageRoutes } from './cloud-storage/index'
-import { routes as accountRoutes } from './account/index'
+import { routes as musicStationRoutes } from './music-station/index'
+import { routes as codeBookRoutes } from './library/index'
 
 Vue.use(VueRouter)
 
@@ -31,31 +33,40 @@ const routes = [
   {
     path: '/account',
     name: 'account',
-    component: () => import('@/views/AccountView.vue'),
+    component: () => import('@/views/account/AccountView.vue'),
     children: accountRoutes
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: () => import('@/views/setting/SettingView.vue'),
   },
   {
     path: '/file-transfer',
     name: 'file-transfer',
-    component: () => import('@/views/FileTransferView.vue'),
+    component: () => import('@/views/file-transfer/FileTransferView.vue'),
     children: fileTransferRoutes
   },
   {
     path: '/cloud-storage',
     name: 'cloud-storage',
-    component: () => import('@/views/CloudStorageView.vue'),
+    component: () => import('@/views/cloud-storage/CloudStorageView.vue'),
     children: cloudStorageRoutes,
     redirect: `/cloud-storage/${cloudStorageRoutes[0].path}`,
   },
   {
     path: '/music-station',
     name: 'music-station',
-    component: () => import('@/views/MusicStationView.vue'),
+    component: () => import('@/views/music-station/MusicStationView.vue'),
+    children: musicStationRoutes,
+    redirect: `/music-station/${musicStationRoutes[0].path}`,
   },
   {
-    path: '/code-book',
-    name: 'code-book',
-    component: () => import('@/views/CodeBookView.vue'),
+    path: '/library',
+    name: 'library',
+    component: () => import('@/views/library/LibraryView.vue'),
+    children: codeBookRoutes,
+    redirect: `/library/${codeBookRoutes[0].path}`,
   }
 ]
 
