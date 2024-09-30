@@ -9,7 +9,7 @@
         :key="index"
         @click="item.handler"
       >
-        <v-list-item-icon v-list-item-icon>
+        <v-list-item-icon>
           <!-- <v-icon>{{ item.icon }}</v-icon> -->
           <svg class="__icon__m item-icon"
             aria-hidden="true"

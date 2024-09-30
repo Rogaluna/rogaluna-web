@@ -19,7 +19,11 @@
             <template v-slot:[`item`]="{ item }">
               <rogaluna-tr @click="handleRowClick(item)" @rclick="handleItemRightClick(item)" :menuItems="dispatchMenuOpts(item.type)">
                 <td style="text-align: left;">
-                  <v-icon>{{ getIcon(item.type) }}</v-icon>
+                  <svg class="__icon__s"
+                    aria-hidden="true"
+                    icon>
+                    <use :xlink:href="getIcon(item.type)"></use>
+                  </svg>
                 </td>
                 <td style="text-align: left;">
                   {{ item.name }}
@@ -74,11 +78,13 @@ export default {
   inject: ['eventBus'],
   computed: {},
   watch: {
-    // 监听 sharedState.dir 的变化
-    'eventBus.sharedState.dir': {
+    // 监听 sharedState.currentFolderUid 的变化
+    'eventBus.sharedState.currentFolderUid': {
       handler(newVal, oldVal) {
-        
-        this.fetchData();
+
+        if (this.eventBus.sharedState.currentFolderUid != this.eventBus.sharedState.rootUid) {
+          this.fetchData();
+        }
       },
       deep: true, // 使得监听器可以检测数组或对象的变化
     }
@@ -103,7 +109,7 @@ export default {
             handler: () => {
               this.$rogalunaWidgets.showFileSelector({}, (files) => {
                 const file = files[0];
-                postFileAPI(file, this.eventBus.currentFolderUid)
+                postFileAPI(file, this.eventBus.sharedState.currentFolderUid)
                   .then(response => {
                     console.log(response);
                     this.fetchData();
@@ -122,7 +128,7 @@ export default {
                 { 
                   confirm: (formData) => { 
                     
-                    createFolderAPI(this.eventBus.currentFolderUid, formData.folderName)
+                    createFolderAPI(this.eventBus.sharedState.currentFolderUid, formData.folderName)
                       .then(response => {
                         console.log(response);
                         this.fetchData();
@@ -137,19 +143,19 @@ export default {
         dir: [
           {
             label: '打开文件夹',
+            icon: '#rogaluna-icon-file',
             value: '1',
             handler: () => {
-              // this.eventBus.sharedState.dir.push({
-              //   text: this.menus.contextObject.name
-              // });
-              this.eventBus.pushDir({text: this.menus.contextObject.name});
+              console.log(`this.eventBus`, this.eventBus);
+              this.eventBus.setDir(this.menus.contextObject.uid);
+              console.log(`this.menus.contextObject`, this.menus.contextObject);
             }
           }
         ],
         file: [
           {
             label: '下载文件',
-            icon: 'xedia rogaluna-icon-download',
+            icon: '#rogaluna-icon-download',
             value: '1',
             handler: () => {
               const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
@@ -197,10 +203,17 @@ export default {
 
       // 异步数据获取
       this.$rogalunaWidgets.showLoading(this.$refs.fileOperatePanel, (stopLoading) => {
-
-        getFileListAPI(this.eventBus.currentFolderUid) // 当前文件夹 uid 是空的，则默认会获取到根目录
+        
+        getFileListAPI(this.eventBus.sharedState.currentFolderUid) // 当前文件夹 uid 是空的，则默认会获取到根目录
           .then(response => { // 获取的回复将包括文件列表和当前目录的uid
-            this.eventBus.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
+
+            if (this.eventBus.sharedState.rootUid == 'root') {
+              // 根目录未初始化，初始化根目录
+              this.eventBus.sharedState.rootUid = response.currentFolderUid;
+            }
+            
+            this.eventBus.sharedState.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
+            this.eventBus.sharedState.path = this.eventBus.formatPathToArray(response.path); // 设置格式化的路径
             this.items = response.data;
             stopLoading();
           })
@@ -221,9 +234,9 @@ export default {
       return this.$store.state.globalAttributes.fileTypeMapping[type] || type;
     },
     getIcon(type) {
-      const icon = this.$store.state.globalAttributes.fileIconTypeMapping[type];
+      const icon = `#${this.$store.state.globalAttributes.fileIconTypeMapping[type]}`;
       // 如果找到图标，返回图标；否则返回默认图标
-      return icon || this.$store.state.globalAttributes.fileIconTypeMapping['default'];
+      return icon || `#${this.$store.state.globalAttributes.fileIconTypeMapping['default']}`;
     },
     dispatchMenuOpts(type) {
       switch (type) {

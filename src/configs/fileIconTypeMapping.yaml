@@ -1,20 +1,20 @@
-default: xedia rogaluna-icon-file-b-8
+default: rogaluna-icon-file-b-8
 
-dir: xedia rogaluna-icon-file-b-2
+dir: rogaluna-icon-file-b-2
 
-txt: xedia rogaluna-icon-file-b-7
+txt: rogaluna-icon-file-b-7
 
-jpg: xedia rogaluna-icon-file-b-6
-png: xedia rogaluna-icon-file-b-6
+jpg: rogaluna-icon-file-b-6
+png: rogaluna-icon-file-b-6
 
-mp3: xedia rogaluna-icon-file-b-3
-flac: xedia rogaluna-icon-file-b-3
+mp3: rogaluna-icon-file-b-3
+flac: rogaluna-icon-file-b-3
 
-pdf: xedia rogaluna-icon-file-b-14
+pdf: rogaluna-icon-file-b-14
 
-docx: xedia rogaluna-icon-file-b-1
+docx: rogaluna-icon-file-b-1
 
-xls: xedia rogaluna-icon-file-b-5
-xlsx: xedia rogaluna-icon-file-b-5
+xls: rogaluna-icon-file-b-5
+xlsx: rogaluna-icon-file-b-5
 
-zip: xedia rogaluna-icon-file-b-4
+zip: rogaluna-icon-file-b-4

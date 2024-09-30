@@ -31,7 +31,7 @@
 
 
     <div class="breadcrumbs-container" @click="showInput" style="flex-grow: 1; margin: 0 10px;">
-      <v-breadcrumbs v-if="!inputVisible" :items="eventBus.sharedState.dir" style="">
+      <v-breadcrumbs v-if="!inputVisible" :items="eventBus.sharedState.path" style="">
         <template v-slot:item="{ item }">
           <v-breadcrumbs-item
             :key="item.text"
@@ -93,6 +93,8 @@
 
 import RogalunaList from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaList.vue';
 
+import getParentFolderAPI from '@/plugins/axios/api/cloud-storage/getParentFolder';
+
 export default {
   inject: ['eventBus'],
   components: {
@@ -112,7 +114,7 @@ export default {
   },
   data() {
     return {
-      editablePath: this.eventBus.sharedState.dir.map(b => b.text).join('/'),
+      editablePath: this.eventBus.formatArrayToPath(this.eventBus.sharedState.path),
       preButtons: [
         {
           text: "返回",
@@ -130,14 +132,21 @@ export default {
           text: "上一级",
           icon: "#rogaluna-icon-jiantou_xiangshang",
           onclick: ()=>{
-            this.handleGoBack()
+            if (this.eventBus.sharedState.path.length > 1) { // 如果不是根目录
+              getParentFolderAPI(this.eventBus.sharedState.currentFolderUid)
+                .then(response => {
+                  this.eventBus.setDir(response.parentUid);
+                })
+
+              
+            }
           }
         },
         {
           text: "返回Root",
           icon: "#rogaluna-icon-home",
           onclick: ()=>{
-            this.handleGoRoot()
+            this.eventBus.setDir(''); //必须重置为空字符串，不能重置为rootUid
           }
         },
       ],
@@ -170,14 +179,14 @@ export default {
   methods: {
     showInput() {
       this.inputVisible = true;
-      this.editablePath = this.eventBus.sharedState.dir.map(b => b.text).join('/');
+      this.editablePath = this.eventBus.formatArrayToPath(this.eventBus.sharedState.path);
       this.$nextTick(() => {
         this.$refs.editableInput.focus(); // 在输入框显示后聚焦
       });
     },
     hideInput() {
       this.inputVisible = false;
-      this.editablePath = this.eventBus.sharedState.dir.map(b => b.text).join('/');
+      this.editablePath = this.eventBus.formatArrayToPath(this.eventBus.sharedState.path);
     },
     handleInputConfirm() {
       console.log(this.editablePath);
@@ -188,29 +197,17 @@ export default {
         // 路径不合法
         this.hideInput();
       } else {
-        const paths = this.editablePath.split('/').filter(p => p.trim() !== '');
-        const breadcrumbs = paths.map(text => ({ text }));
-        // this.eventBus.sharedState.dir = breadcrumbs;
-        this.eventBus.setDir(breadcrumbs);
+        // const paths = this.editablePath.split('/').filter(p => p.trim() !== '');
+        // const breadcrumbs = paths.map(text => ({ text }));
+        // this.eventBus.setDir(breadcrumbs);
         this.hideInput();
       }
     },
-    handleGoBack(){
-      if (this.eventBus.sharedState.dir.length > 1) {
-        const breadcrumbsSegment = this.eventBus.sharedState.dir.slice(0, this.eventBus.sharedState.dir.length - 1);
-        // this.eventBus.sharedState.dir = breadcrumbsSegment;
-        this.eventBus.setDir(breadcrumbsSegment);
-      }
-    },
-    handleGoRoot() {
-      // this.eventBus.sharedState.dir = [{text: 'root'}];
-      this.eventBus.setDir([{text: 'root'}]);
-    },
     handleBreadcrumbClick(item) {
       // 点击路径编辑器
-      const clickedIndex = this.eventBus.sharedState.dir.findIndex(b => b.text === item.text);
-      const breadcrumbsSegment = this.eventBus.sharedState.dir.slice(0, clickedIndex + 1);
-      console.log(breadcrumbsSegment);
+      // const clickedIndex = this.eventBus.sharedState.path.findIndex(b => b.text === item.text);
+      // const breadcrumbsSegment = this.eventBus.sharedState.path.slice(0, clickedIndex + 1);
+      // console.log(breadcrumbsSegment);
     }
   }
 }
