@@ -1,3 +1,5 @@
+import { routes as writeBookRoutes } from './write-book/index'
+
 export const routes = [
   {
     path: 'library-center',
@@ -12,6 +14,8 @@ export const routes = [
   {
     path: 'write-book',
     name: 'write-book',
-    component: () => import('@/views/library/write-book/WriteBookView.vue')
+    component: () => import('@/views/library/write-book/WriteBookView.vue'),
+    children: writeBookRoutes,
+    redirect: `write-book/${writeBookRoutes[0].path}`,
   },
 ]

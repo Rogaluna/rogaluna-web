@@ -20,7 +20,7 @@ const postFileAPI = async (file, parentUid) => {
       formData.append('fileName', encodeURIComponent(file.name)); // 文件名
       formData.append('totalChunks', totalChunks);
 
-      const response = await axiosInstance.post('/api/fileStorage/mergeFile', formData, {
+      const response = await axiosInstance.post('/api/cloudDrive/mergeFile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': Cookies.get('token')

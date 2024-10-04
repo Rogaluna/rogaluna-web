@@ -53,7 +53,7 @@ export default {
         }, 
         {
           name: '云存储',
-          routerName: 'cloud-storage',
+          routerName: 'cloud-drive',
           iconClass: '#rogaluna-icon-CLOUD_DISK'
         }, 
         {

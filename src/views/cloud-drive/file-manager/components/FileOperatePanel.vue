@@ -62,10 +62,10 @@ import RogalunaDiv from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaDiv.v
 import RogalunaTr from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaTr.vue';
 
 import FileListItem from './FileListItem.vue';
-import getFileListAPI from '@/plugins/axios/api/cloud-storage/getFileList';
-import fetchFileDirectLinkAPI from '@/plugins/axios/api/cloud-storage/fetchFileDirectLink'
-import postFileAPI from '@/plugins/axios/api/cloud-storage/postFile';
-import createFolderAPI from '@/plugins/axios/api/cloud-storage/createFolder';
+import getFileListAPI from '@/plugins/axios/api/cloud-drive/getFileList';
+import fetchFileDirectLinkAPI from '@/plugins/axios/api/cloud-drive/fetchFileDirectLink'
+import postFileAPI from '@/plugins/axios/api/cloud-drive/postFile';
+import createFolderAPI from '@/plugins/axios/api/cloud-drive/createFolder';
 
 import NewFolderDialog from './NewFolderDialog.vue';
 
@@ -211,7 +211,6 @@ export default {
               // 根目录未初始化，初始化根目录
               this.eventBus.sharedState.rootUid = response.currentFolderUid;
             }
-            
             this.eventBus.sharedState.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
             this.eventBus.sharedState.path = this.eventBus.formatPathToArray(response.path); // 设置格式化的路径
             this.items = response.data;

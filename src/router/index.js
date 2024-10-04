@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 import { routes as accountRoutes } from './account/index'
 import { routes as fileTransferRoutes } from './file-transfer/index'
-import { routes as cloudStorageRoutes } from './cloud-storage/index'
+import { routes as cloudDriveRoutes } from './cloud-storage/index'
 import { routes as musicStationRoutes } from './music-station/index'
 import { routes as codeBookRoutes } from './library/index'
 
@@ -48,25 +48,25 @@ const routes = [
     children: fileTransferRoutes
   },
   {
-    path: '/cloud-storage',
-    name: 'cloud-storage',
-    component: () => import('@/views/cloud-storage/CloudStorageView.vue'),
-    children: cloudStorageRoutes,
-    redirect: `/cloud-storage/${cloudStorageRoutes[0].path}`,
+    path: '/cloud-drive',
+    name: 'cloud-drive',
+    component: () => import('@/views/cloud-drive/CloudDriveView.vue'),
+    children: cloudDriveRoutes,
+    redirect: `cloud-drive/${cloudDriveRoutes[0].path}`,
   },
   {
     path: '/music-station',
     name: 'music-station',
     component: () => import('@/views/music-station/MusicStationView.vue'),
     children: musicStationRoutes,
-    redirect: `/music-station/${musicStationRoutes[0].path}`,
+    redirect: `music-station/${musicStationRoutes[0].path}`,
   },
   {
     path: '/library',
     name: 'library',
     component: () => import('@/views/library/LibraryView.vue'),
     children: codeBookRoutes,
-    redirect: `/library/${codeBookRoutes[0].path}`,
+    redirect: `library/${codeBookRoutes[0].path}`,
   }
 ]
 

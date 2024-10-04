@@ -15,7 +15,7 @@
 
           <!-- 书籍介绍 -->
           <v-textarea
-            label="书籍介绍"
+            label="书籍描述"
             v-model="form.bookDescription"
             :rules="[rules.required]"
             required
@@ -57,14 +57,14 @@ export default {
         bookDescription: '',
         categoryTags: []
       },
-      categories: [], // 分类选项
+      
       rules: {
         required: value => !!value || '此字段为必填项', // 验证规则
       }
     };
   },
-  created() {
-    this.fetchCategories(); // 在组件创建时获取分类数据
+  props: {
+    categories: [], // 分类选项
   },
   methods: {
     flattenCategories(categories) {
@@ -87,19 +87,9 @@ export default {
       flatten(categories);
       return flatCategories;
     },
-    async fetchCategories() {
-      try {
-        const response = await getBookCategoriesAPI();
-        this.categories = response.data; // 将 API 返回的分类数据赋值
-      } catch (error) {
-        console.error('获取分类选项失败:', error);
-      }
-    },
     async confirm() {
       if (this.$refs.bookForm.validate()) {
-        const response = await newBookAPI(this.form);
-        console.log('书籍添加成功:', response.data);
-        this.$emit('confirm', response.data);
+        this.$emit('confirm', this.form);
         this.visible = false;
         this.$emit('close');
       }

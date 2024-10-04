@@ -8,7 +8,7 @@ const createFolderAPI = async (parentUid, folderName) => {
     formData.append('folder_name', folderName);
 
     // 发送 POST 请求以创建新文件夹
-    const response = await axiosInstance.post('/api/fileStorage/createFolder', formData, {
+    const response = await axiosInstance.post('/api/cloudDrive/createFolder', formData, {
       headers: {
         'Authorization': Cookies.get('token'),
         'Content-Type': 'multipart/form-data'

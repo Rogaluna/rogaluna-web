@@ -5,7 +5,7 @@ const getParentFolderAPI = async (folderUid) => {
   
   try {
       // 使用 URL 参数对象传递查询参数
-      const response = await axiosInstance.get('/api/fileStorage/getParentFolder', {
+      const response = await axiosInstance.get('/api/cloudDrive/getParentFolder', {
           params: {
               directory: folderUid
           },

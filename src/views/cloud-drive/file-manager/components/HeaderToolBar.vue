@@ -92,8 +92,8 @@
  */
 
 import RogalunaList from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaList.vue';
-
-import getParentFolderAPI from '@/plugins/axios/api/cloud-storage/getParentFolder';
+import getParentFolderAPI from '@/plugins/axios/api/cloud-drive/getParentFolder';
+import getUidFromPathAPI from '@/plugins/axios/api/cloud-drive/getUidFromPath'
 
 export default {
   inject: ['eventBus'],
@@ -189,25 +189,38 @@ export default {
       this.editablePath = this.eventBus.formatArrayToPath(this.eventBus.sharedState.path);
     },
     handleInputConfirm() {
-      console.log(this.editablePath);
       // 将字符串发送给服务器
-
-      const pathRegex = /^root(\/[a-zA-Z0-9%]+)*$/;
-      if (!pathRegex.test(this.editablePath)) {
-        // 路径不合法
-        this.hideInput();
-      } else {
-        // const paths = this.editablePath.split('/').filter(p => p.trim() !== '');
-        // const breadcrumbs = paths.map(text => ({ text }));
-        // this.eventBus.setDir(breadcrumbs);
-        this.hideInput();
+      // debugger
+      let inputPath = this.editablePath;
+      if (!inputPath.startsWith("root")) {
+        // 如果路径不以 root 开头，自动添加 root
+        inputPath = "root" + (inputPath.startsWith("/") ? "" : "/") + inputPath;
       }
+
+      getUidFromPathAPI(inputPath)
+          .then(response => {
+            if (response.uid == this.eventBus.sharedState.rootUid) {
+              this.eventBus.setDir("");
+            } else {
+              this.eventBus.setDir(response.uid);
+            }
+          })
+        this.hideInput();
     },
     handleBreadcrumbClick(item) {
       // 点击路径编辑器
-      // const clickedIndex = this.eventBus.sharedState.path.findIndex(b => b.text === item.text);
-      // const breadcrumbsSegment = this.eventBus.sharedState.path.slice(0, clickedIndex + 1);
-      // console.log(breadcrumbsSegment);
+      const clickedIndex = this.eventBus.sharedState.path.findIndex(b => b.text === item.text);
+      const breadcrumbsSegment = this.eventBus.sharedState.path.slice(0, clickedIndex + 1);
+      let path = this.eventBus.formatArrayToPath(breadcrumbsSegment);
+      getUidFromPathAPI(path)
+        .then(response => {
+          if (response.uid == this.eventBus.sharedState.rootUid) {
+            this.eventBus.setDir("");
+          } else {
+            this.eventBus.setDir(response.uid);
+          }
+          
+        })
     }
   }
 }
