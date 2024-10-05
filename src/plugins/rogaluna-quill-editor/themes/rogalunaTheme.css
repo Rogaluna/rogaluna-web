@@ -1,0 +1,14 @@
+/* 修改工具栏按钮的背景颜色 */
+.ql-snow .ql-toolbar button {
+  background-color: #f0f0f0; /* 你想要的背景颜色 */
+}
+
+/* 修改按钮的图标颜色 */
+.ql-snow .ql-toolbar button svg {
+  fill: #ff0000; /* 你想要的图标颜色 */
+}
+
+/* 当按钮被悬停时的样式 */
+.ql-snow .ql-toolbar button:hover {
+  background-color: #e0e0e0; /* 你想要的悬停背景颜色 */
+}
