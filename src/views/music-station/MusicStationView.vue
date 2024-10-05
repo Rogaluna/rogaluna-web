@@ -2,9 +2,14 @@
   <div>
     <aside-navigator :items="navItems"></aside-navigator>
     <v-main style="height: 100%;">
-      <router-view/>
+    
+      <div style="flex-grow: 1; overflow-y: auto;">
+        <router-view/>
+      </div>
 
-      <MusicPlayerBar />
+      <div>
+        <MusicPlayerBar />
+      </div>
     </v-main>
   </div>
 </template>
@@ -51,5 +56,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+::v-deep .v-main__wrap {
+  display: flex;
+  flex-direction: column;
+}
 </style>

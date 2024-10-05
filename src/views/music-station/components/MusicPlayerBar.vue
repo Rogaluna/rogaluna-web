@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation fixed height="90">
+  <div class="music-player-bar">
     <v-divider />
     <div class="nav-main">
       <!-- 左侧：歌曲信息和操作按钮 -->
@@ -170,7 +170,7 @@
         </v-tooltip>
       </div>
     </div>
-  </v-bottom-navigation>
+  </div>
 </template>
 
 <script>
@@ -213,10 +213,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-bottom-navigation {
+.music-player-bar {
+  height: 90px;
   background-color: transparent;
-  position: absolute;
-  bottom: 0;
   display: flex;
   flex-direction: column;
 }
