@@ -2,7 +2,6 @@
   <div>
     <aside-navigator :items="navItems"></aside-navigator>
     <v-main style="height: 100%;">
-    
       <div style="flex-grow: 1; overflow-y: auto;">
         <router-view/>
       </div>
