@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%; display: flex; flex-direction: column;">
     <v-banner
       single-line
       :sticky="false"
@@ -22,7 +22,9 @@
       </template> -->
     </v-banner>
 
-    <router-view></router-view>
+    <div style="flex-grow: 1;">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <rogaluna-quill-editor v-model="content" :options="editorOptions"></rogaluna-quill-editor>
+  <div style="height: 100%;">
+    <rogaluna-quill-editor 
+      v-model="content" 
+      :options="editorOptions"
+      style="display: flex; flex-direction: column; height: 100%;"></rogaluna-quill-editor>
   </div>
 </template>
 
@@ -28,5 +31,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
