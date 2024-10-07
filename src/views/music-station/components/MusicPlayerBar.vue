@@ -11,7 +11,7 @@
           class="mr-2"
         ></v-img>
         <div>
-          <div>{{ songTitle }}</div>
+          <div class="song-name">{{ songTitle }}</div>
           <div class="artist-info">{{ artistName }}</div>
         </div>
       </div>
@@ -234,6 +234,10 @@ export default {
   display: flex;
   justify-content: left;
   align-items: center;
+
+  .song-name {
+    color: white;
+  }
 }
 
 .nav-right {
@@ -249,7 +253,7 @@ export default {
     margin: 0 20px;
 
     &:hover {
-      color: v-bind('primaryColor');
+      fill: v-bind('primaryColor');
     }
   }
 }
@@ -284,7 +288,7 @@ export default {
       margin: 0 40px;
 
       &:hover {
-        color: v-bind('primaryColor');
+        fill: v-bind('primaryColor');
       }
     }
   }
@@ -295,7 +299,7 @@ export default {
   color: gray;
 }
 
-.v-icon {
-  color: white;
+svg {
+  fill: white;
 }
 </style>
