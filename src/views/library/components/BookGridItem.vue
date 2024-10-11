@@ -59,7 +59,7 @@ export default {
   object-fit: cover;
   border: 1px solid;
   border-radius: 5%;
-  border-color: gray;
+  border-color: var(--split-color);
 }
 
 .book-title {
@@ -73,13 +73,13 @@ export default {
   flex-grow: 1;
   padding: 10px 0;
 
-  color: white;
+  color: var(--light-background-color);
 }
 
 .reading-progress {
   width: 100%;
   font-size: 12px;
-  color: gray;
+  color: var(--split-color);
   text-align: right;
 }
 </style>

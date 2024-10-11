@@ -171,10 +171,6 @@ export default {
       inputVisible: false,
     }
   },
-  
-  mounted() {
-
-  },
 
   methods: {
     showInput() {
@@ -233,15 +229,15 @@ export default {
   align-items: center;
   background-color: none;
   border-width: 0px 0px 1px 0px;
-  border-color: #424242;
+  border-color: var(--split-color);
   border-style: solid;
   padding: 5px;
 
   .breadcrumbs-container {
 
     .v-breadcrumbs {
-      background-color: rgba(0, 0, 0, 0.66);
-      border: 1px rgb(200, 200, 200) solid;
+      background-color: var(--deep-background-color);
+      border: 1px var(--split-color) solid;
       padding: 10px;
 
       ::v-deep .v-breadcrumbs__item {
@@ -254,8 +250,8 @@ export default {
     }
 
     .v-input {
-      background-color: rgba(0, 0, 0, 0.66);
-      border: 1px rgb(200, 200, 200) solid;
+      background-color: var(--deep-background-color);
+      border: 1px var(--accent-color) solid;
       padding: 10px;
       margin: 0px;
 

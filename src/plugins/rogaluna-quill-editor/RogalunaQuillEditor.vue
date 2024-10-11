@@ -98,9 +98,9 @@ export default {
   /* 可以在这里添加自定义样式 */
 
   ::v-deep .ql-snow * {
-    fill: red !important;
-    color: white !important;
-    stroke: white !important;
+    fill: var(--primary-color) !important;
+    color: var(--light-background-color) !important;
+    stroke: var(--light-background-color) !important;
   }
 }
 

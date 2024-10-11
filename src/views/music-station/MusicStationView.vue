@@ -2,7 +2,7 @@
   <div>
     <aside-navigator :items="navItems"></aside-navigator>
     <v-main style="height: 100%;">
-      <div style="flex-grow: 1; overflow-y: auto;">
+      <div style="display: flex; flex-grow: 1; overflow: hidden;">
         <router-view/>
       </div>
 
@@ -36,7 +36,7 @@ export default {
           name: '收藏品',
           iconClass: '#rogaluna-icon-Collection',
           handler: (self) => {
-            // self.$router.push({ name: 'file-manager' });
+            self.$router.push({ name: 'music-collection' });
           }
         },
         {
@@ -58,5 +58,6 @@ export default {
 ::v-deep .v-main__wrap {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 </style>

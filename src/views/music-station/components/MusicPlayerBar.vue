@@ -189,11 +189,6 @@ export default {
       playModeStr: '随机播放',
     };
   },
-  computed: {
-    primaryColor() {
-      return this.$vuetify.theme.themes[this.$vuetify.theme.dark ? 'dark' : 'light'].primary;
-    },
-  },
   methods: {
     playPause() {
       this.isPlaying = !this.isPlaying;
@@ -236,7 +231,7 @@ export default {
   align-items: center;
 
   .song-name {
-    color: white;
+    color: var(--light-background-color);
   }
 }
 
@@ -253,7 +248,7 @@ export default {
     margin: 0 20px;
 
     &:hover {
-      fill: v-bind('primaryColor');
+      fill: var(--primary-color)
     }
   }
 }
@@ -273,7 +268,7 @@ export default {
 
     .time-span {
       font-size: 12px;
-      color: gray;
+      color: var(--split-color);
     }
   }
 
@@ -288,7 +283,7 @@ export default {
       margin: 0 40px;
 
       &:hover {
-        fill: v-bind('primaryColor');
+        fill: var(--primary-color);
       }
     }
   }
@@ -296,10 +291,10 @@ export default {
 
 .artist-info {
   font-size: 12px;
-  color: gray;
+  color: var(--split-color);
 }
 
 svg {
-  fill: white;
+  fill: var(--light-background-color);
 }
 </style>

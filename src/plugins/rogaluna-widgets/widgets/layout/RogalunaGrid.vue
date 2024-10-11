@@ -1,5 +1,8 @@
 <template>
   <div :class="['container']" :style="containerStyle">
+    <div class="grid-item" :style="[itemStyle]">
+      <slot name="start"></slot>
+    </div>
     <div
       v-for="(item, index) in items"
       :key="index"
@@ -8,7 +11,7 @@
     >
       <slot :item="item" :index="index"></slot>
     </div>
-    <div v-if="useEndElement" class="grid-item" :style="[itemStyle]">
+    <div class="grid-item" :style="[itemStyle]">
       <slot name="end"></slot>
     </div>
   </div>
@@ -25,7 +28,6 @@
  * @prop {Number} rows - 固定行数
  * @prop {Number} columns - 固定列数
  * @prop {Object} itemStyle - 元素样式
- * @prop {Bool} useEndElement - 启用末尾元素，可以在Grid末尾添加一个其他模板的组件
  * 
  * @note 当rows和columns有值时，会设置grid样式，依照设定的行列进行排列，而当rows和columns没有取值时，会依照元素大小依次排列，此时设置itemStyle的宽高会很有用。
  * 
@@ -96,10 +98,6 @@ export default {
     itemStyle: {
       type: Object,
       default: () => ({})
-    },
-    useEndElement: {
-      type: Boolean,
-      default: false
     }
   },
   computed: {
