@@ -108,12 +108,13 @@ export default {
             value: '1',
             handler: () => {
               this.$rogalunaWidgets.showFileSelector({}, (files) => {
-                const file = files[0];
-                postFileAPI(file, this.eventBus.sharedState.currentFolderUid)
-                  .then(response => {
-                    console.log(response);
-                    this.fetchData();
-                  })
+                files.forEach((file) => {
+                  postFileAPI(file, this.eventBus.sharedState.currentFolderUid)
+                    .then(response => {
+                      console.log(response);
+                      this.fetchData();
+                    })
+                })
               })
             }
           },

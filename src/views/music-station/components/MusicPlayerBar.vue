@@ -11,8 +11,8 @@
           class="mr-2"
         ></v-img>
         <div>
-          <div class="song-name">{{ songTitle }}</div>
-          <div class="artist-info">{{ artistName }}</div>
+          <div class="song-name" align="left">{{ eventBus.currentMusic.title }}</div>
+          <div class="artist-info" align="left">{{ eventBus.currentMusic.artist }}</div>
         </div>
       </div>
 
@@ -71,11 +71,11 @@
                 icon
                 v-bind="attrs"
                 v-on="on"
-                @click="switchPlayMode">
-                <use xlink:href="#rogaluna-icon-play"></use>
+                @click="playPause">
+                <use :xlink:href="eventBus.playerSetting.isPlaying ? '#rogaluna-icon-play' : '#rogaluna-icon-timeout'"></use>
               </svg>
             </template>
-            <span>{{ isPlaying ? '播放' : '暂停' }}</span>
+            <span>{{ eventBus.playerSetting.isPlaying ? '暂停' : '播放' }}</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -130,14 +130,14 @@
         </div>
         <!-- 进度条部分 -->
         <div class="progress-bar">
-          <span class="time-span">{{ currentTime }}</span>
+          <span class="time-span">{{ eventBus.formatTime(eventBus.currentMusic.currentDuration) }}</span>
           <v-slider
-            v-model="currentTimeValue"
-            :max="totalTimeValue"
+            v-model="eventBus.currentDuration"
+            :max="eventBus.totalDuration"
             class="mx-2"
             hide-details
           ></v-slider>
-          <span class="time-span">{{ totalTime }}</span>
+          <span class="time-span">{{ eventBus.formatTime(eventBus.currentMusic.totalDuration) }}</span>
         </div>
       </div>
 
@@ -174,25 +174,60 @@
 </template>
 
 <script>
+import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
+
 export default {
   name: "MusicPlayerBar",
+  inject: ['eventBus'],
   data() {
     return {
-      isPlaying: false,
-      songTitle: "R.I.P.",
-      artistName: "eicateve",
-      currentTime: "0:00",
-      totalTime: "3:45",
-      currentTimeValue: 0,
-      totalTimeValue: 225,
       volume: 0,
       playModeStr: '随机播放',
+      audioElement: null,
     };
   },
+  watch: {
+    // // 监听当前音乐 uid 的变化
+    // 'eventBus.currentMusic.uid': {
+    //   handler(newVal, oldVal) {
+
+
+    //   },
+    //   deep: true, // 使得监听器可以检测数组或对象的变化
+    // }
+  },
+  mounted() {
+    // 加载新音乐事件
+    this.eventBus.$on('load-new-music', () => {
+      this.loadNewMusic();
+    });
+  },
   methods: {
+    loadNewMusic() {
+      if (!this.audioElement) {
+        this.audioElement = new Audio();
+      }
+      this.audioElement.src = BASE_HTTP_URL + "/api/musicStation/getMusic?musicId=" + this.eventBus.currentMusic.uid; // uid 指示了目标音乐，通过它构建src
+
+      this.audioElement.addEventListener('timeupdate', () => {
+        this.eventBus.currentMusic.currentDuration = Math.floor(this.audioElement.currentTime);
+      });
+
+      this.audioElement.addEventListener('loadedmetadata', () => {
+        this.eventBus.currentMusic.totalDuration = Math.floor(this.audioElement.duration);
+      });
+      this.audioElement.load();
+      this.eventBus.playerSetting.isPlaying = true;
+      this.audioElement.play();
+    },
     playPause() {
-      this.isPlaying = !this.isPlaying;
-      console.log(this.isPlaying ? "播放" : "暂停");
+      this.eventBus.playerSetting.isPlaying = !this.eventBus.playerSetting.isPlaying;
+      if (this.eventBus.playerSetting.isPlaying) {
+        this.audioElement.play()
+      } else {
+        this.audioElement.pause()
+      }
+      
     },
     previousTrack() {
       console.log("上一曲");

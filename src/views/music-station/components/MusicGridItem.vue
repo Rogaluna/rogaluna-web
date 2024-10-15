@@ -1,16 +1,16 @@
 <template>
-  <div class="album-grid-item">
+  <div class="item-grid-item" @click="handleItemClick">
     <v-img
       :src="albumCover"
       alt="Album Cover"
-      class="album-cover"
+      class="item-cover"
       @error="handleImageError"
     ></v-img>
-    <div class="album-title">
-      <span>{{ album.title }}</span>
+    <div class="item-title">
+      <span>{{ item.music_name }}</span>
     </div>
     <div class="artist-name">
-      {{ album.artist }}
+      {{ item.artist }}
     </div>
   </div>
 </template>
@@ -19,26 +19,29 @@
 export default {
   name: 'AlbumGridItem',
   props: {
-    album: {
+    item: {
       type: Object,
       required: true
     }
   },
   data() {
     return {
-      albumCover: this.album.cover // Initially use album cover
+      albumCover: '/api/musicStation/cover?album=' + this.item.album_id // Initially use album cover
     };
   },
   methods: {
     handleImageError() {
       this.albumCover = require('@/assets/defaultAlbumCover.svg'); // Use default image when cover fails to load
+    },
+    handleItemClick() {
+      this.$emit('itemClick', this.item);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.album-grid-item {
+.item-grid-item {
   width: 170px;
   height: 300px;
   cursor: pointer;
@@ -53,7 +56,7 @@ export default {
   }
 }
 
-.album-cover {
+.item-cover {
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -62,7 +65,7 @@ export default {
   border-color: gray;
 }
 
-.album-title {
+.item-title {
   width: 100%;
   font-size: 14px;
   font-weight: bold;

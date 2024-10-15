@@ -14,10 +14,17 @@
 </template>
 
 <script>
+import EventBus from '@/views/music-station/bus/playManager'
+
 import AsideNavigator from '../components/AsideNavigator.vue';
 import MusicPlayerBar from './components/MusicPlayerBar.vue';
 
 export default {
+  provide() {
+    return {
+      eventBus: EventBus
+    };
+  },
   components: {
     AsideNavigator,
     MusicPlayerBar

@@ -5,55 +5,55 @@ import Cookies from 'js-cookie';
 import AsyncTask from "../../module/tasks/AsyncTask";
 import { generateMD5 , generateFileMD5 } from "../../module/functions/generateMD5";
 
-const postFileAPI = async (file, parentUid) => {
+const postMusicAPI = async (musicFile) => {
 
   // 延迟函数
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // 定义合并文件的 API 请求
-  const mergeFileAPI = async (uid, totalChunks) => {
+  // 定义合并音乐文件的 API 请求
+  const mergeMusicAPI = async (uid, totalChunks) => {
     try {
+      debugger
       const formData = new FormData();
       formData.append('uid', uid);
-      formData.append('parentUid', parentUid); // 父文件夹uid
-      formData.append('fileName', encodeURIComponent(file.name)); // 文件名
+      formData.append('fileName', encodeURIComponent(musicFile.name)); // 音乐文件名
       formData.append('totalChunks', totalChunks);
 
-      const response = await axiosInstance.post('/api/cloudDrive/mergeFile', formData, {
+      const response = await axiosInstance.post('/api/musicStation/mergeMusic', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': Cookies.get('token')
         }
       });
 
-      console.log("File merge request successful:", response.data);
+      console.log("Music merge request successful:", response.data);
     } catch (error) {
-      console.error("File merge request failed:", error);
-      throw new Error("File merge failed");
+      console.error("Music merge request failed:", error);
+      throw new Error("Music merge failed");
     }
   };
 
   // 定义 HTTP 分块上传的任务执行函数
   const uploadFunction = async () => {
-    const totalSize = file.size;
+    const totalSize = musicFile.size;
     const totalChunks = Math.ceil(totalSize / CHUNK_SIZE); // 计算总的块数
 
-    const uuid = await generateFileMD5(file);
+    const uuid = await generateFileMD5(musicFile);
 
     for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
       const start = chunkIndex * CHUNK_SIZE;
       const end = Math.min(start + CHUNK_SIZE, totalSize);
-      const chunk = file.slice(start, end); // 获取当前块
+      const chunk = musicFile.slice(start, end); // 获取当前块
 
       // 生成当前块的 MD5 校验码
       const chunkMd5Hash = generateMD5(chunk);
   
       const formData = new FormData();
-      formData.append('uid', uuid) // 文件 MD5 校验码
-      formData.append('chunkIndex', chunkIndex); // 块索引：类比于数组索引，0开头，标记1
-      formData.append('totalChunks', totalChunks); // 总块数：类比于数组长度
+      formData.append('uid', uuid); // 音乐文件 MD5 校验码
+      formData.append('chunkIndex', chunkIndex); // 块索引
+      formData.append('totalChunks', totalChunks); // 总块数
       formData.append('chunkMd5', chunkMd5Hash); // 块 MD5 校验码
-      formData.append('chunkData', chunk); // 当前文件块数据
+      formData.append('chunkData', chunk); // 当前音乐块数据
   
       let retryCount = 0;
       const maxRetries = 5;
@@ -64,7 +64,7 @@ const postFileAPI = async (file, parentUid) => {
       while (retryCount < maxRetries && !success) {
         try {
           // 发送当前块的 POST 请求
-          const response = await axiosInstance.post('/api/fileStorage/postFile', formData, {
+          const response = await axiosInstance.post('/api/musicStation/postMusic', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': Cookies.get('token')
@@ -88,9 +88,9 @@ const postFileAPI = async (file, parentUid) => {
       }
     }
 
-    console.log("All chunks uploaded, merging file...");
+    console.log("All chunks uploaded, merging music...");
 
-    await mergeFileAPI(uuid, totalChunks);
+    await mergeMusicAPI(uuid, totalChunks);
   };
 
   // 创建 AsyncTask 实例并添加到上传队列
@@ -101,4 +101,4 @@ const postFileAPI = async (file, parentUid) => {
   
 };
 
-export default postFileAPI
+export default postMusicAPI;

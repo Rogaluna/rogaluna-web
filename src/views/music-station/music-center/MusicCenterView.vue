@@ -6,7 +6,7 @@
     <div style="overflow: auto;">
       <rogaluna-grid :items="items" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
         <template v-slot:default="{ item }">
-          <album-grid-item :album="item" />
+          <music-grid-item :item="item" />
         </template>
       </rogaluna-grid>
     </div>
@@ -15,7 +15,7 @@
 
 <script>
 import RogalunaGrid from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaGrid.vue';
-import AlbumGridItem from '../components/AlbumGridItem.vue';
+import MusicGridItem from '../components/MusicGridItem.vue';
 import SearchBar from '../components/SearchBar.vue';
 
 // import NewDialog from './components/NewDialog.vue';
@@ -23,14 +23,12 @@ import SearchBar from '../components/SearchBar.vue';
 export default {
   components: {
     RogalunaGrid,
-    AlbumGridItem,
+    MusicGridItem,
     SearchBar
   },
   data() {
     return {
-      items: [
-        { title: 'Album 1', cover: 'cover1.jpg', artist: 'Artist 1' },
-      ],
+      items: [],
     };
   },
   methods: {
