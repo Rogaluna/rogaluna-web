@@ -1,6 +1,8 @@
 import { axiosInstance } from "../../main"
 import { CHUNK_SIZE } from "../../configs/axiosConfigs";
 import Cookies from 'js-cookie';
+import { parseBlob } from 'music-metadata-browser';
+import { Buffer } from 'buffer';
 
 import AsyncTask from "../../module/tasks/AsyncTask";
 import { generateMD5 , generateFileMD5 } from "../../module/functions/generateMD5";
@@ -13,7 +15,6 @@ const postMusicAPI = async (musicFile) => {
   // 定义合并音乐文件的 API 请求
   const mergeMusicAPI = async (uid, totalChunks) => {
     try {
-      debugger
       const formData = new FormData();
       formData.append('uid', uid);
       formData.append('fileName', encodeURIComponent(musicFile.name)); // 音乐文件名
@@ -37,9 +38,8 @@ const postMusicAPI = async (musicFile) => {
   const uploadFunction = async () => {
     const totalSize = musicFile.size;
     const totalChunks = Math.ceil(totalSize / CHUNK_SIZE); // 计算总的块数
-
-    const uuid = await generateFileMD5(musicFile);
-
+    const uuid = await generateFileMD5(musicFile); // 生成文件 Md5 值
+    
     for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
       const start = chunkIndex * CHUNK_SIZE;
       const end = Math.min(start + CHUNK_SIZE, totalSize);

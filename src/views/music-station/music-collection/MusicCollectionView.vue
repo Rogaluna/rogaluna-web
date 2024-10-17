@@ -1,22 +1,32 @@
 <template>
-  <div style="display: flex; flex-direction: column; width: 100%;" ref="fileOperatePanel">
+  <rogaluna-div 
+  :menuItems="menus.panel"
+  ref="fileOperatePanel"
+  style="display: flex; flex-direction: column; width: 100%;">
     <div>
       <search-bar></search-bar>
     </div>
-    <div  style="overflow: auto;">
+    <div style="overflow: auto;">
       <rogaluna-grid :items="items" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
         <template v-slot:default="{ item }">
-          <music-grid-item :item="item" @itemClick="handleItemClick"/>
+          <rogaluna-div
+          :menuItems="menus.music">
+            <music-grid-item :item="item" @itemClick="handleItemClick"/>
+          </rogaluna-div>
         </template>
         <template #start>
-          <add-grid-item text="导入" @click="newAlbum"></add-grid-item>
+          <rogaluna-div
+          :menuItems="menus.import">
+            <add-grid-item text="导入" @click="newAlbum"></add-grid-item>
+          </rogaluna-div>
         </template>
       </rogaluna-grid>
     </div>
-  </div>
+  </rogaluna-div>
 </template>
 
 <script>
+import RogalunaDiv from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaDiv.vue';
 import RogalunaGrid from '@/plugins/rogaluna-widgets/widgets/layout/RogalunaGrid.vue';
 import MusicGridItem from '../components/MusicGridItem.vue';
 import AddGridItem from '../components/AddGridItem.vue';
@@ -27,6 +37,7 @@ import postMusicAPI from '@/plugins/axios/api/music-station/postMusic';
 
 export default {
   components: {
+    RogalunaDiv,
     RogalunaGrid,
     MusicGridItem,
     AddGridItem,
@@ -35,6 +46,46 @@ export default {
   inject: ['eventBus'],
   data() {
     return {
+      menus: {
+        panel: [
+          {
+            label: '导入',
+            icon: '#rogaluna-icon-timeout',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+        ],
+        import: [
+          {
+            label: '导入',
+            icon: '#rogaluna-icon-timeout',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+        ],
+        music: [
+          {
+            label: '播放',
+            icon: '#rogaluna-icon-timeout',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+          {
+            label: '详细信息',
+            icon: '#rogaluna-icon-file',
+            value: '1',
+            handler: () => {
+
+            }
+          }
+        ]
+      },
       items: [],
     };
   },

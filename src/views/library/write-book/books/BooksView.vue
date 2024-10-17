@@ -18,6 +18,8 @@ import AddGridItem from '../../components/AddGridItem.vue';
 
 import NewDialog from './components/NewDialog.vue';
 
+import getBookCategoriesAPI from '@/plugins/axios/api/library/getBookCategories'
+
 export default {
   components: {
     RogalunaGrid,
@@ -34,16 +36,32 @@ export default {
   },
   methods: {
     newBook() {
-      // try {
-      //   const response = await getBookCategoriesAPI();
-      //   this.categories = response.data; // 将 API 返回的分类数据赋值
-      // } catch (error) {
-      //   console.error('获取分类选项失败:', error);
-      // }
-
+      let categories;
+      getBookCategoriesAPI()
+        .then((response) => {
+          categories = response.categories;
+          console.log(`categories`, categories);
+        })
+      
       this.$rogalunaWidgets.showDialog(
         NewDialog,
-        { categories: ['1', '2'] },
+        { categories: [
+  {
+    id: 1,
+    name: '科学技术',
+    children: [
+      {
+        id: 2,
+        name: '计算机科学',
+        children: [
+          { id: 3, name: 'C++', children: [] },
+          { id: 4, name: 'JavaScript', children: [] }
+        ]
+      }
+    ]
+  }
+]
+ },
         { 
           confirm: () => { console.log('用户点击了确认'); }, 
           cancel: () => { console.log('用户点击了取消'); } 

@@ -2,7 +2,7 @@
   <v-dialog v-model="visible" max-width="600px" persistent>
     <v-card>
       <v-card-title class="headline">添加书籍</v-card-title>
-      
+
       <v-card-text>
         <v-form ref="bookForm" v-model="valid">
           <!-- 书籍名称 -->
@@ -22,15 +22,35 @@
           ></v-textarea>
 
           <!-- 分类标签 -->
-          <v-select
-            label="分类标签"
-            v-model="form.categoryTags"
-            :items="categories"
-            multiple
-            chips
-            :rules="[rules.required]"
-            required
-          ></v-select>
+          <v-menu
+            v-model="menuVisible"
+            close-on-content-click="false"
+            max-width="400px"
+            offset-y
+          >
+            <template #activator="{ on, attrs }">
+              <v-text-field
+                v-bind="attrs"
+                v-on="on"
+                label="选择分类标签"
+                :value="selectedCategoryNames.join(', ')"
+                readonly
+              ></v-text-field>
+            </template>
+
+            <v-treeview
+              :items="categories"
+              v-model="form.categoryTags"
+              activatable
+              open-on-click
+              item-text="name"
+              item-value="id"
+              multiple
+              selectable
+              return-object
+              class="treeview-dropdown"
+            ></v-treeview>
+          </v-menu>
         </v-form>
       </v-card-text>
 
@@ -44,62 +64,54 @@
 </template>
 
 <script>
-import getBookCategoriesAPI from '@/plugins/axios/api/library/getBookCategories';
-import newBookAPI from '@/plugins/axios/api/library/newBook';
-
 export default {
   data() {
     return {
       visible: true, // 控制对话框的显示
-      valid: false,  // 用于表单验证状态
+      menuVisible: false, // 控制菜单（下拉框）的显示状态
+      valid: false, // 用于表单验证状态
       form: {
         bookName: '',
         bookDescription: '',
-        categoryTags: []
+        categoryTags: [] // 用户选择的标签
       },
-      
       rules: {
-        required: value => !!value || '此字段为必填项', // 验证规则
+        required: value => !!value || '此字段为必填项' // 验证规则
       }
     };
   },
   props: {
-    categories: [], // 分类选项
+    categories: {
+      type: Array, // 期待传入的分类数据是一个数组
+      required: true
+    }
+  },
+  computed: {
+    // 计算已选择的分类名称列表
+    selectedCategoryNames() {
+      return this.form.categoryTags.map(tag => tag.name);
+    }
   },
   methods: {
-    flattenCategories(categories) {
-      let flatCategories = [];
-
-      const flatten = (category, parent = '') => {
-        for (let key in category) {
-          let fullName = parent ? `${parent} / ${key}` : key;
-          flatCategories.push({
-            label: fullName,
-            value: key
-          });
-
-          if (Object.keys(category[key].subcategories).length > 0) {
-            flatten(category[key].subcategories, fullName);
-          }
-        }
-      };
-
-      flatten(categories);
-      return flatCategories;
-    },
     async confirm() {
       if (this.$refs.bookForm.validate()) {
-        this.$emit('confirm', this.form);
+        this.$emit('confirm', this.form); // 提交表单
         this.visible = false;
-        this.$emit('close');
+        this.$emit('close'); // 关闭对话框
       }
     },
     cancel() {
-      // 取消操作，关闭对话框
-      this.$emit('cancel');
+      this.$emit('cancel'); // 取消操作
       this.visible = false;
-      this.$emit('close'); // 用于触发销毁逻辑
+      this.$emit('close'); // 关闭对话框
     }
   }
 };
 </script>
+
+<style scoped>
+.treeview-dropdown {
+  max-height: 200px; /* 限制高度 */
+  overflow-y: auto;  /* 启用滚动条 */
+}
+</style>

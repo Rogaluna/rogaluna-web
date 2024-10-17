@@ -84,5 +84,9 @@ export default {
   font-size: 12px;
   color: gray;
   text-align: right;
+  overflow: hidden;
+  flex-grow: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

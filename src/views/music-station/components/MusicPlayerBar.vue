@@ -132,10 +132,12 @@
         <div class="progress-bar">
           <span class="time-span">{{ eventBus.formatTime(eventBus.currentMusic.currentDuration) }}</span>
           <v-slider
-            v-model="eventBus.currentDuration"
-            :max="eventBus.totalDuration"
+            v-model="eventBus.currentMusic.currentDuration"
+            :max="eventBus.currentMusic.totalDuration"
             class="mx-2"
             hide-details
+            @start="onSliderStart"
+            @change="onSliderEnd"
           ></v-slider>
           <span class="time-span">{{ eventBus.formatTime(eventBus.currentMusic.totalDuration) }}</span>
         </div>
@@ -184,17 +186,10 @@ export default {
       volume: 0,
       playModeStr: '随机播放',
       audioElement: null,
+      isSeeking: false,
     };
   },
   watch: {
-    // // 监听当前音乐 uid 的变化
-    // 'eventBus.currentMusic.uid': {
-    //   handler(newVal, oldVal) {
-
-
-    //   },
-    //   deep: true, // 使得监听器可以检测数组或对象的变化
-    // }
   },
   mounted() {
     // 加载新音乐事件
@@ -209,13 +204,20 @@ export default {
       }
       this.audioElement.src = BASE_HTTP_URL + "/api/musicStation/getMusic?musicId=" + this.eventBus.currentMusic.uid; // uid 指示了目标音乐，通过它构建src
 
-      this.audioElement.addEventListener('timeupdate', () => {
-        this.eventBus.currentMusic.currentDuration = Math.floor(this.audioElement.currentTime);
+      this.audioElement.addEventListener("timeupdate", () => {
+        if (!this.isSeeking) {
+          this.eventBus.currentMusic.currentDuration = Math.floor(
+            this.audioElement.currentTime
+          );
+        }
       });
 
-      this.audioElement.addEventListener('loadedmetadata', () => {
-        this.eventBus.currentMusic.totalDuration = Math.floor(this.audioElement.duration);
+      this.audioElement.addEventListener("loadedmetadata", () => {
+        this.eventBus.currentMusic.totalDuration = Math.floor(
+          this.audioElement.duration
+        );
       });
+
       this.audioElement.load();
       this.eventBus.playerSetting.isPlaying = true;
       this.audioElement.play();
@@ -227,7 +229,15 @@ export default {
       } else {
         this.audioElement.pause()
       }
-      
+    },
+    // 当用户开始拖动时，设置 isSeeking 为 true
+    onSliderStart() {
+      this.isSeeking = true;
+    },
+    // 当用户停止拖动时，更新音乐时间并重置 isSeeking
+    onSliderEnd() {
+      this.isSeeking = false;
+      this.audioElement.currentTime = this.eventBus.currentMusic.currentDuration;
     },
     previousTrack() {
       console.log("上一曲");
