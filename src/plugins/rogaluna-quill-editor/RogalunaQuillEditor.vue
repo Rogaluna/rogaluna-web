@@ -94,15 +94,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rogaluna-quill-editor {
-  /* 可以在这里添加自定义样式 */
-
-  ::v-deep .ql-snow * {
-    fill: var(--primary-color) !important;
-    color: var(--light-background-color) !important;
-    stroke: var(--light-background-color) !important;
-  }
-}
-
-
 </style>

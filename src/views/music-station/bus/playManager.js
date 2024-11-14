@@ -16,7 +16,7 @@ const EventBus = new Vue({
     },
     playerSetting: {
       mode: 'random', // 播放模式
-      sound: 50,      // 声音大小
+      volume: 50,      // 声音大小
       isPlaying: false,    // 播放状态
     },
     playList: [ // 播放列表

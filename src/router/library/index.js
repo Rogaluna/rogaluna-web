@@ -18,4 +18,9 @@ export const routes = [
     children: writeBookRoutes,
     redirect: `write-book/${writeBookRoutes[0].path}`,
   },
+  {
+    path: 'read-page',
+    name: 'read-page',
+    component: () => import('@/views/library/read-page/ReadPageView.vue')
+  },
 ]

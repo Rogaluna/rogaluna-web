@@ -1,6 +1,6 @@
 <template>
   <div :class="['container']" :style="containerStyle">
-    <div class="grid-item" :style="[itemStyle]">
+    <div v-show="$slots.start" class="grid-item" :style="[itemStyle]">
       <slot name="start"></slot>
     </div>
     <div
@@ -11,7 +11,7 @@
     >
       <slot :item="item" :index="index"></slot>
     </div>
-    <div class="grid-item" :style="[itemStyle]">
+    <div v-show="$slots.end" class="grid-item" :style="[itemStyle]">
       <slot name="end"></slot>
     </div>
   </div>

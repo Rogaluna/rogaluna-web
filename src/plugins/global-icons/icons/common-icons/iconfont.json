@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5589047",
+      "name": "warning",
+      "font_class": "warning",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "5589060",
+      "name": "delete",
+      "font_class": "delete1",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "5589021",
+      "name": "backups",
+      "font_class": "backups",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "5589026",
+      "name": "edit",
+      "font_class": "edit",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "5589027",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
       "icon_id": "5589031",
       "name": "search",
       "font_class": "search1",
@@ -46,13 +81,6 @@
       "font_class": "file",
       "unicode": "e611",
       "unicode_decimal": 58897
-    },
-    {
-      "icon_id": "24276135",
-      "name": "order-recently search",
-      "font_class": "a-order-recentlysearch",
-      "unicode": "e66d",
-      "unicode_decimal": 58989
     },
     {
       "icon_id": "5589020",

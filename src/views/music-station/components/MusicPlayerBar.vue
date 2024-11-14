@@ -96,7 +96,6 @@
             <template v-slot:activator="{ on, attrs }">
               <v-menu
                 top
-                transition="scale-transition"
                 offset-y
               >
                 <template v-slot:activator="{ on: menuOn, attrs: menuAttrs }">
@@ -112,15 +111,16 @@
 
                 <v-card width="70" class="pa-2">
                   <v-slider
-                    v-model="volume"
+                    v-model="eventBus.playerSetting.volume"
                     vertical
                     min="0"
                     max="100"
                     thumb-color="primary"
                     track-color="accent"
+                    @input="updateVolume"
                   ></v-slider>
                   <div class="text-center white--text">
-                    {{ volume }}%
+                    {{ eventBus.playerSetting.volume }}%
                   </div>
                 </v-card>
               </v-menu>
@@ -183,7 +183,6 @@ export default {
   inject: ['eventBus'],
   data() {
     return {
-      volume: 0,
       playModeStr: '随机播放',
       audioElement: null,
       isSeeking: false,
@@ -221,6 +220,7 @@ export default {
       this.audioElement.load();
       this.eventBus.playerSetting.isPlaying = true;
       this.audioElement.play();
+      this.updateVolume();
     },
     playPause() {
       this.eventBus.playerSetting.isPlaying = !this.eventBus.playerSetting.isPlaying;
@@ -238,6 +238,12 @@ export default {
     onSliderEnd() {
       this.isSeeking = false;
       this.audioElement.currentTime = this.eventBus.currentMusic.currentDuration;
+    },
+    updateVolume() {
+      if (this.audioElement) {
+        this.audioElement.volume = this.eventBus.playerSetting.volume / 100; // 将滑块值转换为 0-1 范围
+        console.log(`this.audioElement.volume`, this.audioElement.volume);
+      }
     },
     previousTrack() {
       console.log("上一曲");

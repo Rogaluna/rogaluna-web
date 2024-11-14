@@ -10,7 +10,8 @@
       <rogaluna-grid :items="items" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
         <template v-slot:default="{ item }">
           <rogaluna-div
-          :menuItems="menus.music">
+          :menuItems="menus.music"
+          @rclick="handleItemRightClick(item)">
             <music-grid-item :item="item" @itemClick="handleItemClick"/>
           </rogaluna-div>
         </template>
@@ -47,6 +48,7 @@ export default {
   data() {
     return {
       menus: {
+        contextObject: {},
         panel: [
           {
             label: '导入',
@@ -73,7 +75,7 @@ export default {
             icon: '#rogaluna-icon-timeout',
             value: '1',
             handler: () => {
-              
+              this.handleItemClick(this.menus.contextObject);
             }
           },
           {
@@ -81,7 +83,7 @@ export default {
             icon: '#rogaluna-icon-file',
             value: '1',
             handler: () => {
-
+              handleItemClick()
             }
           }
         ]
@@ -134,6 +136,9 @@ export default {
         //     stopLoading();
         //   })
       })
+    },
+    handleItemRightClick(item) {
+      this.menus.contextObject = item;
     },
     handleItemClick(item) {
       console.log(`this.eventBus`, this.eventBus);

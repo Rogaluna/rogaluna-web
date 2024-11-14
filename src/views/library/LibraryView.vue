@@ -40,7 +40,7 @@ export default {
         },
         {
           name: '最近参阅',
-          iconClass: '#rogaluna-icon-a-order-recentlysearch',
+          iconClass: '#rogaluna-icon-backups',
           handler: (self) => {
             // self.$router.push({ name: 'file-manager' });
           }

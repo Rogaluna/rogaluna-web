@@ -62,7 +62,7 @@ export default {
   object-fit: cover;
   border: 1px solid;
   border-radius: 5%;
-  border-color: gray;
+  border-color: var(--split-color);
 }
 
 .item-title {
@@ -76,13 +76,13 @@ export default {
   flex-grow: 1;
   padding: 10px 0;
 
-  color: white;
+  color: var(--light-background-color);
 }
 
 .artist-name {
   width: 100%;
   font-size: 12px;
-  color: gray;
+  color: var(--split-color);
   text-align: right;
   overflow: hidden;
   flex-grow: 1;

@@ -1,10 +1,12 @@
 <template>
-  <v-text-field
-    label="Search for a book"
-    v-model="query"
-    clearable
-    @keyup.enter="onSearch"
-  />
+  <div class="search-container">
+    <v-text-field
+      placeholder="搜索"
+      v-model="query"
+      clearable
+      @keyup.enter="onSearch"
+    />
+  </div>
 </template>
 
 <script>
@@ -24,6 +26,9 @@ export default {
 };
 </script>
 
-<style scoped>
-/* 可以根据需要自定义样式 */
+<style lang="scss" scoped>
+
+.search-container {
+  width: 40vh;
+}
 </style>

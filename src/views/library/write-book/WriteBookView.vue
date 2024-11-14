@@ -22,7 +22,7 @@
       </template> -->
     </v-banner>
 
-    <div style="flex-grow: 1;">
+    <div style="flex-grow: 1; min-height: 0;">
       <router-view></router-view>
     </div>
   </div>
@@ -42,8 +42,8 @@ export default {
   .title-text {
     background: linear-gradient(
       to right, 
-      white, 
-      red
+      var(--light-background-color),
+      var(--primary-color)
     );
     background-clip: text;
     -webkit-text-fill-color: transparent;
