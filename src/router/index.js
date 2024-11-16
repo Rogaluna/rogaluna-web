@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Cookies from 'js-cookie';
 
+import { routes as settingRoutes } from './setting/index'
 import { routes as accountRoutes } from './account/index'
 import { routes as fileTransferRoutes } from './file-transfer/index'
 import { routes as cloudDriveRoutes } from './cloud-storage/index'
@@ -34,12 +35,14 @@ const routes = [
     path: '/account',
     name: 'account',
     component: () => import('@/views/account/AccountView.vue'),
-    children: accountRoutes
+    children: accountRoutes,
   },
   {
     path: '/setting',
     name: 'setting',
     component: () => import('@/views/setting/SettingView.vue'),
+    children: settingRoutes,
+    redirect: `setting/${settingRoutes[0].path}`,
   },
   {
     path: '/file-transfer',

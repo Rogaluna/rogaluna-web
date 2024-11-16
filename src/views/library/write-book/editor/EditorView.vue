@@ -6,7 +6,7 @@
         style="flex: 1; display: flex; flex-direction: column; height: 100%;"></rogaluna-quill-editor>
     <div style="width: 200px; height: 100%;">
       <!-- 这里放置工具栏组件 -->
-       <side-book-state-bar :items="chapters" @sideOpts="handleSideOpts">
+       <side-book-state-bar ref="sideOptPanel" :items="chapters" @sideOpts="handleSideOpts">
         
        </side-book-state-bar>
     </div>
@@ -24,7 +24,16 @@ import getChapterListAPI from '@/plugins/axios/api/library/getChapterList';
 import newChapterAPI from '@/plugins/axios/api/library/newChapter';
 import getChapterContentAPI from '@/plugins/axios/api/library/getChapterContent';
 import updateChapterContentAPI from '@/plugins/axios/api/library/updateChapterContent';
+import getCategoriesAPI from '@/plugins/axios/api/library/getCategories';
+import getBookInfoAPI from '@/plugins/axios/api/library/getBookInfo';
 import getBookCategoriesAPI from '@/plugins/axios/api/library/getBookCategories';
+import getChapterInfoAPI from '@/plugins/axios/api/library/getChapterInfo';
+
+import updateBookInfoAPI from '@/plugins/axios/api/library/updateBookInfo';
+import updateChapterInfoAPI from '@/plugins/axios/api/library/updateChapterInfo';
+
+import deleteChapterAPI from '@/plugins/axios/api/library/deleteChapter';
+import deleteBookAPI from '@/plugins/axios/api/library/deleteBook';
 
 export default {
   components: {
@@ -47,19 +56,23 @@ export default {
   },
   methods: {
     fetchChapters() {
-      const bookId =  this.$route.query.id;
-      getChapterListAPI(bookId)
-        .then(response => {
-          const responseData = response.data;
-          this.chapters = responseData;
-        })
+      this.$rogalunaWidgets.showLoading(this.$refs.sideOptPanel, async (stopLoading) => {
+        const bookId =  this.$route.query.id;
+
+        const response = await getChapterListAPI(bookId);
+        const responseData = response.data;
+        this.chapters = responseData;
+
+        stopLoading();
+      })
+
+      
     },
     fetchChapterContent(chapterIndex) {
       const bookId = this.$route.query.id;
       getChapterContentAPI(bookId, chapterIndex)
         .then(response => {
-          console.log(`response`, response);
-          this.content += response;
+          this.content = response;
         })
     },
     async handleSideOpts(event) {
@@ -77,50 +90,118 @@ export default {
                   })
                     .then(response => {
                       if (response.success) {
-                        // 如果新建成功，那么刷新章节列表
+                        this.fetchChapters();
+                        this.$rogalunaWidgets.showSnackbar("已添加");
                       } else {
-                        // 否则弹出创建失败的消息
-                        this.$rogalunaWidgets.showSnackbar("新建失败");
+                        this.$rogalunaWidgets.showSnackbar("新建章节失败");
                       }
                     })                
                 }, 
-                cancel: () => { console.log('用户点击了取消'); } 
+                cancel: () => { console.log('取消'); } 
               }
             )
           }
         break;
         case 'moreSetting':
           {
-            const categories = (await getBookCategoriesAPI()).categories;
+            this.$rogalunaWidgets.showLoading(null, async (stopLoading) => {
+              const bookId = this.$route.query.id;
 
-            this.$rogalunaWidgets.showDialog(
-              BookDetailSettingDialog,
-              { 
-                categories: categories.children
-              },
-              { 
-                confirm: () => { console.log('用户点击了确认'); }, 
-                cancel: () => { console.log('用户点击了取消'); } 
-              } // 事件回调
-            )
+              const categories = (await getCategoriesAPI()).categories;
+              const bookInfo = (await getBookInfoAPI(bookId)).data;
+              const bookCategory = (await getBookCategoriesAPI(bookId)).data.tags;
+
+              this.$rogalunaWidgets.showDialog(
+                BookDetailSettingDialog,
+                { 
+                  categories: categories.children,
+                  initData: {
+                    ...bookInfo,
+                    tags: bookCategory
+                  }
+                },
+                { 
+                  del: () => {
+                    deleteBookAPI(bookId)
+                      .then(response => {
+                        if (response.success) {
+                          this.$rogalunaWidgets.showSnackbar("已删除书籍");
+                          this.$router.push({ name: 'write-book' });
+                        } else {
+                          this.$rogalunaWidgets.showSnackbar("书籍删除失败");
+                        }
+                      })
+                  },
+                  confirm: (form) => { 
+                    updateBookInfoAPI({
+                      id: bookId,
+                      name: form.bookName,
+                      desc: form.bookDescription,
+                      tags: form.categoryTags.map(obj => obj.id)
+                    })
+                      .then(response => {
+                        if (response.success) {
+                          this.$rogalunaWidgets.showSnackbar("书籍已更新");
+                        } else {
+                          this.$rogalunaWidgets.showSnackbar("书籍无法更新");
+                        }
+                      })
+                  }, 
+                  cancel: () => { console.log('取消'); } 
+                } // 事件回调
+              )
+
+              stopLoading();
+            })
           }
         break;
         case 'setChapter':
           {
-            this.$rogalunaWidgets.showDialog(
-              SetChapterDialog,
-              {},
-              {
-                del: () => { console.log('用户点击了删除'); },
-                confirm: () => { console.log('用户点击了确认'); }, 
-                cancel: () => { console.log('用户点击了取消'); } 
-              }
-            )
+            this.$rogalunaWidgets.showLoading(null, async (stopLoading) => {
+              const bookId = this.$route.query.id;
+              const chapterData = (await getChapterInfoAPI(bookId, event.payload.chapter_number)).data;
+              
+              this.$rogalunaWidgets.showDialog(
+                SetChapterDialog,
+                {
+                  initData: chapterData
+                },
+                {
+                  del: () => { 
+                    deleteChapterAPI(bookId, chapterData.chapter_number)
+                      .then(response => {
+                        if (response.success) {
+                          this.fetchChapters();
+                          this.$rogalunaWidgets.showSnackbar("已删除");
+                        } else {
+                          this.$rogalunaWidgets.showSnackbar("删除失败");
+                        }
+                      })  
+                  },
+                  confirm: (form) => {
+                    updateChapterInfoAPI({
+                      ...form,
+                      id: bookId,
+                      index: chapterData.chapter_number
+                    })
+                      .then(response => {
+                        if (response.success) {
+                          this.$rogalunaWidgets.showSnackbar("章节已更新");
+                        } else {
+                          this.$rogalunaWidgets.showSnackbar("章节无法更新");
+                        }
+                      })
+                  }, 
+                  cancel: () => { console.log('取消'); } 
+                }
+              )
+
+              stopLoading();
+            })
           }
         break;
         case 'selectChapter':
           {
-            this.content = '';
             this.fetchChapterContent(event.payload.chapter_number);
           }
         break;

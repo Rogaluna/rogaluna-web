@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="visible" max-width="600px" persistent>
     <v-card>
-      <v-card-title class="headline">添加书籍</v-card-title>
+      <v-card-title class="headline">书籍详细设置</v-card-title>
 
       <v-card-text>
         <v-form ref="bookForm" v-model="valid">
@@ -17,14 +17,13 @@
           <v-textarea
             label="书籍描述"
             v-model="form.bookDescription"
-            :rules="[rules.required]"
             required
           ></v-textarea>
 
           <!-- 分类标签 -->
           <v-menu
             v-model="menuVisible"
-            close-on-content-click="false"
+            :close-on-content-click="false"
             max-width="400px"
             offset-y
           >
@@ -65,45 +64,53 @@
 
 <script>
 export default {
+  props: {
+    categories: {
+      type: Array,
+      required: true
+    },
+  },
   data() {
     return {
-      visible: true, // 控制对话框的显示
-      menuVisible: false, // 控制菜单（下拉框）的显示状态
-      valid: false, // 用于表单验证状态
+      visible: true,
+      menuVisible: false,
+      valid: false,
       form: {
         bookName: '',
         bookDescription: '',
-        categoryTags: [] // 用户选择的标签
+        categoryTags: [],
       },
       rules: {
-        required: value => !!value || '此字段为必填项' // 验证规则
+        required: value => !!value || '此字段为必填项'
       }
     };
   },
-  props: {
-    categories: {
-      type: Array, // 期待传入的分类数据是一个数组
-      required: true
-    }
-  },
   computed: {
-    // 计算已选择的分类名称列表
     selectedCategoryNames() {
       return this.form.categoryTags.map(tag => tag.name);
     }
   },
+  watch: {
+    visible(newVal) {
+      if (!newVal) this.resetForm();
+    }
+  },
   methods: {
-    async confirm() {
+    confirm() {
       if (this.$refs.bookForm.validate()) {
-        this.$emit('confirm', this.form); // 提交表单
-        this.visible = false;
-        this.$emit('close'); // 关闭对话框
+        this.$emit('confirm', this.form);
+        this.$emit('close');
       }
     },
     cancel() {
-      this.$emit('cancel'); // 取消操作
-      this.visible = false;
-      this.$emit('close'); // 关闭对话框
+      this.$emit('cancel');
+      this.$emit('close');
+    },
+    resetForm() {
+      this.form.bookName = '';
+      this.form.bookDescription = '';
+      this.form.categoryTags = [];
+      this.$refs.bookForm.resetValidation();
     }
   }
 };
@@ -111,7 +118,7 @@ export default {
 
 <style scoped>
 .treeview-dropdown {
-  max-height: 200px; /* 限制高度 */
-  overflow-y: auto;  /* 启用滚动条 */
+  max-height: 200px;
+  overflow-y: auto;
 }
 </style>

@@ -1,13 +1,14 @@
 import { axiosInstance } from "../../main"
 import Cookies from 'js-cookie';
 
-const newBookAPI = async (formData) => {
+const updateBookInfoAPI = async (formData) => {
 
   // 创建一个新的 FormData 实例并添加表单数据
   // {
-  //   name: '新书籍',
-  //   description: '测试书籍',
-  //   tags: '书籍标签（整形数组）'
+  //   id: '书籍 id',
+  //   name: '新的书籍名称',
+  //   desc: '新的书籍描述'
+  //   tags: '新的书籍标签（整形数组）'
   // }
   const form = new FormData();
   Object.keys(formData).forEach((key) => {
@@ -24,10 +25,10 @@ const newBookAPI = async (formData) => {
       form.append(key, value);
     }
   });
-
+  
   try {
     // 使用 URL 参数对象传递查询参数
-    const response = await axiosInstance.post('/api/library/newBook', form, {
+    const response = await axiosInstance.post('/api/library/updateBookInfo', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': Cookies.get('token')
@@ -36,10 +37,10 @@ const newBookAPI = async (formData) => {
     // 返回文件列表
     return response.data;
   } catch (error) {
-    console.error("新建书籍失败: ", error);
+    console.error("更新书籍信息失败: ", error);
     // 根据需要返回值
     return { success: false, error: error.message };
   }
 };
 
-export default newBookAPI
+export default updateBookInfoAPI

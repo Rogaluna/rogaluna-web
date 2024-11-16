@@ -8,7 +8,7 @@
           <!-- 排序索引 -->
           <v-text-field
             label="排序索引"
-            v-model="form.index"
+            v-model="form.newIndex"
             :rules="[rules.required, rules.numeric]"
             required
           ></v-text-field>
@@ -43,17 +43,23 @@
 
 <script>
 export default {
+  props: {
+    initData:{
+      type: Object,
+      require: true 
+    }
+  },
   data() {
     return {
       visible: true,
       valid: false,
       form: {
-        index: '',
-        name: '',
-        group: ''
+        newIndex: this.initData.chapter_number,
+        name: this.initData.title,
+        group: this.initData.group
       },
       rules: {
-        required: value => !!value || '此字段为必填项',
+        required: value => value !== null && value !== undefined && value !== '' || '此字段为必填项',
         numeric: value => !isNaN(value) || '必须为数字'
       }
     };
@@ -79,7 +85,7 @@ export default {
       this.$emit('close');
     },
     resetForm() {
-      this.form.index = '';
+      this.form.newIndex = '';
       this.form.name = '';
       this.form.group = '';
       this.$refs.chapterForm.resetValidation();

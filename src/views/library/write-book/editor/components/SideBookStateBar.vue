@@ -13,7 +13,7 @@
             <span>
               <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon @click="chapterSetting">
+                  <v-btn icon @click="chapterSetting(item)">
                     <svg class="__icon__es"
                       aria-hidden="true"
                       icon

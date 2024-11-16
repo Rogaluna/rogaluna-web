@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%; height: 100%;" ref="booksContainer">
     <rogaluna-grid :items="books" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
       <template v-slot:default="{ item }">
         <book-grid-item :book="item" @itemClick="editBook(item)"/>
@@ -18,8 +18,9 @@ import AddGridItem from '../../components/AddGridItem.vue';
 
 import NewDialog from './components/NewDialog.vue';
 
-import getBookCategoriesAPI from '@/plugins/axios/api/library/getBookCategories'
+import getCategoriesAPI from '@/plugins/axios/api/library/getCategories'
 import getBookListAPI from '@/plugins/axios/api/library/getBookList';
+import newBookAPI from '@/plugins/axios/api/library/newBook';
 
 export default {
   components: {
@@ -38,13 +39,20 @@ export default {
   methods: {
     fetchBooks() {
       // 获取此用户编写的书籍列表
-      getBookListAPI(2, '#')
-        .then(response => {
-          this.books = response.data;
-        })
+      this.$rogalunaWidgets.showLoading(this.$refs.booksContainer, (stopLoading) => {
+
+        getBookListAPI(2, '#')
+          .then(response => {
+            this.books = response.data;
+
+            stopLoading();
+          })
+      })
+
+      
     },
     async newBook() {
-      const categories = (await getBookCategoriesAPI()).categories;
+      const categories = (await getCategoriesAPI()).categories;
 
       this.$rogalunaWidgets.showDialog(
         NewDialog,
@@ -52,7 +60,18 @@ export default {
           categories: categories.children
         },
         { 
-          confirm: (form) => { console.log(`form`, form); }, 
+          confirm: (form) => { 
+            console.log(`form`, form);
+
+            newBookAPI({
+              name: form.bookName,
+              description: form.bookDescription,
+              tags: form.categoryTags.map(obj => obj.id)
+            })
+              .then(response => {
+                console.log(`更新状态：`, response.success);
+              })
+          }, 
           cancel: () => { console.log('用户点击了取消'); } 
         } // 事件回调
       )

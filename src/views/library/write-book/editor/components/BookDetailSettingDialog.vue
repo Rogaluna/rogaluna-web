@@ -17,14 +17,13 @@
           <v-textarea
             label="书籍描述"
             v-model="form.bookDescription"
-            :rules="[rules.required]"
             required
           ></v-textarea>
 
           <!-- 分类标签 -->
           <v-menu
             v-model="menuVisible"
-            close-on-content-click="false"
+            :close-on-content-click="false"
             max-width="400px"
             offset-y
           >
@@ -56,6 +55,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
+        <v-btn color="secondary" @click="del">删除章节</v-btn>
         <v-btn color="primary" @click="confirm">确认</v-btn>
         <v-btn color="secondary" @click="cancel">取消</v-btn>
       </v-card-actions>
@@ -69,6 +69,10 @@ export default {
     categories: {
       type: Array,
       required: true
+    },
+    initData:{
+      type: Object,
+      require: true 
     }
   },
   data() {
@@ -77,9 +81,9 @@ export default {
       menuVisible: false,
       valid: false,
       form: {
-        bookName: '',
-        bookDescription: '',
-        categoryTags: []
+        bookName: this.initData.name,
+        bookDescription: this.initData.description,
+        categoryTags: this.getCategoryTagsFromIds(this.initData.tags)
       },
       rules: {
         required: value => !!value || '此字段为必填项'
@@ -97,6 +101,10 @@ export default {
     }
   },
   methods: {
+    del() {
+      this.$emit('del');
+      this.$emit('close');
+    },
     confirm() {
       if (this.$refs.bookForm.validate()) {
         this.$emit('confirm', this.form);
@@ -112,6 +120,22 @@ export default {
       this.form.bookDescription = '';
       this.form.categoryTags = [];
       this.$refs.bookForm.resetValidation();
+    },
+    // 递归查找分类标签
+    getCategoryTagsFromIds(ids) {
+      const result = [];
+      const findTags = (categories) => {
+        categories.forEach(category => {
+          if (ids.includes(category.id)) {
+            result.push(category);
+          }
+          if (category.children && category.children.length > 0) {
+            findTags(category.children);
+          }
+        });
+      };
+      findTags(this.categories);
+      return result;
     }
   }
 };
