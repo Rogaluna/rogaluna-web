@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import AsyncTask from "../../module/tasks/AsyncTask";
 import { generateMD5 , generateFileMD5 } from "../../module/functions/generateMD5";
 
-const postFileAPI = async (file, parentUid) => {
+const postFileAPI = async (file, parentUid, callback) => {
 
   // 延迟函数
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -64,7 +64,7 @@ const postFileAPI = async (file, parentUid) => {
       while (retryCount < maxRetries && !success) {
         try {
           // 发送当前块的 POST 请求
-          const response = await axiosInstance.post('/api/fileStorage/postFile', formData, {
+          const response = await axiosInstance.post('/api/cloudDrive/postFile', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': Cookies.get('token')
@@ -90,7 +90,11 @@ const postFileAPI = async (file, parentUid) => {
 
     console.log("All chunks uploaded, merging file...");
 
-    await mergeFileAPI(uuid, totalChunks);
+    mergeFileAPI(uuid, totalChunks).then((response)=>{
+      if (typeof callback === "function") {
+        callback(response);
+      }
+    });
   };
 
   // 创建 AsyncTask 实例并添加到上传队列

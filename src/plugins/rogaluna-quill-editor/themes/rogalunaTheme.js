@@ -10,4 +10,5 @@ class RogalunaTheme extends SnowTheme {
 
   
 }
+
 export default RogalunaTheme;

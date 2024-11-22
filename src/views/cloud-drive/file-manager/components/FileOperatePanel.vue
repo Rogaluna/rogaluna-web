@@ -107,14 +107,23 @@ export default {
             icon: '#rogaluna-icon-upload',
             value: '1',
             handler: () => {
+              
               this.$rogalunaWidgets.showFileSelector({}, (files) => {
-                files.forEach((file) => {
-                  postFileAPI(file, this.eventBus.sharedState.currentFolderUid)
-                    .then(response => {
-                      console.log(response);
-                      this.fetchData();
-                    })
-                })
+                // debugger
+                // files.forEach((file) => {
+                //   postFileAPI(file, this.eventBus.sharedState.currentFolderUid)
+                //     .then(response => {
+                //       console.log(response);
+                //       this.fetchData();
+                //     })
+                // })
+
+                for (let i = 0; i < files.length; i++) {
+                  const file = files[i];
+                  postFileAPI(file, this.eventBus.sharedState.currentFolderUid, (response) => {
+                    this.fetchData();
+                  })
+                }
               })
             }
           },
@@ -215,6 +224,7 @@ export default {
             this.eventBus.sharedState.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
             this.eventBus.sharedState.path = this.eventBus.formatPathToArray(response.path); // 设置格式化的路径
             this.items = response.data;
+            console.log(`fetchData`, this.items);
             stopLoading();
           })
       })

@@ -227,10 +227,66 @@ export default {
 
 .rogaluna-quill-editor {
 
-  ::v-deep .ql-snow * {
-    fill: var(--primary-color);
-    color: var(--light-background-color);
-    stroke: var(--light-background-color);
+  ::v-deep .ql-snow.ql-toolbar {
+
+    button {
+
+      .ql-stroke {
+        stroke: var(--light-background-color);
+      }
+
+      .ql-fill {
+        fill: var(--primary-color);
+      }
+
+      &:hover .ql-stroke {
+        stroke: var(--primary-color);
+      }
+
+    }
+
+    .ql-picker {
+      .ql-stroke {
+        stroke: var(--light-background-color);
+        
+      }
+
+      .ql-picker-label {
+        border-color: var(--split-color);
+        color: var(--light-background-color);
+      }
+
+      .ql-picker-options {
+        border-color: var(--split-color);
+        background-color: var(--dark-background-color);
+
+        .ql-picker-item {
+          color: var(--light-background-color);
+
+          &:hover {
+            color: var(--primary-color);
+          }
+
+          &.ql-selected {
+            color: var(--primary-color);
+          }
+        }
+
+        
+      }
+
+      .ql-color-label {
+        fill: var(--primary-color);
+      }
+
+      &:hover .ql-stroke {
+        stroke: var(--primary-color);
+      }
+    }
+
+    // button:hover {
+    //   stroke: var(--light-background-color);
+    // }
   }
 
   ::v-deep .ql-toolbar.ql-snow {
