@@ -7,6 +7,7 @@ import { routes as accountRoutes } from './account/index'
 import { routes as fileTransferRoutes } from './file-transfer/index'
 import { routes as cloudDriveRoutes } from './cloud-storage/index'
 import { routes as musicStationRoutes } from './music-station/index'
+import { routes as emailRoutes } from './email/index'
 import { routes as codeBookRoutes } from './library/index'
 
 Vue.use(VueRouter)
@@ -63,6 +64,12 @@ const routes = [
     component: () => import('@/views/music-station/MusicStationView.vue'),
     children: musicStationRoutes,
     redirect: `music-station/${musicStationRoutes[0].path}`,
+  },
+  {
+    path: '/email',
+    name: 'email',
+    component: () => import('@/views/email/EmailView.vue'),
+    children: emailRoutes
   },
   {
     path: '/library',

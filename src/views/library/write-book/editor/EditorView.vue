@@ -2,7 +2,6 @@
   <div style="height: 100%; display: flex;">
     <rogaluna-quill-editor 
         v-model="content" 
-        :options="editorOptions"
         style="flex: 1; display: flex; flex-direction: column; height: 100%;"></rogaluna-quill-editor>
     <div style="width: 200px; height: 100%;">
       <!-- 这里放置工具栏组件 -->
@@ -43,11 +42,6 @@ export default {
   data() {
     return {
       content: '', // 编辑器内容
-      editorOptions: {
-        modules: {
-          toolbar: true, // 或者传递工具栏配置对象
-        },
-      },
       chapters: []
     };
   },

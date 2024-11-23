@@ -26,23 +26,23 @@ export default {
         },
         {
           name: '书架',
-          iconClass: '#rogaluna-icon-fenlei',
+          iconClass: '#rogaluna-icon-Collection',
           handler: (self) => {
             self.$router.push({ name: 'bookshelf' });
           }
         },
-        {
-          name: '收藏品',
-          iconClass: '#rogaluna-icon-Collection',
-          handler: (self) => {
-            // self.$router.push({ name: 'file-manager' });
-          }
-        },
+        // {
+        //   name: '收藏品',
+        //   iconClass: '#rogaluna-icon-Collection',
+        //   handler: (self) => {
+        //     // self.$router.push({ name: 'file-manager' });
+        //   }
+        // },
         {
           name: '最近参阅',
           iconClass: '#rogaluna-icon-backups',
           handler: (self) => {
-            // self.$router.push({ name: 'file-manager' });
+            self.$router.push({ name: 'read-history' });
           }
         }
       ],

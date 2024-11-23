@@ -63,7 +63,7 @@ export default {
         },
         {
           name: '邮箱',
-          routerName: 'e-mail',
+          routerName: 'email',
           iconClass: '#rogaluna-icon-email'
         },
         {

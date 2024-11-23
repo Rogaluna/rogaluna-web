@@ -9,7 +9,7 @@
         icon>
         <use xlink:href="#rogaluna-icon-tushuguan"></use>
       </svg>
-      <span class="title-text">&nbsp;&nbsp;书城</span>
+      <span class="title-text">&nbsp;&nbsp;图书馆</span>
 
       <!-- <template v-slot:actions>
         <SearchBar @search="handleSearch" />

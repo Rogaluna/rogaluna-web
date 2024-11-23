@@ -12,6 +12,11 @@ export const routes = [
     component: () => import('@/views/library/bookshelf/BookshelfView.vue')
   },
   {
+    path: 'read-history',
+    name: 'read-history',
+    component: () => import('@/views/library/read-history/ReadHistoryView.vue')
+  },
+  {
     path: 'write-book',
     name: 'write-book',
     component: () => import('@/views/library/write-book/WriteBookView.vue'),

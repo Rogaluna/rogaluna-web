@@ -9,14 +9,14 @@
         icon>
         <use xlink:href="#rogaluna-icon-fenlei"></use>
       </svg>
-      <span class="title-text">&nbsp;&nbsp;书架</span>
+      <span class="title-text">&nbsp;&nbsp;最近参阅</span>
 
       <template v-slot:actions>
         <v-btn
           text
           color="primary"
         >
-          管理
+          删除历史记录
         </v-btn>
       </template>
     </v-banner>
@@ -26,7 +26,7 @@
         <book-grid-item :book="item" />
       </template>
       <template #end>
-        <add-grid-item text="从浏览历史中添加"></add-grid-item>
+        <add-grid-item text="去图书馆阅读"></add-grid-item>
       </template>
     </rogaluna-grid>
   </div>
@@ -51,7 +51,7 @@ export default {
   methods: {
     fetchData() {
       // 获取用户书架中的书籍
-
+      
     }
   }
 }

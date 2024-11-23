@@ -18,14 +18,7 @@ export default {
     return {
       navItems: [
         {
-          name: '账户设置',
-          iconClass: '#rogaluna-icon-file',
-          handler: (self) => {
-            self.$router.push({ name: 'account-setting' });
-          }
-        },
-        {
-          name: '主题与背景',
+          name: '电子邮箱',
           iconClass: '#rogaluna-icon-file',
           handler: (self) => {
             self.$router.push({ name: 'account-setting' });
