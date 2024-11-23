@@ -35,14 +35,14 @@ export default {
   border-radius: 5%;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(var(--light-background-color-rgb), 0.5);
   }
 }
 
 .plus {
   width: 100%;
   height: 210px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--split-color);
   border-radius: 5%;
   display: flex;
   flex-direction: column;
@@ -52,13 +52,13 @@ export default {
 
   .plus-sign {
     font-size: 48px;
-    color: #999;
+    color: rgba(var(--light-background-color-rgb), 0.5625);
   }
 
   .text {
     margin-top: 10px;
     font-size: 16px;
-    color: #666;
+    color: rgba(var(--light-background-color-rgb), 0.375);
     text-align: center;
   }
 }

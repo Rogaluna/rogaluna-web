@@ -12,8 +12,16 @@
           @error="handleImageError"
         ></v-img>
         <div>
-          <div class="song-name" align="left">{{ eventBus.currentMusic.title }}</div>
-          <div class="artist-info" align="left">{{ eventBus.currentMusic.artist }}</div>
+          <div class="song-name" align="left">
+            <rogaluna-scroll-text>
+              {{ eventBus.currentMusic.title }}
+            </rogaluna-scroll-text>
+          </div>
+          <div class="artist-info" align="left">
+            <rogaluna-scroll-text>
+              {{ eventBus.currentMusic.artist }}
+            </rogaluna-scroll-text>
+          </div>
         </div>
       </div>
 
@@ -23,7 +31,7 @@
         <div class="control-buttons">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-menu top transition="slide-y-transition" offset-y>
+              <v-menu top transition="slide-y-transition" offset-x>
                 <template v-slot:activator="{ on: menuOn, attrs: menuAttrs }">
                   <svg class="__icon__es control-button"
                     aria-hidden="true"
@@ -183,9 +191,14 @@ import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
 import PlaySettingDialog from './PlaySettingDialog.vue';
 import PlayListDrawer from './PlayListDrawer.vue';
 
+import RogalunaScrollText from '@/plugins/rogaluna-widgets/widgets/sundries/RogalunaScrollText.vue';
+
 export default {
   name: "MusicPlayerBar",
   inject: ['eventBus'],
+  components: {
+    RogalunaScrollText,
+  },
   data() {
     return {
       albumCover: '/api/musicStation/cover?album=' + this.eventBus.currentMusic.uid,
@@ -321,6 +334,24 @@ export default {
 
   .song-name {
     color: var(--light-background-color);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    // 设置容器最大宽度为200
+    width: 200px; 
+
+  }
+
+  .artist-info {
+    font-size: 12px;
+    color: var(--split-color);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    // 设置容器最大宽度为200
+    width: 200px; 
   }
 }
 
@@ -376,11 +407,6 @@ export default {
       }
     }
   }
-}
-
-.artist-info {
-  font-size: 12px;
-  color: var(--split-color);
 }
 
 svg {

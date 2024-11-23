@@ -7,17 +7,21 @@
       @error="handleImageError"
     ></v-img>
     <div class="item-title">
-      <span>{{ item.music_name }}</span>
+      <rogaluna-scroll-text>{{ item.music_name }}</rogaluna-scroll-text>
     </div>
     <div class="artist-name">
-      {{ item.artist }}
+      <rogaluna-scroll-text>{{ item.artist }}</rogaluna-scroll-text>
     </div>
   </div>
 </template>
 
 <script>
+import RogalunaScrollText from '@/plugins/rogaluna-widgets/widgets/sundries/RogalunaScrollText.vue';
+
 export default {
-  name: 'AlbumGridItem',
+  components: {
+    RogalunaScrollText
+  },
   props: {
     item: {
       type: Object,
@@ -52,7 +56,7 @@ export default {
   border-radius: 5%;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(var(--light-background-color-rgb), 0.5);
   }
 }
 

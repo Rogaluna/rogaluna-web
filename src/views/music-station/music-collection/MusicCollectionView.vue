@@ -1,7 +1,7 @@
 <template>
   <rogaluna-div 
   :menuItems="menus.panel"
-  ref="fileOperatePanel"
+  ref="operatePanel"
   style="display: flex; flex-direction: column; width: 100%;">
     <div>
       <search-bar></search-bar>
@@ -33,7 +33,7 @@ import MusicGridItem from '../components/MusicGridItem.vue';
 import AddGridItem from '../components/AddGridItem.vue';
 import SearchBar from '../components/SearchBar.vue';
 
-import MusicDetailDialog from './components/MusicDetailDialog.vue';
+import MusicDetailDialog from '../components/MusicDetailDialog.vue';
 
 import getMusicListAPI from '@/plugins/axios/api/music-station/getMusicList';
 import postMusicAPI from '@/plugins/axios/api/music-station/postMusic';
@@ -111,7 +111,7 @@ export default {
        * 1：检索私有存储
        */
 
-      this.$rogalunaWidgets.showLoading(this.$refs.fileOperatePanel, (stopLoading) => {
+      this.$rogalunaWidgets.showLoading(this.$refs.operatePanel, (stopLoading) => {
 
         if (isAlbum) {
           // 检索专辑
@@ -125,18 +125,6 @@ export default {
               stopLoading();
             })
         }
-
-        // getFileListAPI(this.eventBus.sharedState.currentFolderUid) // 当前文件夹 uid 是空的，则默认会获取到根目录
-        //   .then(response => { // 获取的回复将包括文件列表和当前目录的uid
-        //     if (this.eventBus.sharedState.rootUid == 'root') {
-        //       // 根目录未初始化，初始化根目录
-        //       this.eventBus.sharedState.rootUid = response.currentFolderUid;
-        //     }
-        //     this.eventBus.sharedState.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
-        //     this.eventBus.sharedState.path = this.eventBus.formatPathToArray(response.path); // 设置格式化的路径
-        //     this.items = response.data;
-        //     stopLoading();
-        //   })
       })
     },
     handleItemRightClick(item) {
