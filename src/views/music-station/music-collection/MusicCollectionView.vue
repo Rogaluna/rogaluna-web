@@ -33,6 +33,8 @@ import MusicGridItem from '../components/MusicGridItem.vue';
 import AddGridItem from '../components/AddGridItem.vue';
 import SearchBar from '../components/SearchBar.vue';
 
+import MusicDetailDialog from './components/MusicDetailDialog.vue';
+
 import getMusicListAPI from '@/plugins/axios/api/music-station/getMusicList';
 import postMusicAPI from '@/plugins/axios/api/music-station/postMusic';
 
@@ -81,9 +83,9 @@ export default {
           {
             label: '详细信息',
             icon: '#rogaluna-icon-file',
-            value: '1',
+            value: '2',
             handler: () => {
-              handleItemClick()
+              this.showMusicDetail(this.menus.contextObject);
             }
           }
         ]
@@ -143,6 +145,23 @@ export default {
     handleItemClick(item) {
       console.log(`this.eventBus`, this.eventBus);
       this.eventBus.setCurrentMusic(item);
+    },
+    showMusicDetail(item) {
+      console.log(`item`, item);
+      // 显示音乐信息
+      this.$rogalunaWidgets.showDialog(
+        MusicDetailDialog,
+        {
+          initData: {
+            name: 'Song Name',
+            artist: 'Artist Name',
+            album: 'Album Name',
+            duration: 245, // in seconds
+            genre: 'Genre Name'
+          }
+        },
+        {} 
+      )
     },
     newAlbum() {
       // 导入音乐

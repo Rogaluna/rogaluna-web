@@ -8,8 +8,8 @@ const EventBus = new Vue({
   data: {
     currentMusic: { // 当前播放音乐
       uid: '',
-      title: 'R.I.P.',
-      artist: 'eicateve',
+      title: '♪ ♪ ♪ ♪',
+      artist: '♫ ♫ ♫ ♫',
 
       totalDuration: 0,      // 总时长 (秒)
       currentDuration: 0,    // 当前进度 (秒)

@@ -5,10 +5,11 @@
       <!-- 左侧：歌曲信息和操作按钮 -->
       <div class="nav-left">
         <v-img
-          src="https://via.placeholder.com/50"
+          :src="albumCover"
           max-width="50"
           max-height="50"
           class="mr-2"
+          @error="handleImageError"
         ></v-img>
         <div>
           <div class="song-name" align="left">{{ eventBus.currentMusic.title }}</div>
@@ -96,7 +97,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-menu
                 top
-                offset-y
+                offset-x
               >
                 <template v-slot:activator="{ on: menuOn, attrs: menuAttrs }">
                   <svg class="__icon__es control-button"
@@ -151,11 +152,12 @@
               aria-hidden="true"
               icon
               v-bind="attrs"
-              v-on="on">
-              <use xlink:href="#rogaluna-icon-musiclist"></use>
+              v-on="on"
+              @click="showPlaySetting">
+              <use xlink:href="#rogaluna-icon-masterctrl"></use>
             </svg>
           </template>
-          <span>播放列表</span>
+          <span>播放设置</span>
         </v-tooltip>
 
         <v-tooltip bottom>
@@ -164,11 +166,12 @@
               aria-hidden="true"
               icon
               v-bind="attrs"
-              v-on="on">
-              <use xlink:href="#rogaluna-icon-masterctrl"></use>
+              v-on="on"
+              @click="showPlayList">
+              <use xlink:href="#rogaluna-icon-musiclist"></use>
             </svg>
           </template>
-          <span>播放设置</span>
+          <span>播放队列</span>
         </v-tooltip>
       </div>
     </div>
@@ -177,12 +180,15 @@
 
 <script>
 import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
+import PlaySettingDialog from './PlaySettingDialog.vue';
+import PlayListDrawer from './PlayListDrawer.vue';
 
 export default {
   name: "MusicPlayerBar",
   inject: ['eventBus'],
   data() {
     return {
+      albumCover: '/api/musicStation/cover?album=' + this.eventBus.currentMusic.uid,
       playModeStr: '随机播放',
       audioElement: null,
       isSeeking: false,
@@ -197,25 +203,22 @@ export default {
     });
   },
   methods: {
+    handleImageError() {
+      this.albumCover = require('@/assets/defaultAlbumCover.svg'); // 当封面加载失败时，使用默认图片
+    },
+
     loadNewMusic() {
       if (!this.audioElement) {
         this.audioElement = new Audio();
       }
+
       this.audioElement.src = BASE_HTTP_URL + "/api/musicStation/getMusic?musicId=" + this.eventBus.currentMusic.uid; // uid 指示了目标音乐，通过它构建src
 
-      this.audioElement.addEventListener("timeupdate", () => {
-        if (!this.isSeeking) {
-          this.eventBus.currentMusic.currentDuration = Math.floor(
-            this.audioElement.currentTime
-          );
-        }
-      });
+      this.audioElement.addEventListener("timeupdate", this.onTimeUpdate);
 
-      this.audioElement.addEventListener("loadedmetadata", () => {
-        this.eventBus.currentMusic.totalDuration = Math.floor(
-          this.audioElement.duration
-        );
-      });
+      this.audioElement.addEventListener("loadedmetadata", this.onLoadedMetadata);
+
+      this.audioElement.addEventListener("ended",this.onEnded);
 
       this.audioElement.load();
       this.eventBus.playerSetting.isPlaying = true;
@@ -229,6 +232,22 @@ export default {
       } else {
         this.audioElement.pause()
       }
+    },
+    onTimeUpdate() {
+      if (!this.isSeeking) {
+        this.eventBus.currentMusic.currentDuration = Math.floor(
+          this.audioElement.currentTime
+        );
+      }
+    },
+    onLoadedMetadata() {
+      this.eventBus.currentMusic.totalDuration = Math.floor(
+        this.audioElement.duration
+      );
+    },
+    onEnded() {
+      console.log("音乐播放完毕");
+      // this.cleanupAudio();
     },
     // 当用户开始拖动时，设置 isSeeking 为 true
     onSliderStart() {
@@ -254,7 +273,26 @@ export default {
     switchPlayMode() {
       console.log("随机播放");
     },
+
+    showPlaySetting() {
+      this.$rogalunaWidgets.showDialog(
+        PlaySettingDialog,
+        {},
+        {}
+      )
+    },
+    showPlayList() {
+      this.$rogalunaWidgets.showDrawer(
+        PlayListDrawer,
+        {},
+        {}
+      )
+    }
+
   },
+  beforeDestroy() {
+
+  }
 };
 </script>
 
