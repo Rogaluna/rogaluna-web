@@ -48,8 +48,8 @@ export default {
       if (this.stopPropagation) {
         event.stopPropagation();
       }
-      this.$rogalunaWidgets.showContextMenu({ x: event.clientX, y: event.clientY }, this.menuItems);
       this.$emit('rclick', event);
+      this.$rogalunaWidgets.showContextMenu({ x: event.clientX, y: event.clientY }, this.menuItems);
     },
     handleClick() {
       this.$emit('click');

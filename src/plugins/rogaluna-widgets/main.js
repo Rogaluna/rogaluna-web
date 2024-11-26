@@ -36,38 +36,43 @@ export const RogalunaWidgetsPlugin = {
        * @param {Function} callback - loading 时进行的回调函数，使用 (stopLoading) => { ...执行内容; stopLoading(); }
        */
       showLoading(refElement = null, callback = null) {
-        let loadingInstance;
-
-        const appendToElement = (element) => {
-          loadingInstance = new LoadingConstructor({
+        const loadingInstance = new LoadingConstructor({
             vuetify,
-          });
-          element.appendChild(loadingInstance.$mount().$el);
-          this.loadingInstances.push(loadingInstance);
-
-          const stopLoading = () => {
+        });
+    
+        // 搜索 app 节点
+        const appElement = document.querySelector('[data-app]') || document.body;
+    
+        // 如果 refElement 为 null，默认挂载到 app 节点
+        const mountElement = refElement
+            ? (refElement.$el || refElement)
+            : appElement;
+    
+        // 确保挂载点有定位样式
+        const originalPosition = mountElement.style.position;
+        if (!originalPosition || originalPosition === 'static') {
+            mountElement.style.position = 'relative';
+        }
+    
+        loadingInstance.$mount(); // 创建 Vue 实例
+        mountElement.appendChild(loadingInstance.$el); // 追加到挂载点
+    
+        const stopLoading = () => {
             loadingInstance.$destroy();
             if (loadingInstance.$el && loadingInstance.$el.parentNode) {
-              loadingInstance.$el.parentNode.removeChild(loadingInstance.$el);
+                loadingInstance.$el.parentNode.removeChild(loadingInstance.$el);
             }
-            this.loadingInstances = this.loadingInstances.filter(inst => inst !== loadingInstance);
-          };
-
-          if (callback) {
-            callback(stopLoading);
-          }
+            // 恢复挂载点的原始样式
+            if (originalPosition) {
+                mountElement.style.position = originalPosition;
+            } else {
+                mountElement.style.removeProperty('position');
+            }
         };
-
-        if (refElement) {
-          if (refElement.$el) {
-            refElement.$el.style.position = "relative";
-            appendToElement(refElement.$el);
-          } else {
-            refElement.style.position = "relative";
-            appendToElement(refElement);
-          }
-        } else {
-          appendToElement(document.body);
+    
+        // 调用回调，传递停止加载的方法
+        if (callback) {
+            callback(stopLoading);
         }
       },
 
@@ -176,8 +181,12 @@ export const RogalunaWidgetsPlugin = {
           drawerInstance.$on(event, events[event]);
         });
 
+        // 搜索 app
+        const appElement = document.querySelector('[data-app]') || document.body;
         // 如果 refElement 为 null，默认挂载到 document.body
-        const mountElement = refElement ? (refElement.$el || refElement) : document.body;
+        const mountElement = refElement ? 
+          (refElement.$el || refElement) : 
+          appElement;
 
         // 确保挂载点有定位样式
         const originalPosition = mountElement.style.position;

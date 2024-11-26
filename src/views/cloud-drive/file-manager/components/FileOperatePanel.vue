@@ -244,9 +244,8 @@ export default {
       return this.$store.state.globalAttributes.fileTypeMapping[type] || type;
     },
     getIcon(type) {
-      const icon = `#${this.$store.state.globalAttributes.fileIconTypeMapping[type]}`;
       // 如果找到图标，返回图标；否则返回默认图标
-      return icon || `#${this.$store.state.globalAttributes.fileIconTypeMapping['default']}`;
+      return `#${this.$store.state.globalAttributes.fileIconTypeMapping[type] || this.$store.state.globalAttributes.fileIconTypeMapping['default']}`;
     },
     dispatchMenuOpts(type) {
       switch (type) {

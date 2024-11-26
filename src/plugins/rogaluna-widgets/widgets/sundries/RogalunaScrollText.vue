@@ -1,70 +1,51 @@
-<!-- 此组件来自 https://blog.csdn.net/hyupeng1006/article/details/135241154 -->
+<!-- 此组件改良自 https://blog.csdn.net/hyupeng1006/article/details/135241154 -->
 <template>
   <div class="scrollText" ref="outer">
-      <div class="st-inner" :class="{'st-scrolling': needToScroll}">
-          <span class="st-section" ref="inner">{{text}}</span>
-          <span class="st-section" v-if="needToScroll">{{text}}</span>
-          <!-- 加两条是为了滚动的时候实现无缝衔接 -->
-      </div>
+    <div class="st-inner" :class="{ 'st-scrolling': scroll && needToScroll }">
+      <span class="st-section" ref="inner">{{ text }}</span>
+      <span class="st-section" v-if="scroll && needToScroll">{{ text }}</span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    scroll: {
+      type: Boolean,
+      default: true // 默认滚动
+    }
+  },
   data() {
     return {
-      needToScroll: false,
-      text: ""
+      needToScroll: false, // 是否需要滚动
+      text: "" // 当前显示的文本内容
     };
   },
   mounted() {
-    this.startCheck();
-  },
-  beforeDestroy() {
-    this.stopCheck();
+    this.setText();
+    this.checkScroll();
   },
   methods: {
-    // 检查当前元素是否需要滚动
-    check() {
-      this.setText();
+    // 检查是否需要滚动
+    checkScroll() {
       this.$nextTick(() => {
-        let flag = this.isOverflow();
-        this.needToScroll = flag;
+        this.needToScroll = this.isOverflow();
       });
     },
-
-    // 判断子元素宽度是否大于父元素宽度，超出则需要滚动，否则不滚动
+    // 判断子元素宽度是否超出父元素宽度
     isOverflow() {
-      let outer = this.$refs.outer;
-      let inner = this.$refs.inner;
-      let outerWidth = this.getWidth(outer);
-      let innerWidth = this.getWidth(inner);
-      return innerWidth > outerWidth;
+      const outer = this.$refs.outer;
+      const inner = this.$refs.inner;
+      if (!outer || !inner) return false;
+      return inner.offsetWidth > outer.offsetWidth;
     },
-
-    // 获取元素宽度
-    getWidth(el) {
-      let { width } = el.getBoundingClientRect();
-      return width;
-    },
-
-    // 获取到父组件传过来的内容复传给this.text
+    // 获取到父组件传递的插槽内容
     setText() {
       this.text =
         (this.$slots.default &&
           this.$slots.default.reduce((res, it) => res + it.text, "")) ||
         "";
-    },
-
-    // 增加定时器，隔一秒check一次
-    startCheck() {
-      this._checkTimer = setInterval(this.check, 1000);
-      this.check();
-    },
-
-    // 关闭定时器
-    stopCheck() {
-      clearInterval(this._checkTimer);
     }
   }
 };
@@ -82,7 +63,7 @@ export default {
   padding: 0 5px;
 }
 
-// 向左匀速滚动动画
+// 滚动动画
 .st-scrolling {
   animation: scroll 10s linear infinite;
 }

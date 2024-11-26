@@ -8,7 +8,7 @@ const getMusicListAPI = async (opt, param) => {
     const response = await axiosInstance.get('/api/musicStation/getMusicList', {
         params: {
           opt: opt,
-          query: param
+          param: param
         },
         headers: {
           'Authorization': Cookies.get('token')

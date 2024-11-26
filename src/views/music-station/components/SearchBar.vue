@@ -120,10 +120,6 @@ export default {
   display: flex;
   align-items: center;
   background-color: none;
-  border-width: 0px 0px 1px 0px;
-  border-color: var(--split-color);
-  border-style: solid;
-  padding: 5px;
 
   .searchbar-container {
     .v-input {

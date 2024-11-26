@@ -4,7 +4,21 @@
   ref="operatePanel"
   style="display: flex; flex-direction: column; width: 100%;">
     <div>
-      <search-bar></search-bar>
+      <v-banner
+        single-line
+        :sticky="false"
+      >
+        <svg class="__icon__m"
+          aria-hidden="true"
+          icon>
+          <use xlink:href="#rogaluna-icon-tushuguan"></use>
+        </svg>
+        <span class="title-text">&nbsp;&nbsp;音乐台</span>
+
+        <template v-slot:actions>
+          <search-bar></search-bar>
+        </template>
+      </v-banner>
     </div>
     <div style="overflow: auto;">
       <rogaluna-grid :items="items" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
@@ -137,5 +151,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .v-banner__text {
+  text-align: left;
 
+  .title-text {
+    background: linear-gradient(
+      to right, 
+      var(--light-background-color),
+      var(--primary-color)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    font-size: 24px;
+  }
+}
 </style>
