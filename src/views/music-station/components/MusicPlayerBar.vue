@@ -201,7 +201,7 @@ export default {
   },
   data() {
     return {
-      albumCover: '/api/musicStation/cover?album=' + this.eventBus.currentMusic.uid,
+      albumCover: `/api/musicStation/cover?album=${this.eventBus.currentMusic.uid}`,
       playModeStr: '随机播放',
       audioElement: null,
       isSeeking: false,
@@ -225,7 +225,7 @@ export default {
         this.audioElement = new Audio();
       }
 
-      this.audioElement.src = BASE_HTTP_URL + "/api/musicStation/getMusic?musicId=" + this.eventBus.currentMusic.uid; // uid 指示了目标音乐，通过它构建src
+      this.audioElement.src = `${BASE_HTTP_URL}/api/musicStation/getMusic?musicId=${this.eventBus.currentMusic.uid}`; // 有些奇怪，必须加 BASE_HTTP_URL ，否则就不能播放
 
       this.audioElement.addEventListener("timeupdate", this.onTimeUpdate);
 

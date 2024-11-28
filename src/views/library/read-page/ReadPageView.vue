@@ -72,7 +72,7 @@ export default {
       chapters: [],
       readRecord: {},
       selectedIndex: -1,
-      bookCover: '/api/library/cover?book=' + this.$route.query.id,
+      bookCover: `/api/library/cover?book=${this.$route.query.id}`,
       textContent: ''
     };
   },

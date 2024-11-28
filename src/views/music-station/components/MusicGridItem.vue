@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      albumCover: '/api/musicStation/cover?album=' + this.item.album_id // Initially use album cover
+      albumCover: `/api/musicStation/cover?album=${this.item.album_id}` // Initially use album cover
     };
   },
   methods: {

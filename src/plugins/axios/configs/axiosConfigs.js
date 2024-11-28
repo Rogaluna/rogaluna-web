@@ -1,1 +1,3 @@
 export const CHUNK_SIZE = 1024 * 1024;
+
+export const MAX_LIBRARY_RESOURCE_UPLOAD_SIZE = 1024 * 1024 * 10;

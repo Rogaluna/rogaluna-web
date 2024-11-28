@@ -14,7 +14,7 @@ export default {
     },
     options: {
       type: Array,
-      default: [
+      default: () => [
         ["bold", "italic", "underline", "strike"], // toggled buttons
         ["blockquote", "code-block"],
         ["link", "image", "video", "formula"],
@@ -36,8 +36,8 @@ export default {
       ],
     },
     handlers: {
-      type: Object,
-      default: () => ({}), // 用户自定义的 handlers
+      type: Function,
+      default: () => {}, // 用户自定义的 handlers
     },
   },
   data() {
@@ -56,7 +56,7 @@ export default {
         modules: {
           toolbar: {
             container: this.options,
-            handlers: this.handlers,
+            handlers: this.handlers(this),
           },
         },
         theme: 'rogaluna'

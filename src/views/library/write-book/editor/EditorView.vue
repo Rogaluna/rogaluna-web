@@ -1,7 +1,8 @@
 <template>
   <div style="height: 100%; display: flex;">
     <rogaluna-quill-editor 
-        v-model="content" 
+        v-model="content"
+        :handlers="handlers"
         style="flex: 1; display: flex; flex-direction: column; height: 100%;"></rogaluna-quill-editor>
     <div style="width: 200px; height: 100%;">
       <!-- 这里放置工具栏组件 -->
@@ -33,6 +34,8 @@ import updateChapterInfoAPI from '@/plugins/axios/api/library/updateChapterInfo'
 
 import deleteChapterAPI from '@/plugins/axios/api/library/deleteChapter';
 import deleteBookAPI from '@/plugins/axios/api/library/deleteBook';
+import uploadLibraryResourceAPI from '@/plugins/axios/api/library/uploadLibraryRes';
+import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
 
 export default {
   components: {
@@ -42,7 +45,44 @@ export default {
   data() {
     return {
       content: '', // 编辑器内容
-      chapters: []
+                    // 等待用户保存编辑，url 指向的图片将会从临时文件夹移动到持久文件夹内，这些图片经过服务器处理写入注册表，与章节对应起来，一旦用户要进行删除或修改，可以通过注册表进行查询。
+              // 应该需要一个函数去搜集当前内容中的 url ，与修改之前的 url 组进行比较，从而进行删除和确认。
+      handlers: (editor) => {
+        const self = this; // 获取外层指针以便在闭包内使用
+        return {
+          image() {
+            const quill = editor.quill;
+
+            self.$rogalunaWidgets.showFileSelector({ accept: 'image/*', multiple: false}, (files) => {
+              for (const key of Object.keys(files)) {
+                const file = files[key];
+                
+                // 将图片上传到服务器，获取已上传图片的 url
+                uploadLibraryResourceAPI(file)
+                  .then(response => {
+                    console.log(`response`, response);
+                    // 将 url 写入编辑器光标所在，构成 img
+                    const md5 = response.data;
+                    const url = `${BASE_HTTP_URL}/api/library/getResource?id=${md5}`;
+
+                    // 获取当前光标位置
+                    const range = quill.getSelection();
+                    if (range) {
+                      // 在光标位置插入图片
+                      quill.insertEmbed(range.index, 'image', url);
+
+                      // 将光标移动到图片之后
+                      quill.setSelection(range.index + 1);
+                    } else {
+                      console.error('No selection found');
+                    }
+                  })
+              }
+            })
+          },
+        };
+      }, // 编辑器选项处理重载
+      chapters: [],
     };
   },
   mounted() {
@@ -59,8 +99,6 @@ export default {
 
         stopLoading();
       })
-
-      
     },
     fetchChapterContent(chapterIndex) {
       const bookId = this.$route.query.id;
