@@ -25,7 +25,13 @@
           @click="playMusic(item)"
         >
           <!-- 图片 -->
-          <v-img :src="item.cover" alt="Cover" class="music-cover" contain />
+          <v-img
+            :src="`/api/musicStation/cover?album=${item.uid}`"
+            width="36"
+            height="36"
+            class="mr-2"
+            @error="handleImageError"
+          ></v-img>
 
           <!-- 两行文字 -->
           <div class="music-info">
@@ -68,18 +74,15 @@ export default {
     },
     playMusic(item) {
       this.eventBus.setCurrentMusic(item)
-    }
+    },
+    handleImageError() {
+      this.albumCover = require('@/assets/defaultAlbumCover.svg'); // 当封面加载失败时，使用默认图片
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-// ::v-deep .v-navigation-drawer__content {
-//   background-color: rgba($color: var(--deep-background-color-rgb), $alpha: 0.7);
-
-
-
-// }
 
 .play-list-container {
   width: 300px;
