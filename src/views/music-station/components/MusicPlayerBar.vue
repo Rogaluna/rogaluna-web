@@ -37,26 +37,42 @@
                     aria-hidden="true"
                     icon
                     v-bind="Object.assign({}, attrs, menuAttrs)"
-                    v-on="Object.assign({}, on, menuOn)"
-                    @click="switchPlayMode">
-                    <use xlink:href="#rogaluna-icon-random"></use>
+                    v-on="Object.assign({}, on, menuOn)">
+                    <use :xlink:href="getIcon(eventBus.playerSetting.mode)"></use>
                   </svg>
                 </template>
 
                 <v-list>
-                  <v-list-item @click="playMode = 'random'">
+                  <!-- <v-list-item @click="switchPlayMode('random')">
                     <v-list-item-title>随机播放</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="playMode = 'repeat'">
+                  <v-list-item @click="switchPlayMode('loop')">
                     <v-list-item-title>循环播放</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="playMode = 'single'">
+                  <v-list-item @click="switchPlayMode('single')">
                     <v-list-item-title>单曲循环</v-list-item-title>
+                  </v-list-item> -->
+
+                  <v-list-item 
+                    v-for="(label, mode) in $store.state.globalAttributes.playModeTypeMapping" 
+                    :key="mode" 
+                    @click="switchPlayMode(mode)"
+                  >
+                    <v-list-item-icon>
+                      <svg class="__icon__s control-button"
+                        aria-hidden="true"
+                        icon>
+                        <use :xlink:href="getIcon(mode)"></use>
+                      </svg>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ label }}</v-list-item-title>
+                    </v-list-item-content>
                   </v-list-item>
                 </v-list>
               </v-menu>
             </template>
-            <span>{{ playModeStr }}</span>
+            <span>{{ convertType(eventBus.playerSetting.mode) }}</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -283,8 +299,18 @@ export default {
     nextTrack() {
       console.log("下一曲");
     },
-    switchPlayMode() {
-      console.log("随机播放");
+
+
+    switchPlayMode(mode) {
+      this.eventBus.setPlayerMode(mode);
+    },
+    convertType(type) {
+      // 类型转换中文
+      return this.$store.state.globalAttributes.playModeTypeMapping[type] || type;
+    },
+    getIcon(type) {
+      // 如果找到图标，返回图标；否则返回默认图标
+      return `#${this.$store.state.globalAttributes.playModeIconTypeMapping[type] || this.$store.state.globalAttributes.playModeIconTypeMapping['random']}`;
     },
 
     showPlaySetting() {
@@ -297,8 +323,13 @@ export default {
     showPlayList() {
       this.$rogalunaWidgets.showDrawer(
         PlayListDrawer,
-        {},
-        {}
+        {
+          musicList: this.eventBus.playList.musicList,
+          selectedIndex: this.eventBus.playList.currentIndex,
+        },
+        {
+          play: (item) => { this.eventBus.setCurrentMusic(item); } 
+        }
       )
     }
 

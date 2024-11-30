@@ -22,16 +22,17 @@
       <template #item="{ item, index }">
         <div
           class="music-item"
-          :class="{ 'dark-item': index % 2 === 0, 'light-item': index % 2 === 1 }"
+          :class="{ 'dark-item': index % 2 === 0, 'light-item': index % 2 === 1, 'selected-item': selectedIndex === index }"
           @mouseenter="handleHover(index)"
           @mouseleave="handleLeave"
+          @click="playMusic(item, index)"
         >
           <!-- 图片 -->
           <v-img :src="item.cover" alt="Cover" class="music-cover" contain />
 
           <!-- 两行文字 -->
           <div class="music-info">
-            <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-title">{{ item.title }}</rogaluna-scroll-text>
+            <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-title">{{ item.music_name }}</rogaluna-scroll-text>
             <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-artist">{{ item.artist }}</rogaluna-scroll-text>
           </div>
         </div>
@@ -56,7 +57,7 @@ export default {
       default: [
         {
           cover: 'image-url', // 图片地址
-          title: 'La\'qryma of the Wasteland (Extended Mix)', // 标题
+          music_name: 'La\'qryma of the Wasteland (Extended Mix)', // 标题
           artist: 'DJ Noriken' // 艺术家
         },
         {
@@ -75,6 +76,10 @@ export default {
           artist: 'DJ Noriken' // 艺术家
         },
       ]
+    },
+    selectedIndex: {
+      type: Number,
+      default: -1
     }
   },
   data() {
@@ -93,6 +98,10 @@ export default {
     closeDrawer() {
       this.$emit("close");
     },
+    playMusic(item, index) {
+      this.selectedIndex = index;
+      this.$emit("play", item);
+    }
   },
 };
 </script>
@@ -145,6 +154,17 @@ export default {
       font-size: 12px;
       color: #bbbbbb;
     }
+  }
+
+  &:hover {
+    cursor: pointer;
+    background: linear-gradient(to right, var(--light-background-color) 0%, var(--light-background-color) 0%, transparent 5%), /* 横向渐变 */
+  }
+
+  &.selected-item {
+    background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) 0%, transparent 5%)
+
+
   }
 }
 

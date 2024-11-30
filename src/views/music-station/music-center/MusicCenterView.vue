@@ -126,8 +126,11 @@ export default {
       this.menus.contextObject = item;
     },
     handleItemClick(item) {
-      console.log(`this.eventBus`, this.eventBus);
+      // 设置当前音乐
       this.eventBus.setCurrentMusic(item);
+
+      // 设置播放列表，处于音乐台中，因此设置为默认播放列表，添加形式为 append
+      this.eventBus.setPlayList([item], 'append');
     },
     showMusicDetail(item) {
       console.log(`item`, item);

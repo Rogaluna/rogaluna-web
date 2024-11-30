@@ -19,11 +19,39 @@ const EventBus = new Vue({
       volume: 50,      // 声音大小
       isPlaying: false,    // 播放状态
     },
-    playList: [ // 播放列表
-
-    ]
+    playList: { // 播放列表
+      musicList: [], // 音乐列表
+      currentIndex: -1, // 当前播放索引
+    } 
   },
   methods: {
+    /**
+     * 设置当前播放列表
+     * @param {Array} list 音乐列表
+     * @param {String} opt 设置，“set” 表示覆盖列表， “append” 表示添加到当前列表
+     */
+    setPlayList(list, opt = "set") {
+      switch(opt) {
+        case "set": 
+          {
+            this.playList.musicList = list;
+          }
+        break;
+        case "append":
+          {
+            this.playList.musicList.push(...list);
+          }
+        break;
+        default: 
+          return ;
+      }
+      
+      console.log(`this.playList`, this.playList.musicList);
+
+      // 设置当前音乐列表完毕后，发送一个事件
+      this.$emit('load-music-list');
+    },
+
     /**
      * 设置当前播放的音乐
      * @param {Object} music 音乐对象
@@ -34,6 +62,10 @@ const EventBus = new Vue({
       this.currentMusic.artist = music.artist;
       this.setTotalDuration(music.duration);
       this.updateCurrentDuration(0);
+
+      // 设置当前音乐在播放列表中索引
+      this.playList.currentIndex = this.playList.musicList.findIndex(item => item.uid === this.currentMusic.uid);
+      console.log(`this.playList.currentIndex`, this.playList.currentIndex);
 
       // 设置当前音乐完毕后，发送一个事件，播放器将会从网络获取音乐数据并自动播放
       this.$emit('load-new-music');

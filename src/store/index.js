@@ -17,4 +17,7 @@ const store =  new Vuex.Store({
 store.dispatch('globalAttributes/loadFileTypeMapping');
 store.dispatch('globalAttributes/loadFileIconTypeMapping')
 
+store.dispatch('globalAttributes/loadPlayModeTypeMapping');
+store.dispatch('globalAttributes/loadPlayModeIconTypeMapping')
+
 export default store;
