@@ -82,7 +82,7 @@
                 icon
                 v-bind="attrs"
                 v-on="on"
-                @click="switchPlayMode">
+                @click="previousTrack">
                 <use xlink:href="#rogaluna-icon-previous"></use>
               </svg>
             </template>
@@ -110,7 +110,7 @@
                 icon
                 v-bind="attrs"
                 v-on="on"
-                @click="switchPlayMode">
+                @click="nextTrack">
                 <use xlink:href="#rogaluna-icon-nextsong"></use>
               </svg>
             </template>
@@ -295,9 +295,11 @@ export default {
     },
     previousTrack() {
       console.log("上一曲");
+      this.eventBus.playPrevious();
     },
     nextTrack() {
       console.log("下一曲");
+      this.eventBus.playNext();
     },
 
 

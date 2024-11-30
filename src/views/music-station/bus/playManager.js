@@ -22,6 +22,7 @@ const EventBus = new Vue({
     playList: { // 播放列表
       musicList: [], // 音乐列表
       currentIndex: -1, // 当前播放索引
+      indexRandomList: [] // 以音乐列表的数量生成的随机索引排布列表
     } 
   },
   methods: {
@@ -46,7 +47,20 @@ const EventBus = new Vue({
           return ;
       }
       
-      console.log(`this.playList`, this.playList.musicList);
+      // 生成索引随机数列表
+      // 创建索引数组 [0, 1, 2, ..., n-1]
+      const array = Array.from({ length: this.playList.musicList.length }, (_, i) => i);
+
+      // Fisher-Yates 洗牌算法
+      for (let i = array.length - 1; i > 0; i--) {
+        // 生成一个范围在 [0, i] 的伪随机索引
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+
+        // 交换元素
+        [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
+      }
+
+      this.playList.indexRandomList = array;
 
       // 设置当前音乐列表完毕后，发送一个事件
       this.$emit('load-music-list');
@@ -104,6 +118,62 @@ const EventBus = new Vue({
      */
     setPlayerMode(mode) {
       this.playerSetting.mode = mode;
+    },
+
+    /**
+     * 播放上一首
+     * 
+     */
+    playPrevious() {
+      switch (this.playerSetting.mode) {
+        case 'random':
+          {
+            const len = this.playList.indexRandomList.length;
+            const index = this.playList.indexRandomList.findIndex(i => i === this.playList.currentIndex)
+            const preMusic = this.playList.musicList[this.playList.indexRandomList[(((index - 1) % len) + len) % len]];
+            this.setCurrentMusic(preMusic);
+          }
+        break;
+        case 'loop':
+        case 'single':
+          {
+            const len = this.playList.musicList.length;
+            const preMusic = this.playList.musicList[(((this.playList.currentIndex - 1) % len) + len) % len];
+            this.setCurrentMusic(preMusic);
+          }
+        break;
+      
+        default:
+          break;
+      }
+    },
+
+    /**
+     * 播放下一首
+     * 
+     */
+    playNext() {
+      switch (this.playerSetting.mode) {
+        case 'random':
+          {
+            const len = this.playList.indexRandomList.length;
+            const index = this.playList.indexRandomList.findIndex(i => i === this.playList.currentIndex)
+            const nextMusic = this.playList.musicList[this.playList.indexRandomList[(((index + 1) % len) + len) % len]];
+            this.setCurrentMusic(nextMusic);
+          }
+        break;
+        case 'loop':
+        case 'single':
+          {
+            const len = this.playList.musicList.length;
+            const nextMusic = this.playList.musicList[(((this.playList.currentIndex + 1) % len) + len) % len];
+            this.setCurrentMusic(nextMusic);
+          }
+        break;
+      
+        default:
+          break;
+      }
     },
 
     /**
