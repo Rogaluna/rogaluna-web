@@ -1,8 +1,5 @@
 <template>
-  <rogaluna-div 
-  :menuItems="menus.panel"
-  ref="operatePanel"
-  style="display: flex; flex-direction: column; width: 100%;">
+  <div style="width: 100%; display: flex; flex-direction: column;">
     <div>
       <v-banner
         single-line
@@ -20,18 +17,23 @@
         </template>
       </v-banner>
     </div>
-    <div style="overflow: auto;">
-      <rogaluna-grid :items="items" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
-        <template v-slot:default="{ item }">
-          <rogaluna-div
-          :menuItems="menus.music"
-          @rclick="handleItemRightClick(item)">
-            <music-grid-item :item="item" @itemClick="handleItemClick"/>
-          </rogaluna-div>
-        </template>
-      </rogaluna-grid>
-    </div>
-  </rogaluna-div>
+    <rogaluna-div 
+    :menuItems="menus.panel"
+    ref="operatePanel"
+    style="display: flex; flex-direction: column; width: 100%; flex-grow: 1; min-height: 0;">
+      <div style="overflow: auto;">
+        <rogaluna-grid :items="items" :itemStyle="{ borderWidth: 0 }" :useEndElement="true" style="padding: 10px;">
+          <template v-slot:default="{ item }">
+            <rogaluna-div
+            :menuItems="menus.music"
+            @rclick="handleItemRightClick(item)">
+              <music-grid-item :item="item" @itemClick="handleItemClick"/>
+            </rogaluna-div>
+          </template>
+        </rogaluna-grid>
+      </div>
+    </rogaluna-div>
+  </div>
 </template>
 
 <script>

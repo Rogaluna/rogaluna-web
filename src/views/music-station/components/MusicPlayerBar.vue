@@ -170,7 +170,7 @@
 
       <!-- 右侧：其他操作按钮 -->
       <div class="nav-right">
-        <v-tooltip bottom>
+        <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <svg class="__icon__es nav-right-button"
               aria-hidden="true"
@@ -184,7 +184,7 @@
           <span>播放设置</span>
         </v-tooltip>
 
-        <v-tooltip bottom>
+        <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <svg class="__icon__es nav-right-button"
               aria-hidden="true"
@@ -205,7 +205,6 @@
 <script>
 import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
 import PlaySettingDialog from './PlaySettingDialog.vue';
-import PlayListDrawer from './PlayListDrawer.vue';
 
 import RogalunaScrollText from '@/plugins/rogaluna-widgets/widgets/sundries/RogalunaScrollText.vue';
 
@@ -323,16 +322,7 @@ export default {
       )
     },
     showPlayList() {
-      this.$rogalunaWidgets.showDrawer(
-        PlayListDrawer,
-        {
-          musicList: this.eventBus.playList.musicList,
-          selectedIndex: this.eventBus.playList.currentIndex,
-        },
-        {
-          play: (item) => { this.eventBus.setCurrentMusic(item); } 
-        }
-      )
+      this.eventBus.playList.visible = !this.eventBus.playList.visible;
     }
 
   },

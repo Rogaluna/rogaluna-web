@@ -20,6 +20,7 @@ const EventBus = new Vue({
       isPlaying: false,    // 播放状态
     },
     playList: { // 播放列表
+      visible: false, // 可视状态
       musicList: [], // 音乐列表
       currentIndex: -1, // 当前播放索引
       indexRandomList: [] // 以音乐列表的数量生成的随机索引排布列表
@@ -76,6 +77,8 @@ const EventBus = new Vue({
       this.currentMusic.artist = music.artist;
       this.setTotalDuration(music.duration);
       this.updateCurrentDuration(0);
+
+      console.log(`music`, this.currentMusic.title);
 
       // 设置当前音乐在播放列表中索引
       this.playList.currentIndex = this.playList.musicList.findIndex(item => item.uid === this.currentMusic.uid);

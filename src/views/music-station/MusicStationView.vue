@@ -4,6 +4,7 @@
     <v-main style="height: 100%;">
       <div style="display: flex; flex-grow: 1; overflow: hidden;">
         <router-view/>
+        <play-list-drawer></play-list-drawer>
       </div>
 
       <div>
@@ -18,6 +19,7 @@ import EventBus from '@/views/music-station/bus/playManager'
 
 import AsideNavigator from '../components/AsideNavigator.vue';
 import MusicPlayerBar from './components/MusicPlayerBar.vue';
+import PlayListDrawer from './components/PlayListDrawer.vue';
 
 export default {
   provide() {
@@ -27,7 +29,8 @@ export default {
   },
   components: {
     AsideNavigator,
-    MusicPlayerBar
+    MusicPlayerBar,
+    PlayListDrawer
   },
   data() {
     return {
