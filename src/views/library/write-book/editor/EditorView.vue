@@ -45,8 +45,6 @@ export default {
   data() {
     return {
       content: '', // 编辑器内容
-                    // 等待用户保存编辑，url 指向的图片将会从临时文件夹移动到持久文件夹内，这些图片经过服务器处理写入注册表，与章节对应起来，一旦用户要进行删除或修改，可以通过注册表进行查询。
-              // 应该需要一个函数去搜集当前内容中的 url ，与修改之前的 url 组进行比较，从而进行删除和确认。
       handlers: (editor) => {
         const self = this; // 获取外层指针以便在闭包内使用
         return {
@@ -83,6 +81,7 @@ export default {
         };
       }, // 编辑器选项处理重载
       chapters: [],
+      originalResList: [],
     };
   },
   mounted() {
@@ -105,7 +104,67 @@ export default {
       getChapterContentAPI(bookId, chapterIndex)
         .then(response => {
           this.content = response;
+
+          // 需要对原始获取的文本进行统计
+          this.originalResList = this.statisticalCitationRes(response);
+          console.log('资源引用列表:', this.originalResList);
         })
+    },
+    statisticalCitationRes(content) {
+      // 统计引用的资源
+      if (!content || typeof content !== 'string') {
+          return [];
+      }
+
+      const resourceIds = [];
+
+      // 匹配 src 属性中包含 /api/library/getResource?id= 的 id 值
+      const regex = /src="[^"]*\/api\/library\/getResource\?id=([^"&]+)"/g;
+      let match;
+
+      while ((match = regex.exec(content)) !== null) {
+          // 将匹配到的 id 值添加到列表
+          resourceIds.push(match[1]);
+      }
+
+      return resourceIds;
+    },
+    compareArrays(originalList, newList) {
+      // 构建计数器函数
+      const buildCounter = (array) => {
+        const counter = new Map();
+        for (const item of array) {
+            counter.set(item, (counter.get(item) || 0) + 1);
+        }
+        return counter;
+      }
+
+      // 原始数组和新数组的计数器
+      const originalCounter = buildCounter(originalList);
+      const newCounter = buildCounter(newList);
+
+      const added = [];
+      const removed = [];
+
+      // 遍历原始计数器，找出减少的元素
+      for (const [item, count] of originalCounter.entries()) {
+        const newCount = newCounter.get(item) || 0;
+        if (newCount < count) {
+          const diff = count - newCount;
+          removed.push(...Array(diff).fill(item)); // 根据差值填充
+        }
+      }
+
+      // 遍历新计数器，找出增加的元素
+      for (const [item, count] of newCounter.entries()) {
+        const originalCount = originalCounter.get(item) || 0;
+        if (count > originalCount) {
+          const diff = count - originalCount;
+          added.push(...Array(diff).fill(item)); // 根据差值填充
+        }
+      }
+
+      return { added, removed };
     },
     async handleSideOpts(event) {
       switch(event.type) {
@@ -239,10 +298,18 @@ export default {
         break;
         case 'saveChapter':
           {
+            // 需要统计添加的资源引用、删除的资源引用
+            const newResList = this.statisticalCitationRes(this.content);
+            console.log(`新的资源引用列表`, newResList);
+
+            const { added, removed } = this.compareArrays(this.originalResList, newResList);
+            console.log("添加的元素:", added); 
+            console.log("删除的元素:", removed);
+
             updateChapterContentAPI({
               id: this.$route.query.id,
               index: event.payload,
-              content: this.content,
+              content: this.content
             })
               .then(response => {
                 console.log(`response`, response);

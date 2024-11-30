@@ -35,7 +35,7 @@
     <div class="bottom-icon">
       <v-tooltip top>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon @click="saveChapter(selectedIndex)">
+          <v-btn icon @click="saveChapter(selectedIndex)" :disabled="selectedIndex < 0">
             <svg class="__icon__s"
               aria-hidden="true"
               icon
@@ -45,7 +45,7 @@
             </svg>
           </v-btn>
         </template>
-        <span>保存撰写</span>
+        <span>保存撰写</span> 
       </v-tooltip>
 
       <v-tooltip top>

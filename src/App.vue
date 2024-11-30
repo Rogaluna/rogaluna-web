@@ -55,22 +55,26 @@ html {
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
+    cursor: pointer;
   }
 
   /* 滚动条上的滚动滑块样式 */
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: rgba(var(--primary-color-rgb), 0.8);
+    cursor: pointer;
   }
 
   /* 鼠标悬停时 */
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(var(--primary-color-rgb), 0.6);
+    cursor: pointer;
   }
 
   /* 鼠标按下时 */
   ::-webkit-scrollbar-thumb:active {
     background-color: var(--primary-color);
+    cursor: pointer;
   }
 }
 

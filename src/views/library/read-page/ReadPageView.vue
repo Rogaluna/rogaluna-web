@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="read-container">
     <v-banner
       single-line
       :sticky="false"
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div v-else v-html="textContent" class="content-display">
+    <div v-else v-html="textContent" class="content-display" align="left">
 
     </div>
   </div>
@@ -153,52 +153,57 @@ export default {
   }
 }
 
-.content-display {
-  padding: 1rem;
-  width: 100%;
+.read-container {
   display: flex;
-  flex-grow: 1;
-  min-width: none;
-}
+  flex-direction: column;
+  height: 100%;
 
-.book-info {
-  display: flex;
-  flex-direction: row;
-
-  .cover-container {
-    width: 168px;
-    height: 225px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    border-radius: 5%;
-
-    .book-cover {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border: 1px solid;
-      border-radius: 5%;
-      border-color: var(--split-color);
-    }
+  .content-display {
+    overflow-y: scroll;
+    flex-grow: 1;
+    min-width: 0;
   }
 
-  .info-container {
+
+  .book-info {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
-    .title-container {
+    .cover-container {
+      width: 168px;
+      height: 225px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      border-radius: 5%;
 
+      .book-cover {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border: 1px solid;
+        border-radius: 5%;
+        border-color: var(--split-color);
+      }
     }
 
-    .author-container {
+    .info-container {
+      display: flex;
+      flex-direction: column;
 
-    }
+      .title-container {
 
-    .option-container {
+      }
 
+      .author-container {
+
+      }
+
+      .option-container {
+
+      }
     }
   }
 }

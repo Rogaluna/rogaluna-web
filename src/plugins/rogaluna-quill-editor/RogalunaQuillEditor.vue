@@ -94,4 +94,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+::v-deep .ql-container {
+  flex-grow: 1;
+  min-height: 0;
+}
 </style>
