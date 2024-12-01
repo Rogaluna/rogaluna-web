@@ -13,14 +13,10 @@
         ></v-img>
         <div>
           <div class="song-name" align="left">
-            <rogaluna-scroll-text>
-              {{ eventBus.currentMusic.title }}
-            </rogaluna-scroll-text>
+            <rogaluna-scroll-text :text="eventBus.currentMusic.title"/>
           </div>
           <div class="artist-info" align="left">
-            <rogaluna-scroll-text>
-              {{ eventBus.currentMusic.artist }}
-            </rogaluna-scroll-text>
+            <rogaluna-scroll-text :text="eventBus.currentMusic.artist"/>
           </div>
         </div>
       </div>
@@ -43,16 +39,6 @@
                 </template>
 
                 <v-list>
-                  <!-- <v-list-item @click="switchPlayMode('random')">
-                    <v-list-item-title>随机播放</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="switchPlayMode('loop')">
-                    <v-list-item-title>循环播放</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="switchPlayMode('single')">
-                    <v-list-item-title>单曲循环</v-list-item-title>
-                  </v-list-item> -->
-
                   <v-list-item 
                     v-for="(label, mode) in $store.state.globalAttributes.playModeTypeMapping" 
                     :key="mode" 
@@ -240,7 +226,12 @@ export default {
         this.audioElement = new Audio();
       }
 
+      this.audioElement.pause();
+      this.audioElement.currentTime = 0;
+
       this.audioElement.src = `${BASE_HTTP_URL}/api/musicStation/getMusic?musicId=${this.eventBus.currentMusic.uid}`; // 有些奇怪，必须加 BASE_HTTP_URL ，否则就不能播放
+
+      this.audioElement.addEventListener('canplay', this.onCanPlay);
 
       this.audioElement.addEventListener("timeupdate", this.onTimeUpdate);
 
@@ -249,9 +240,6 @@ export default {
       this.audioElement.addEventListener("ended",this.onEnded);
 
       this.audioElement.load();
-      this.eventBus.playerSetting.isPlaying = true;
-      this.audioElement.play();
-      this.updateVolume();
     },
     playPause() {
       this.eventBus.playerSetting.isPlaying = !this.eventBus.playerSetting.isPlaying;
@@ -260,6 +248,11 @@ export default {
       } else {
         this.audioElement.pause()
       }
+    },
+    onCanPlay() {
+      this.eventBus.playerSetting.isPlaying = true;
+      this.audioElement.play();
+      this.updateVolume();
     },
     onTimeUpdate() {
       if (!this.isSeeking) {
@@ -293,11 +286,9 @@ export default {
       }
     },
     previousTrack() {
-      console.log("上一曲");
       this.eventBus.playPrevious();
     },
     nextTrack() {
-      console.log("下一曲");
       this.eventBus.playNext();
     },
 

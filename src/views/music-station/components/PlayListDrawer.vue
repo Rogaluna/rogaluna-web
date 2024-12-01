@@ -2,17 +2,18 @@
   <div
     v-show="eventBus.playList.visible"
     class="play-list-container"
+    style="width: 300px;"
   >
-    <v-toolbar flat>
+    <v-toolbar flat width="300">
       <v-toolbar-title>播放列表</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer>
       <v-btn icon @click="closeDrawer">
         <svg class="__icon__s"
           aria-hidden="true"
           icon>
           <use xlink:href="#rogaluna-icon-delete"></use>
         </svg>
-      </v-btn>
+      </v-btn> -->
     </v-toolbar>
 
     <rogaluna-list :items="eventBus.playList.musicList" :itemStyle="{ padding: 0, borderWidth: 0 }">
@@ -26,17 +27,17 @@
         >
           <!-- 图片 -->
           <v-img
-            :src="`/api/musicStation/cover?album=${item.uid}`"
-            width="36"
-            height="36"
+            :src="errorImages[item.uid] ? require('@/assets/defaultAlbumCover.svg') : `/api/musicStation/cover?album=${item.uid}`"
+            width="50"
+            height="50"
             class="mr-2"
-            @error="handleImageError"
+            @error="handleImageError(item.uid)"
           ></v-img>
 
           <!-- 两行文字 -->
           <div class="music-info">
-            <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-title">{{ item.music_name }}</rogaluna-scroll-text>
-            <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-artist">{{ item.artist }}</rogaluna-scroll-text>
+            <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-title" :text="item.music_name"/>
+            <rogaluna-scroll-text align="left" :scroll="index === hoveredIndex" class="music-artist" :text="item.artist"/>
           </div>
         </div>
       </template>
@@ -60,6 +61,7 @@ export default {
   data() {
     return {
       hoveredIndex: -1,
+      errorImages: {}, // 存储封面加载错误的 UID
     };
   },
   methods: {
@@ -75,8 +77,8 @@ export default {
     playMusic(item) {
       this.eventBus.setCurrentMusic(item)
     },
-    handleImageError() {
-      this.albumCover = require('@/assets/defaultAlbumCover.svg'); // 当封面加载失败时，使用默认图片
+    handleImageError(uid) {
+      this.$set(this.errorImages, uid, true);
     },
   },
 };
@@ -85,7 +87,6 @@ export default {
 <style lang="scss" scoped>
 
 .play-list-container {
-  width: 300px;
 
   border-width: 0 0 0 1px;
   border-style: solid;
@@ -105,18 +106,11 @@ export default {
     width: 100%;
 
     &.dark-item {
-      background-color: rgba($color: var(--light-background-color-rgb), $alpha: 0.2); // 深色背景
+      background-color: rgba($color: var(--deep-background-color-rgb), $alpha: 0.3); // 深色背景
     }
 
     &.light-item {
-      background-color: rgba($color: var(--light-background-color-rgb), $alpha: 0.3); // 浅色背景
-    }
-
-    .music-cover {
-      width: 50px;
-      height: 50px;
-      border-radius: 5px;
-      margin-right: 10px;
+      background-color: rgba($color: var(--deep-background-color-rgb), $alpha: 0.2); // 浅色背景
     }
 
     .music-info {
@@ -143,7 +137,7 @@ export default {
     }
 
     &.selected-item {
-      background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) 0%, transparent 5%)
+      background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) 0%, rgba($color: var(--light-background-color-rgb), $alpha: 0.15) 5%)
 
 
     }

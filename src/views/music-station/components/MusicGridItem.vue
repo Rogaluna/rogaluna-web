@@ -7,10 +7,10 @@
       @error="handleImageError"
     ></v-img>
     <div class="item-title">
-      <rogaluna-scroll-text>{{ item.music_name }}</rogaluna-scroll-text>
+      <rogaluna-scroll-text :text="item.music_name" />
     </div>
     <div class="artist-name">
-      <rogaluna-scroll-text>{{ item.artist }}</rogaluna-scroll-text>
+      <rogaluna-scroll-text :text="item.artist" />
     </div>
   </div>
 </template>

@@ -138,9 +138,6 @@ export default {
             .then(response => {
               this.items = response.data;
 
-              // 设置播放列表
-              this.eventBus.setPlayList(this.items, 'set');
-
               stopLoading();
             })
         }
@@ -150,11 +147,11 @@ export default {
       this.menus.contextObject = item;
     },
     handleItemClick(item) {
-      // 设置当前音乐
-      this.eventBus.setCurrentMusic(item);
-
       // 设置播放列表，处于收藏中，因此设置为收藏播放列表，添加形式为 set
       this.eventBus.setPlayList(this.items, 'set');
+
+      // 设置当前音乐
+      this.eventBus.setCurrentMusic(item);
     },
     showMusicDetail(item) {
       console.log(`item`, item);

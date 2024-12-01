@@ -14,17 +14,23 @@ export default {
     scroll: {
       type: Boolean,
       default: true // 默认滚动
+    },
+    text: {
+      type: String
     }
   },
   data() {
     return {
       needToScroll: false, // 是否需要滚动
-      text: "" // 当前显示的文本内容
     };
   },
   mounted() {
-    this.setText();
     this.checkScroll();
+  },
+  watch: {
+    text() {
+      this.checkScroll();
+    }
   },
   methods: {
     // 检查是否需要滚动
@@ -40,13 +46,6 @@ export default {
       if (!outer || !inner) return false;
       return inner.offsetWidth > outer.offsetWidth;
     },
-    // 获取到父组件传递的插槽内容
-    setText() {
-      this.text =
-        (this.$slots.default &&
-          this.$slots.default.reduce((res, it) => res + it.text, "")) ||
-        "";
-    }
   }
 };
 </script>

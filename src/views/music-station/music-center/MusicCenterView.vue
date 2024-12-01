@@ -118,7 +118,6 @@ export default {
           getMusicListAPI(opt, param)
             .then(response => {
               this.items = response.data;
-              console.log(`this.items`, this.items);
               stopLoading();
             })
         }
@@ -128,11 +127,11 @@ export default {
       this.menus.contextObject = item;
     },
     handleItemClick(item) {
-      // 设置当前音乐
-      this.eventBus.setCurrentMusic(item);
-
       // 设置播放列表，处于音乐台中，因此设置为默认播放列表，添加形式为 append
       this.eventBus.setPlayList([item], 'append');
+
+      // 设置当前音乐
+      this.eventBus.setCurrentMusic(item);
     },
     showMusicDetail(item) {
       console.log(`item`, item);

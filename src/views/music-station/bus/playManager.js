@@ -41,7 +41,11 @@ const EventBus = new Vue({
         break;
         case "append":
           {
-            this.playList.musicList.push(...list);
+            list.forEach(item => {
+              if (!this.playList.musicList.some(existingItem => existingItem.uid === item.uid)) {
+                  this.playList.musicList.push(item);
+              }
+          });
           }
         break;
         default: 
@@ -78,11 +82,8 @@ const EventBus = new Vue({
       this.setTotalDuration(music.duration);
       this.updateCurrentDuration(0);
 
-      console.log(`music`, this.currentMusic.title);
-
       // 设置当前音乐在播放列表中索引
       this.playList.currentIndex = this.playList.musicList.findIndex(item => item.uid === this.currentMusic.uid);
-      console.log(`this.playList.currentIndex`, this.playList.currentIndex);
 
       // 设置当前音乐完毕后，发送一个事件，播放器将会从网络获取音乐数据并自动播放
       this.$emit('load-new-music');
