@@ -24,8 +24,7 @@
         label="用户名"
         :rules="[rules.required]"
         outlined
-        dense
-        clearable>
+        dense>
         <div slot="prepend">
           <svg class="__icon__s importable"
             aria-hidden="true"
