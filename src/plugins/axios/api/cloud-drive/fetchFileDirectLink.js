@@ -2,11 +2,12 @@ import { axiosInstance } from "../../main"
 import { BASE_HTTP_URL } from "../../configs/baseUrl";
 import Cookies from 'js-cookie';
 
-const fetchFileDirectLinkAPI = async (filePath) => {
+const fetchFileDirectLinkAPI = async (targetMd5, targetFileName) => {
   try {
 		// 创建一个 FormData 对象
     const formData = new FormData();
-    formData.append('filePath', filePath); // 添加 filePath 到表单数据中
+    formData.append('targetMd5', targetMd5);
+		formData.append('fileName', targetFileName);
 
 		// 使用 URL 参数对象传递查询参数
 		const response = await axiosInstance.post('/api/cloudDrive/fetchFileDirectLink', formData, {
@@ -22,8 +23,8 @@ const fetchFileDirectLinkAPI = async (filePath) => {
 		// 创建一个临时的 URL 对象，指向下载的文件
 		const link = document.createElement('a');
 		link.href = `${BASE_HTTP_URL}/api/cloudDrive/getFile?token=${downloadToken}`;
-		// 从文件路径中提取文件名，设置为下载的文件名
-		link.setAttribute('download', filePath.split('/').pop());
+		// 将 targetFileName 设置为下载的文件名
+		link.setAttribute('download', targetFileName);
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);

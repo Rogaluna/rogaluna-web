@@ -55,7 +55,7 @@
 import Directory from './components/Directory.vue';
 
 import getBookInfoAPI from '@/plugins/axios/api/library/getBookInfo';
-import getUserInfoAPI from '@/plugins/axios/api/account/getUserInfo';
+import getAccountInfoAPI from '@/plugins/axios/api/account/getAccountInfo';
 import getBookReadProgressAPI from '@/plugins/axios/api/library/getBookReadProgress';
 import getChapterListAPI from '@/plugins/axios/api/library/getChapterList';
 import getChapterContentAPI from '@/plugins/axios/api/library/getChapterContent';
@@ -99,7 +99,7 @@ export default {
             // 获取指定的书籍信息
             const bookInfo = await getBookInfoAPI(bookId)
             this.book = bookInfo.data;
-            const userInfo = await getUserInfoAPI(bookInfo.data.user_id);
+            const userInfo = await getAccountInfoAPI(bookInfo.data.user_id);
             this.user = userInfo.data;
           }
 

@@ -156,7 +156,6 @@ export default {
             icon: '#rogaluna-icon-file',
             value: '1',
             handler: () => {
-              console.log(`this.eventBus`, this.eventBus);
               this.eventBus.setDir(this.menus.contextObject.uid);
               console.log(`this.menus.contextObject`, this.menus.contextObject);
             }
@@ -168,8 +167,9 @@ export default {
             icon: '#rogaluna-icon-download',
             value: '1',
             handler: () => {
-              const targetPath = `${this.eventBus.formattedDir}/${this.menus.contextObject.name}`;
-              fetchFileDirectLinkAPI(targetPath)
+              const targetMd5 = this.menus.contextObject.contentMd5;
+              const targetFileName = this.menus.contextObject.name;
+              fetchFileDirectLinkAPI(targetMd5, targetFileName)
               .then(response => {
                 console.log(response);
               })

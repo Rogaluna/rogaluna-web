@@ -1,14 +1,11 @@
 import { axiosInstance } from "../../main"
 import Cookies from 'js-cookie';
 
-const getUserInfoAPI = async (param) => {
+const getAccountInfoAPI = async (param) => {
 
   try {
     // 使用 URL 参数对象传递查询参数
-    const response = await axiosInstance.get('/api/account/getUserInfo', {
-        params: {
-          id: param
-        },
+    const response = await axiosInstance.get('/api/account/getAccountInfo', {
         headers: {
           'Authorization': Cookies.get('token')
         }
@@ -22,4 +19,4 @@ const getUserInfoAPI = async (param) => {
   }
 };
 
-export default getUserInfoAPI
+export default getAccountInfoAPI

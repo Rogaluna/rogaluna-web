@@ -6,10 +6,11 @@
 
 // Symbol引入图标js文件
 import './icons/file-icons/iconfont';
-import './icons/computer-icons/iconfont'
-import './icons/arrow-icons/iconfont'
-import './icons/common-icons/iconfont'
-import './icons/media-icons/iconfont'
+import './icons/computer-icons/iconfont';
+import './icons/arrow-icons/iconfont';
+import './icons/common-icons/iconfont';
+import './icons/media-icons/iconfont';
+import './icons/account-icons/iconfont';
 
 export default {
     install() {
