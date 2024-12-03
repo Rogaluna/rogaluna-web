@@ -331,48 +331,6 @@ export default {
               {
                 confirm: async () => {
                   const bookId = this.$route.query.id;
-                  // const originText = await getChapterContentAPI(bookId, event.payload);
-
-                  // // 需要对原始获取的文本进行分行和哈希计算
-                  // const tokens1 = this.tokenizeHtmlContent(originText);
-                  // const tokenLines1 = this.splitTokensIntoLines(tokens1);
-                  // const lines1 = tokenLines1.map(lineTokens => this.rebuildContentFromTokens(lineTokens));
-                  // console.log(`hashLines1`, lines1);
-                  
-                  // const tokens2 = this.tokenizeHtmlContent(this.content);
-                  // const tokenLines2 = this.splitTokensIntoLines(tokens2);
-                  // const lines2 = tokenLines2.map(lineTokens => this.rebuildContentFromTokens(lineTokens));
-                  // console.log(`hashLines2`, lines2);
-
-                  // const { deletions, insertions } = myersDiffCompare(lines1, lines2);
-
-                  // // 匹配 id 
-                  // const regex = /src="https?:\/\/[^"]*\/api\/library\/getResource\?id=([a-fA-F0-9]+)/;
-                  // function extractIds(operations) {
-                  //     const ids = [];
-                  //     operations.forEach(op => {
-                  //         const match = op.match(regex);
-                  //         if (match && match[1]) {
-                  //             ids.push(match[1]);
-                  //         }
-                  //     });
-                  //     return ids;
-                  // }
-                  // const deletionIds = extractIds(deletions);
-                  // const insertionIds = extractIds(insertions);
-
-                  // console.log(`diffs`, deletionIds, insertionIds);
-
-                  // updateChapterContentAPI({
-                  //   id: bookId,
-                  //   index: event.payload,
-                  //   content: this.content,
-                  //   removed: deletionIds,
-                  //   added: insertionIds
-                  // })
-                  //   .then(response => {
-                  //     console.log(`response`, response);
-                  //   })
 
                   const myersDiffCompare = (oldText, newText) => {
                     const m = oldText.length;
