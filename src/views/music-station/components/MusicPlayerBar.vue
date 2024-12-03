@@ -211,10 +211,10 @@ export default {
   watch: {
   },
   mounted() {
+    this.handleLoadNewMusic = this.loadNewMusic.bind(this);
+
     // 加载新音乐事件
-    this.eventBus.$on('load-new-music', () => {
-      this.loadNewMusic();
-    });
+    this.eventBus.$on('load-new-music', this.handleLoadNewMusic);
   },
   methods: {
     handleImageError() {
@@ -222,22 +222,26 @@ export default {
     },
 
     loadNewMusic() {
-      if (!this.audioElement) {
-        this.audioElement = new Audio();
+      if (this.audioElement) {
+        this.audioElement.pause();
+        this.audioElement.src = '';
+        this.audioElement.removeEventListener('canplay', this.onCanPlay);
+        this.audioElement.removeEventListener('timeupdate', this.onTimeUpdate);
+        this.audioElement.removeEventListener('loadedmetadata', this.onLoadedMetadata);
+        this.audioElement.removeEventListener('ended', this.onEnded);
+        this.audioElement = null;
       }
+
+      this.audioElement = new Audio(`${BASE_HTTP_URL}/api/musicStation/getMusic?musicId=${this.eventBus.currentMusic.uid}`);
 
       this.audioElement.pause();
       this.audioElement.currentTime = 0;
 
-      this.audioElement.src = `${BASE_HTTP_URL}/api/musicStation/getMusic?musicId=${this.eventBus.currentMusic.uid}`; // 有些奇怪，必须加 BASE_HTTP_URL ，否则就不能播放
-
+      // 添加事件监听器
       this.audioElement.addEventListener('canplay', this.onCanPlay);
-
-      this.audioElement.addEventListener("timeupdate", this.onTimeUpdate);
-
-      this.audioElement.addEventListener("loadedmetadata", this.onLoadedMetadata);
-
-      this.audioElement.addEventListener("ended",this.onEnded);
+      this.audioElement.addEventListener('timeupdate', this.onTimeUpdate);
+      this.audioElement.addEventListener('loadedmetadata', this.onLoadedMetadata);
+      this.audioElement.addEventListener('ended', this.onEnded);
 
       this.audioElement.load();
     },
@@ -318,7 +322,19 @@ export default {
 
   },
   beforeDestroy() {
-
+    // 移除事件监听器
+    this.eventBus.$off('load-new-music', this.handleLoadNewMusic);
+    
+    // 停止并移除 audio 元素
+    if (this.audioElement) {
+      this.audioElement.pause();
+      this.audioElement.src = '';
+      this.audioElement.removeEventListener('canplay', this.onCanPlay);
+      this.audioElement.removeEventListener('timeupdate', this.onTimeUpdate);
+      this.audioElement.removeEventListener('loadedmetadata', this.onLoadedMetadata);
+      this.audioElement.removeEventListener('ended', this.onEnded);
+      this.audioElement = null;
+    }
   }
 };
 </script>

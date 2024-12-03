@@ -61,6 +61,9 @@ export default {
   },
   methods: {
   },
+  beforeDestroy() {
+
+  }
 }
 </script>
 
