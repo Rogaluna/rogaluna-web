@@ -36,6 +36,7 @@ import deleteChapterAPI from '@/plugins/axios/api/library/deleteChapter';
 import deleteBookAPI from '@/plugins/axios/api/library/deleteBook';
 import uploadLibraryResourceAPI from '@/plugins/axios/api/library/uploadLibraryRes';
 import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
+import ConfirmSaveDialog from './components/ConfirmSaveDialog.vue';
 
 export default {
   components: {
@@ -81,7 +82,6 @@ export default {
         };
       }, // 编辑器选项处理重载
       chapters: [],
-      originalResList: [],
     };
   },
   mounted() {
@@ -104,67 +104,93 @@ export default {
       getChapterContentAPI(bookId, chapterIndex)
         .then(response => {
           this.content = response;
-
-          // 需要对原始获取的文本进行统计
-          this.originalResList = this.statisticalCitationRes(response);
-          console.log('资源引用列表:', this.originalResList);
         })
     },
-    statisticalCitationRes(content) {
-      // 统计引用的资源
-      if (!content || typeof content !== 'string') {
-          return [];
+    tokenizeHtmlContent(htmlContent) {
+      const tokens = [];
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlContent, 'text/html');
+
+      function traverse(node) {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+              // 开始标签
+              const tagName = node.tagName.toLowerCase();
+              const attributes = [];
+              for (let attr of node.attributes) {
+                  attributes.push({ name: attr.name, value: attr.value });
+              }
+              tokens.push({ type: 'startTag', tagName, attributes });
+
+              // 递归遍历子节点
+              for (let child of node.childNodes) {
+                  traverse(child);
+              }
+
+              // 结束标签
+              tokens.push({ type: 'endTag', tagName });
+          } else if (node.nodeType === Node.TEXT_NODE) {
+              // 文本节点
+              const text = node.textContent;
+              tokens.push({ type: 'text', content: text });
+          } else if (node.nodeType === Node.COMMENT_NODE) {
+              // 注释节点（可选）
+              const comment = node.textContent;
+              tokens.push({ type: 'comment', content: comment });
+          }
       }
 
-      const resourceIds = [];
-
-      // 匹配 src 属性中包含 /api/library/getResource?id= 的 id 值
-      const regex = /src="[^"]*\/api\/library\/getResource\?id=([^"&]+)"/g;
-      let match;
-
-      while ((match = regex.exec(content)) !== null) {
-          // 将匹配到的 id 值添加到列表
-          resourceIds.push(match[1]);
+      // 开始遍历文档节点
+      for (let child of doc.body.childNodes) {
+          traverse(child);
       }
 
-      return resourceIds;
+      return tokens;
     },
-    compareArrays(originalList, newList) {
-      // 构建计数器函数
-      const buildCounter = (array) => {
-        const counter = new Map();
-        for (const item of array) {
-            counter.set(item, (counter.get(item) || 0) + 1);
-        }
-        return counter;
+    splitTokensIntoLines(tokens) {
+      const lines = [];
+      let currentLine = [];
+
+      const lineBreakTags = ['p', 'div', 'br', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr'];
+
+      for (let token of tokens) {
+          currentLine.push(token);
+
+          if (
+              (token.type === 'endTag' && lineBreakTags.includes(token.tagName)) ||
+              (token.type === 'startTag' && token.tagName === 'br')
+          ) {
+              // 遇到行结束标签或 <br>，开始新的一行
+              lines.push(currentLine);
+              currentLine = [];
+          }
       }
 
-      // 原始数组和新数组的计数器
-      const originalCounter = buildCounter(originalList);
-      const newCounter = buildCounter(newList);
-
-      const added = [];
-      const removed = [];
-
-      // 遍历原始计数器，找出减少的元素
-      for (const [item, count] of originalCounter.entries()) {
-        const newCount = newCounter.get(item) || 0;
-        if (newCount < count) {
-          const diff = count - newCount;
-          removed.push(...Array(diff).fill(item)); // 根据差值填充
-        }
+      // 添加最后一行
+      if (currentLine.length > 0) {
+          lines.push(currentLine);
       }
 
-      // 遍历新计数器，找出增加的元素
-      for (const [item, count] of newCounter.entries()) {
-        const originalCount = originalCounter.get(item) || 0;
-        if (count > originalCount) {
-          const diff = count - originalCount;
-          added.push(...Array(diff).fill(item)); // 根据差值填充
-        }
+      return lines;
+    },
+    rebuildContentFromTokens(tokens) {
+      let content = '';
+
+      for (let token of tokens) {
+          if (token.type === 'startTag') {
+              const attributes = token.attributes
+                  .map(attr => `${attr.name}="${attr.value}"`)
+                  .join(' ');
+              content += `<${token.tagName}${attributes ? ' ' + attributes : ''}>`;
+          } else if (token.type === 'endTag') {
+              content += `</${token.tagName}>`;
+          } else if (token.type === 'text') {
+              content += token.content;
+          } else if (token.type === 'comment') {
+              content += `<!--${token.content}-->`;
+          }
       }
 
-      return { added, removed };
+      return content;
     },
     async handleSideOpts(event) {
       switch(event.type) {
@@ -298,22 +324,215 @@ export default {
         break;
         case 'saveChapter':
           {
-            // 需要统计添加的资源引用、删除的资源引用
-            const newResList = this.statisticalCitationRes(this.content);
-            console.log(`新的资源引用列表`, newResList);
+            // 以下内容很有可能需要使用对话框处理
+            this.$rogalunaWidgets.showDialog(
+              ConfirmSaveDialog,
+              {},
+              {
+                confirm: async () => {
+                  const bookId = this.$route.query.id;
+                  // const originText = await getChapterContentAPI(bookId, event.payload);
 
-            const { added, removed } = this.compareArrays(this.originalResList, newResList);
-            console.log("添加的元素:", added); 
-            console.log("删除的元素:", removed);
+                  // // 需要对原始获取的文本进行分行和哈希计算
+                  // const tokens1 = this.tokenizeHtmlContent(originText);
+                  // const tokenLines1 = this.splitTokensIntoLines(tokens1);
+                  // const lines1 = tokenLines1.map(lineTokens => this.rebuildContentFromTokens(lineTokens));
+                  // console.log(`hashLines1`, lines1);
+                  
+                  // const tokens2 = this.tokenizeHtmlContent(this.content);
+                  // const tokenLines2 = this.splitTokensIntoLines(tokens2);
+                  // const lines2 = tokenLines2.map(lineTokens => this.rebuildContentFromTokens(lineTokens));
+                  // console.log(`hashLines2`, lines2);
 
-            updateChapterContentAPI({
-              id: this.$route.query.id,
-              index: event.payload,
-              content: this.content
-            })
-              .then(response => {
-                console.log(`response`, response);
-              })
+                  // const { deletions, insertions } = myersDiffCompare(lines1, lines2);
+
+                  // // 匹配 id 
+                  // const regex = /src="https?:\/\/[^"]*\/api\/library\/getResource\?id=([a-fA-F0-9]+)/;
+                  // function extractIds(operations) {
+                  //     const ids = [];
+                  //     operations.forEach(op => {
+                  //         const match = op.match(regex);
+                  //         if (match && match[1]) {
+                  //             ids.push(match[1]);
+                  //         }
+                  //     });
+                  //     return ids;
+                  // }
+                  // const deletionIds = extractIds(deletions);
+                  // const insertionIds = extractIds(insertions);
+
+                  // console.log(`diffs`, deletionIds, insertionIds);
+
+                  // updateChapterContentAPI({
+                  //   id: bookId,
+                  //   index: event.payload,
+                  //   content: this.content,
+                  //   removed: deletionIds,
+                  //   added: insertionIds
+                  // })
+                  //   .then(response => {
+                  //     console.log(`response`, response);
+                  //   })
+
+                  const myersDiffCompare = (oldText, newText) => {
+                    const m = oldText.length;
+                    const n = newText.length;
+
+                    // 定义二维数组D，用于保存编辑距离
+                    const D = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+                    // 初始化边界条件
+                    for (let i = 0; i <= m; i++) {
+                      D[i][0] = i;
+                    }
+                    for (let j = 0; j <= n; j++) {
+                      D[0][j] = j;
+                    }
+
+                    // 计算编辑距离矩阵
+                    for (let i = 1; i <= m; i++) {
+                      for (let j = 1; j <= n; j++) {
+                        if (oldText[i - 1] === newText[j - 1]) {
+                          D[i][j] = D[i - 1][j - 1]; // 没有修改
+                        } else {
+                          D[i][j] = Math.min(
+                            D[i - 1][j] + 1,     // 删除操作
+                            D[i][j - 1] + 1,     // 插入操作
+                            D[i - 1][j - 1] + 1  // 替换操作
+                          );
+                        }
+                      }
+                    }
+
+                    // 回溯得到差异行
+                    const deletions = [];
+                    const insertions = [];
+                    let i = m, j = n;
+                    while (i > 0 || j > 0) {
+                      if (i > 0 && j > 0 && oldText[i - 1] === newText[j - 1]) {
+                        // 如果两行相同，不做任何操作
+                        i--;
+                        j--;
+                      } else {
+                        if (i > 0 && j > 0 && D[i][j] === D[i - 1][j - 1] + 1) {
+                          // 替换操作，拆分为删除和插入
+                          deletions.push(oldText[i - 1]);
+                          insertions.push(newText[j - 1]);
+                          i--;
+                          j--;
+                        } else if (i > 0 && D[i][j] === D[i - 1][j] + 1) {
+                          // 删除操作
+                          deletions.push(oldText[i - 1]);
+                          i--;
+                        } else if (j > 0 && D[i][j] === D[i][j - 1] + 1) {
+                          // 插入操作
+                          insertions.push(newText[j - 1]);
+                          j--;
+                        }
+                      }
+                    }
+
+                    // 由于是从后向前回溯，需要反转数组
+                    deletions.reverse();
+                    insertions.reverse();
+
+                    return { deletions, insertions };
+                  }
+
+                  const extractIds = (operations) => {
+                    const ids = [];
+                    operations.forEach(op => {
+                      const match = op.match(/src="https?:\/\/[^"]*\/api\/library\/getResource\?id=([a-fA-F0-9]+)/);
+                      if (match && match[1]) {
+                        ids.push(match[1]);
+                      }
+                    });
+                    return ids;
+                  }
+
+                  await this.$rogalunaWidgets.showProgressDialog(async (progress) => {
+                    // 初始化对话框属性
+                    progress.taskName = '保存章节';
+                    progress.totalTasks = 4;
+                    progress.currentTask = 0;
+                    progress.useSubtitle = true;
+                    progress.subtitle = '初始化中...';
+                    progress.percentage = 0;
+                    progress.indeterminate = false;
+                    progress.autoComplete = false; // 不自动完成
+                    progress.useCancel = true; // 显示“取消”按钮
+                    progress.completed = false;
+
+                    // 1.处理原始文本中...
+                    progress.currentTask = 1;
+                    progress.percentage = 0;
+                    progress.subtitle = '处理原始文本中...';
+                    const originText = await getChapterContentAPI(bookId, event.payload);
+
+                    progress.percentage = 10;
+                    const tokens1 = this.tokenizeHtmlContent(originText);
+
+                    progress.percentage = 20;
+                    const tokenLines1 = this.splitTokensIntoLines(tokens1);
+
+                    progress.percentage = 30;
+                    const lines1 = tokenLines1.map(lineTokens => {
+                      this.rebuildContentFromTokens(lineTokens)
+                      progress.percentage += (70 / tokenLines1.length);
+                    });
+
+                    // 2.处理修改文本中...
+                    progress.currentTask = 2;
+                    progress.percentage = 0;
+                    progress.subtitle = '处理修改文本中...';
+
+                    progress.percentage = 10;
+                    const tokens2 = this.tokenizeHtmlContent(this.content);
+
+                    progress.percentage = 20;
+                    const tokenLines2 = this.splitTokensIntoLines(tokens2);
+
+                    progress.percentage = 30;
+                    const lines2 = tokenLines2.map(lineTokens => {
+                      this.rebuildContentFromTokens(lineTokens)
+                      progress.percentage += (70 / tokenLines1.length);
+                    });
+
+                    // 3.获取差异中...
+                    progress.currentTask = 3;
+                    progress.percentage = 0;
+                    progress.subtitle = '获取差异中...';
+                    const { deletions, insertions } = myersDiffCompare(lines1, lines2);
+
+                    progress.percentage = 10;
+                    const deletionIds = extractIds(deletions);
+
+                    progress.percentage = 55;
+                    const insertionIds = extractIds(insertions);
+
+                    // 4.上传文本中...
+                    progress.currentTask = 4;
+                    progress.percentage = 0;
+                    progress.subtitle = '上传文本中...';
+                    const response = await updateChapterContentAPI({
+                      id: bookId,
+                      index: event.payload,
+                      content: this.content,
+                      removed: deletionIds,
+                      added: insertionIds
+                    })
+
+                    progress.percentage = 100;
+                    progress.completed = true;
+                    if (response.success == true) {
+                      progress.subtitle = "章节已上传";
+                    } else {
+                      progress.subtitle = "上传失败";
+                    }
+                  });
+                }
+              }
+            )
           }
         break;
       }

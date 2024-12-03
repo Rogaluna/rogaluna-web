@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "15686806",
+      "name": "本地网络",
+      "font_class": "daping30tubiaoku_niantiefuben45",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "15066943",
       "name": "chat-3",
       "font_class": "chat-3",

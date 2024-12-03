@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "41747773",
+      "name": "color-palette--color-palette-company-office-suppli",
+      "font_class": "color-palette--color-palette-company-office-suppli",
+      "unicode": "e736",
+      "unicode_decimal": 59190
+    },
+    {
       "icon_id": "5589047",
       "name": "warning",
       "font_class": "warning",

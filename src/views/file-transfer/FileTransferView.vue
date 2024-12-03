@@ -19,14 +19,14 @@ export default {
       navItems: [
         {
           name: '文件传输',
-          iconClass: '#rogaluna-icon-file',
+          iconClass: '#rogaluna-icon-file_transfer',
           handler: (self) => {
             self.$router.push({ name: 'account-setting' });
           }
         },
         {
           name: '本地网络与设备',
-          iconClass: '#rogaluna-icon-file',
+          iconClass: '#rogaluna-icon-daping30tubiaoku_niantiefuben45',
           handler: (self) => {
             self.$router.push({ name: 'account-setting' });
           }

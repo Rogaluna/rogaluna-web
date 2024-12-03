@@ -19,16 +19,16 @@ export default {
       navItems: [
         {
           name: '账户设置',
-          iconClass: '#rogaluna-icon-file',
+          iconClass: '#rogaluna-icon-idcard',
           handler: (self) => {
             self.$router.push({ name: 'account-setting' });
           }
         },
         {
           name: '主题与背景',
-          iconClass: '#rogaluna-icon-file',
+          iconClass: '#rogaluna-icon-color-palette--color-palette-company-office-suppli',
           handler: (self) => {
-            self.$router.push({ name: 'account-setting' });
+            self.$router.push({ name: 'theme-background' });
           }
         },
       ],

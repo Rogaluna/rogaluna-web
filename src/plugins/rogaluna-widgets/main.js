@@ -2,10 +2,12 @@ import Vue from 'vue';
 import RogalunaContextMenu from './widgets/sundries/RogalunaContextMenu.vue';
 import RogalunaLoading from './widgets/sundries/RogalunaLoading.vue';
 import RogalunaSnackbar from './widgets/sundries/RogalunaSnackbar.vue';
+import RogalunaProgressDialog from './widgets/sundries/RogalunaProgressDialog.vue';
 
 const ContextMenuConstructor = Vue.extend(RogalunaContextMenu);
 const LoadingConstructor = Vue.extend(RogalunaLoading);
 const SnackbarConstructor = Vue.extend(RogalunaSnackbar);
+const ProgressConstructor = Vue.extend(RogalunaProgressDialog);
 
 export const RogalunaWidgetsPlugin = {
   install(Vue, { vuetify }) {
@@ -214,6 +216,150 @@ export const RogalunaWidgetsPlugin = {
 
         drawerInstance.$on('close', destroyDrawer);
       },
+
+      /**
+       * 动态创建进度对话框
+       * @param {Function} callback 回调函数，用于设置进度相关的属性
+       * @returns {Promise<void>} 包含关闭对话框的方法
+       * 
+       * @example
+       */
+      // await this.$rogalunaWidgets.showProgressDialog(async (progress) => {
+      //   // 初始化对话框属性
+      //   progress.taskName = '数据处理';
+      //   progress.totalTasks = 2;
+      //   progress.currentTask = 0;
+      //   progress.useSubtitle = true;
+      //   progress.subtitle = '初始化中...';
+      //   progress.percentage = 0;
+      //   progress.indeterminate = false;
+      //   progress.autoComplete = true; // 显示“完成”按钮
+      //   progress.useCancel = true; // 显示“取消”按钮
+      //   progress.completed = false;
+
+      //   // 执行第一个任务
+      //   progress.currentTask = 1;
+      //   progress.subtitle = '正在处理字符分割...';
+      //   progress.percentage = 0;
+
+      //   // 模拟耗时操作
+      //   await new Promise((resolve) => setTimeout(resolve, 2000));
+      //   progress.percentage = 50;
+
+      //   await new Promise((resolve) => setTimeout(resolve, 2000));
+      //   progress.percentage = 100;
+
+      //   // 标记第一个任务完成
+      //   progress.completed = true;
+
+      //   // 执行第二个任务
+      //   progress.currentTask = 2;
+      //   progress.subtitle = '正在进行合并...';
+      //   progress.percentage = 0;
+      //   progress.completed = false;
+
+      //   await new Promise((resolve) => setTimeout(resolve, 2000));
+      //   progress.percentage = 50;
+
+      //   await new Promise((resolve) => setTimeout(resolve, 2000));
+      //   progress.percentage = 100;
+
+      //   // 所有任务完成
+      //   progress.completed = true;
+      //   progress.subtitle = '所有任务已完成！';
+      // });
+      async showProgressDialog(callback) {
+        return new Promise((resolve, reject) => {
+          // 创建组件实例，并传入初始 props
+          const progressInstance = new ProgressConstructor({
+            vuetify,
+            propsData: {
+              visible: true,
+              width: 500,
+              taskName: '任务',
+              totalTasks: 1,
+              currentTask: 0,
+              useSubtitle: false,
+              subtitle: '',
+              percentage: 0,
+              indeterminate: false,
+              autoComplete: false,
+              useCancel: false,
+              completed: false,
+            },
+          });
+      
+          // 挂载组件并添加到 DOM
+          const component = progressInstance.$mount();
+          document.body.appendChild(component.$el);
+      
+          // 定义销毁对话框的方法
+          const destroyDialog = () => {
+            progressInstance.$destroy();
+            if (component.$el && component.$el.parentNode) {
+              component.$el.parentNode.removeChild(component.$el);
+            }
+          };
+      
+          // 绑定事件回调
+          progressInstance.$on('cancel', () => {
+            // 用户取消时，销毁对话框并拒绝 Promise
+            destroyDialog();
+            reject(new Error('用户取消了操作'));
+          });
+      
+          progressInstance.$on('complete', () => {
+            // 用户点击完成时，销毁对话框并解析 Promise
+            destroyDialog();
+            resolve();
+          });
+      
+          // 创建 progress 对象，允许设置对话框的属性
+          const progress = {};
+      
+          // 列出所有可设置的属性
+          const props = [
+            'taskName',
+            'totalTasks',
+            'currentTask',
+            'useSubtitle',
+            'subtitle',
+            'percentage',
+            'indeterminate',
+            'autoComplete',
+            'useCancel',
+            'completed',
+            'width',
+          ];
+      
+          // 为每个属性定义 getter 和 setter
+          props.forEach((prop) => {
+            Object.defineProperty(progress, prop, {
+              get() {
+                return progressInstance[prop];
+              },
+              set(value) {
+                progressInstance[prop] = value;
+              },
+              enumerable: true,
+            });
+          });
+      
+          // 执行回调函数，并确保对话框在完成后关闭
+          (async () => {
+            try {
+              await callback(progress);
+              // 回调完成后，自动关闭对话框
+              resolve();
+            } catch (error) {
+              // 如果回调抛出错误，销毁对话框并拒绝 Promise
+              destroyDialog();
+              reject(error);
+            }
+          })();
+        });
+      
+      }
     };
   }
 };
