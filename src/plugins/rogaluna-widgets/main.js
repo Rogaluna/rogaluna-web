@@ -165,59 +165,6 @@ export const RogalunaWidgetsPlugin = {
       },
 
       /**
-       * 动态创建抽屉组件
-       * @param {Object} DrawerComponent - 抽屉组件（需要用 import() 动态加载或直接传入）
-       * @param {Object} props - 抽屉组件的 props
-       * @param {Object} events - 抽屉组件的事件回调
-       * @param {Object} refElement - ref 参考元素，会在这个元素内显示抽屉，如果设置为 null，则挂载到整个网页
-       */
-      showDrawer(DrawerComponent, props = {}, events = {}, refElement = null) {
-        const DrawerConstructor = Vue.extend(DrawerComponent);
-
-        const drawerInstance = new DrawerConstructor({
-          vuetify,
-          propsData: props,
-        });
-
-        Object.keys(events).forEach((event) => {
-          drawerInstance.$on(event, events[event]);
-        });
-
-        // 搜索 app
-        const appElement = document.querySelector('[data-app]') || document.body;
-        // 如果 refElement 为 null，默认挂载到 document.body
-        const mountElement = refElement ? 
-          (refElement.$el || refElement) : 
-          appElement;
-
-        // 确保挂载点有定位样式
-        const originalPosition = mountElement.style.position;
-        if (!originalPosition || originalPosition === 'static') {
-          mountElement.style.position = 'relative';
-        }
-
-        drawerInstance.$mount(); // 创建 Vue 实例
-
-        // 追加到挂载点
-        mountElement.appendChild(drawerInstance.$el);
-
-        const destroyDrawer = () => {
-          drawerInstance.$destroy();
-          if (drawerInstance.$el && drawerInstance.$el.parentNode) {
-            drawerInstance.$el.parentNode.removeChild(drawerInstance.$el);
-          }
-          // 恢复原始样式
-          if (originalPosition) {
-            mountElement.style.position = originalPosition;
-          } else {
-            mountElement.style.removeProperty('position');
-          }
-        };
-
-        drawerInstance.$on('close', destroyDrawer);
-      },
-
-      /**
        * 动态创建进度对话框
        * @param {Function} callback 回调函数，用于设置进度相关的属性
        * @returns {Promise<void>} 包含关闭对话框的方法

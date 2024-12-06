@@ -8,7 +8,7 @@
           :src="albumCover"
           max-width="50"
           max-height="50"
-          class="mr-2"
+          class="music-cover mr-2"
           @error="handleImageError"
         ></v-img>
         <div>
@@ -189,7 +189,6 @@
 </template>
 
 <script>
-import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
 import PlaySettingDialog from './PlaySettingDialog.vue';
 
 import RogalunaScrollText from '@/plugins/rogaluna-widgets/widgets/sundries/RogalunaScrollText.vue';
@@ -202,7 +201,7 @@ export default {
   },
   data() {
     return {
-      albumCover: `/api/musicStation/cover?album=${this.eventBus.currentMusic.uid}`,
+      albumCover: require('@/assets/defaultAlbumCover.svg'),
       playModeStr: '随机播放',
       audioElement: null,
       isSeeking: false,
@@ -232,7 +231,8 @@ export default {
         this.audioElement = null;
       }
 
-      this.audioElement = new Audio(`${BASE_HTTP_URL}/api/musicStation/getMusic?musicId=${this.eventBus.currentMusic.uid}`);
+      this.audioElement = new Audio(`/api/musicStation/getMusic?id=${this.eventBus.currentMusic.uid}`);
+      this.albumCover = `/api/musicStation/getCover?id=${this.eventBus.currentMusic.uid}`,
 
       this.audioElement.pause();
       this.audioElement.currentTime = 0;
@@ -273,6 +273,12 @@ export default {
     onEnded() {
       console.log("音乐播放完毕");
       // this.cleanupAudio();
+      
+      if (this.eventBus.playerSetting.mode == 'loop') {
+        this.eventBus.currentMusic.currentDuration = 0;
+      } else {
+        this.nextTrack();
+      }
     },
     // 当用户开始拖动时，设置 isSeeking 为 true
     onSliderStart() {
@@ -340,106 +346,110 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+svg {
+  fill: var(--light-background-color);
+}
+
 .music-player-bar {
   height: 90px;
   background-color: transparent;
   display: flex;
   flex-direction: column;
-}
 
-.nav-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0 20px 0 20px;
-}
-
-.nav-left {
-  flex-basis: 15%;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-
-  .song-name {
-    color: var(--light-background-color);
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    // 设置容器最大宽度为200
-    width: 200px; 
-
-  }
-
-  .artist-info {
-    font-size: 12px;
-    color: var(--split-color);
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    // 设置容器最大宽度为200
-    width: 200px; 
-  }
-}
-
-.nav-right {
-  height: 100%;
-  flex-basis: 15%;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-
-  .nav-right-button {
-    cursor: pointer;
-    font-size: 32px;
-    margin: 0 20px;
-
-    &:hover {
-      fill: var(--primary-color)
-    }
-  }
-}
-
-.nav-center {
-  flex-basis: 70%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .progress-bar {
+  .nav-main {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
-    justify-content: space-between;
+    height: 100%;
+    padding: 0 20px 0 20px;
 
-    .time-span {
-      font-size: 12px;
-      color: var(--split-color);
+    .music-cover {
+      border-radius: 10%;
     }
   }
 
-  .control-buttons {
+  .nav-left {
+    flex-basis: 15%;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
 
-    .control-button {
+    .song-name {
+      color: var(--light-background-color);
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      // 设置容器最大宽度为200
+      width: 200px; 
+
+    }
+
+    .artist-info {
+      font-size: 12px;
+      color: var(--split-color);
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      // 设置容器最大宽度为200
+      width: 200px; 
+    }
+  }
+
+  .nav-right {
+    height: 100%;
+    flex-basis: 15%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+
+    .nav-right-button {
       cursor: pointer;
       font-size: 32px;
-      margin: 0 40px;
+      margin: 0 20px;
 
       &:hover {
-        fill: var(--primary-color);
+        fill: var(--primary-color)
       }
     }
   }
-}
 
-svg {
-  fill: var(--light-background-color);
+  .nav-center {
+    flex-basis: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+
+      .time-span {
+        font-size: 12px;
+        color: var(--split-color);
+      }
+    }
+
+    .control-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .control-button {
+        cursor: pointer;
+        font-size: 32px;
+        margin: 0 40px;
+
+        &:hover {
+          fill: var(--primary-color);
+        }
+      }
+    }
+  }
 }
 </style>

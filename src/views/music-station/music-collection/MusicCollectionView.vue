@@ -53,6 +53,7 @@ import MusicDetailDialog from '../components/MusicDetailDialog.vue';
 
 import getMusicListAPI from '@/plugins/axios/api/music-station/getMusicList';
 import postMusicAPI from '@/plugins/axios/api/music-station/postMusic';
+import getAlbumsInfoAPI from '@/plugins/axios/api/music-station/getAlbumsInfo';
 
 export default {
   components: {
@@ -156,19 +157,28 @@ export default {
     showMusicDetail(item) {
       console.log(`item`, item);
       // 显示音乐信息
-      this.$rogalunaWidgets.showDialog(
-        MusicDetailDialog,
-        {
-          initData: {
-            name: 'Song Name',
-            artist: 'Artist Name',
-            album: 'Album Name',
-            duration: 245, // in seconds
-            genre: 'Genre Name'
-          }
-        },
-        {} 
-      )
+
+      this.$rogalunaWidgets.showLoading(null, async (stopLoading) => {
+        
+        const response = await getAlbumsInfoAPI(item.album_id);
+        const responseData = response.data[0];
+
+        this.$rogalunaWidgets.showDialog(
+          MusicDetailDialog,
+          {
+            initData: {
+              name: item.music_name,
+              artist: item.artist,
+              album: responseData.album_name,
+              duration: item.duration, // in seconds
+              genre: responseData.genre
+            }
+          },
+          {} 
+        )
+
+        stopLoading();
+      })
     },
     newAlbum() {
       // 导入音乐

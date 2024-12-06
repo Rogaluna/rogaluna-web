@@ -2,6 +2,7 @@
   <div class="item-grid-item" @click="handleItemClick">
     <v-img
       :src="albumCover"
+      fluid
       alt="Album Cover"
       class="item-cover"
       @error="handleImageError"
@@ -30,7 +31,7 @@ export default {
   },
   data() {
     return {
-      albumCover: `/api/musicStation/cover?album=${this.item.album_id}` // Initially use album cover
+      albumCover: `/api/musicStation/getCover?id=${this.item.uid}` // Initially use album cover
     };
   },
   methods: {
@@ -63,7 +64,6 @@ export default {
 .item-cover {
   width: 100%;
   height: 200px;
-  object-fit: cover;
   border: 1px solid;
   border-radius: 5%;
   border-color: var(--split-color);

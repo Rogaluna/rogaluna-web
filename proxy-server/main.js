@@ -14,9 +14,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    proxy.web(req, res, { target: 'http://localhost:8000' });
+    proxy.web(req, res, { target: 'http://localhost' });
 });
 
-server.listen(3000, () => {
-    console.log('Proxy server is running on http://localhost:3000');
+server.listen(8080, () => {
+    console.log('Proxy server is running on http://localhost:8080');
 });

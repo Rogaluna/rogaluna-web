@@ -27,10 +27,10 @@
         >
           <!-- 图片 -->
           <v-img
-            :src="errorImages[item.uid] ? require('@/assets/defaultAlbumCover.svg') : `/api/musicStation/cover?album=${item.uid}`"
+            :src="errorImages[item.uid] ? require('@/assets/defaultAlbumCover.svg') : `/api/musicStation/getCover?id=${item.uid}`"
             width="50"
             height="50"
-            class="mr-2"
+            class="music-cover mr-2"
             @error="handleImageError(item.uid)"
           ></v-img>
 
@@ -111,6 +111,10 @@ export default {
 
     &.light-item {
       background-color: rgba($color: var(--deep-background-color-rgb), $alpha: 0.2); // 浅色背景
+    }
+
+    .music-cover {
+      border-radius: 10%;
     }
 
     .music-info {

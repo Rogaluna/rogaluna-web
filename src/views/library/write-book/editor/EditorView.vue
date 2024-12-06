@@ -35,7 +35,6 @@ import updateChapterInfoAPI from '@/plugins/axios/api/library/updateChapterInfo'
 import deleteChapterAPI from '@/plugins/axios/api/library/deleteChapter';
 import deleteBookAPI from '@/plugins/axios/api/library/deleteBook';
 import uploadLibraryResourceAPI from '@/plugins/axios/api/library/uploadLibraryRes';
-import { BASE_HTTP_URL } from '@/plugins/axios/configs/baseUrl';
 import ConfirmSaveDialog from './components/ConfirmSaveDialog.vue';
 
 export default {
@@ -62,7 +61,7 @@ export default {
                     console.log(`response`, response);
                     // 将 url 写入编辑器光标所在，构成 img
                     const md5 = response.data;
-                    const url = `${BASE_HTTP_URL}/api/library/getResource?id=${md5}`;
+                    const url = `/api/library/getResource?id=${md5}`;
 
                     // 获取当前光标位置
                     const range = quill.getSelection();
