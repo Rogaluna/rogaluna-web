@@ -5,57 +5,66 @@
 
       <v-card-text>
         <v-form ref="bookForm" v-model="valid">
-          <!-- 书籍名称 -->
-          <v-text-field
-            label="书籍名称"
-            v-model="form.bookName"
-            :rules="[rules.required]"
-            required
-          ></v-text-field>
-
-          <!-- 书籍介绍 -->
-          <v-textarea
-            label="书籍描述"
-            v-model="form.bookDescription"
-            required
-          ></v-textarea>
-
-          <!-- 分类标签 -->
-          <v-menu
-            v-model="menuVisible"
-            :close-on-content-click="false"
-            max-width="400px"
-            offset-y
-          >
-            <template #activator="{ on, attrs }">
+          <v-row>
+            <v-col>
+              <!-- 书籍名称 -->
               <v-text-field
-                v-bind="attrs"
-                v-on="on"
-                label="选择分类标签"
-                :value="selectedCategoryNames.join(', ')"
-                readonly
+                label="书籍名称"
+                v-model="form.bookName"
+                :rules="[rules.required]"
+                required
               ></v-text-field>
-            </template>
 
-            <v-treeview
-              :items="categories"
-              v-model="form.categoryTags"
-              activatable
-              open-on-click
-              item-text="name"
-              item-value="id"
-              multiple
-              selectable
-              return-object
-              class="treeview-dropdown"
-            ></v-treeview>
-          </v-menu>
+              <!-- 书籍介绍 -->
+              <v-textarea
+                label="书籍描述"
+                v-model="form.bookDescription"
+                required
+              ></v-textarea>
+
+              <!-- 分类标签 -->
+              <v-menu
+                v-model="menuVisible"
+                :close-on-content-click="false"
+                max-width="400px"
+                offset-y
+              >
+                <template #activator="{ on, attrs }">
+                  <v-text-field
+                    v-bind="attrs"
+                    v-on="on"
+                    label="选择分类标签"
+                    :value="selectedCategoryNames.join(', ')"
+                    readonly
+                  ></v-text-field>
+                </template>
+
+                <v-treeview
+                  :items="categories"
+                  v-model="form.categoryTags"
+                  activatable
+                  open-on-click
+                  item-text="name"
+                  item-value="id"
+                  multiple
+                  selectable
+                  return-object
+                  class="treeview-dropdown"
+                ></v-treeview>
+              </v-menu>
+            </v-col>
+            <v-col>
+              <rogaluna-image-uploader :src="form.coverUrl" @click="handleChangeImage">
+
+              </rogaluna-image-uploader>
+            </v-col>
+          </v-row>
         </v-form>
       </v-card-text>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="secondary" @click="del">删除章节</v-btn>
+        <v-btn color="secondary" @click="del">删除书籍</v-btn>
         <v-btn color="primary" @click="confirm">确认</v-btn>
         <v-btn color="secondary" @click="cancel">取消</v-btn>
       </v-card-actions>
@@ -64,6 +73,8 @@
 </template>
 
 <script>
+import RogalunaImageUploader from '@/plugins/rogaluna-widgets/widgets/sundries/RogalunaImageUploader.vue';
+
 export default {
   props: {
     categories: {
@@ -75,6 +86,9 @@ export default {
       require: true 
     }
   },
+  components: {
+    RogalunaImageUploader
+  },
   data() {
     return {
       visible: true,
@@ -83,7 +97,8 @@ export default {
       form: {
         bookName: this.initData.name,
         bookDescription: this.initData.description,
-        categoryTags: this.getCategoryTagsFromIds(this.initData.tags)
+        categoryTags: this.getCategoryTagsFromIds(this.initData.tags),
+        coverUrl: this.initData.coverUrl
       },
       rules: {
         required: value => !!value || '此字段为必填项'
@@ -136,6 +151,9 @@ export default {
       };
       findTags(this.categories);
       return result;
+    },
+    handleChangeImage() {
+      this.$emit("changeCover");
     }
   }
 };

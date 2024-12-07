@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      bookCover: `/api/library/cover?book=${this.book.id}` // 初始使用书籍封面
+      bookCover: `/api/library/getBookCover?id=${this.book.id}` // 初始使用书籍封面
     };
   },
   methods: {

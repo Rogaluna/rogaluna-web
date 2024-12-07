@@ -36,6 +36,7 @@ import deleteChapterAPI from '@/plugins/axios/api/library/deleteChapter';
 import deleteBookAPI from '@/plugins/axios/api/library/deleteBook';
 import uploadLibraryResourceAPI from '@/plugins/axios/api/library/uploadLibraryRes';
 import ConfirmSaveDialog from './components/ConfirmSaveDialog.vue';
+import uploadBookCoverAPI from '@/plugins/axios/api/library/uploadBookCover';
 
 export default {
   components: {
@@ -233,7 +234,8 @@ export default {
                   categories: categories.children,
                   initData: {
                     ...bookInfo,
-                    tags: bookCategory
+                    tags: bookCategory,
+                    coverUrl: `/api/library/getBookCover?id=${bookId}`,
                   }
                 },
                 { 
@@ -253,7 +255,7 @@ export default {
                       id: bookId,
                       name: form.bookName,
                       desc: form.bookDescription,
-                      tags: form.categoryTags.map(obj => obj.id)
+                      tags: form.categoryTags.map(obj => obj.id),
                     })
                       .then(response => {
                         if (response.success) {
@@ -263,6 +265,17 @@ export default {
                         }
                       })
                   }, 
+                  changeCover: () => {
+                    this.$rogalunaWidgets.showFileSelector({ accept: "image/*", multiple: false }, (files) => {
+                      // 将选择的图片替换原图片
+                      const file = files[0];
+                      console.log(`file`, file);
+                      uploadBookCoverAPI(bookId, file)
+                        .then(response => {
+                          console.log(`response`, response);
+                        })
+                    })
+                  },
                   cancel: () => { console.log('取消'); } 
                 } // 事件回调
               )
