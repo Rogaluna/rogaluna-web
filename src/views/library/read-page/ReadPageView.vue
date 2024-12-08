@@ -45,13 +45,14 @@
       </div>
     </div>
 
-    <div v-else v-html="textContent" class="content-display" align="left">
-
-    </div>
+    
+    <rogaluna-quill-editor v-else class="content-display" :value="textContent" readOnly></rogaluna-quill-editor>
   </div>
 </template>
 
 <script>
+import RogalunaQuillEditor from '@/plugins/rogaluna-quill-editor/RogalunaQuillEditor.vue';
+
 import Directory from './components/Directory.vue';
 
 import getBookInfoAPI from '@/plugins/axios/api/library/getBookInfo';
@@ -62,7 +63,8 @@ import getChapterContentAPI from '@/plugins/axios/api/library/getChapterContent'
 
 export default {
   components: {
-    Directory
+    Directory,
+    RogalunaQuillEditor
   },
   data() {
     return {
@@ -159,9 +161,17 @@ export default {
   height: 100%;
 
   .content-display {
-    overflow-y: scroll;
+    overflow: auto;
     flex-grow: 1;
     min-width: 0;
+
+    ::v-deep .ql-toolbar.ql-snow {
+      display: none;
+    }
+
+    ::v-deep .ql-container.ql-snow {
+      border-width: 0;
+    }
   }
 
 

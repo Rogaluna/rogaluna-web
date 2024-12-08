@@ -12,6 +12,10 @@ export default {
       type: String,
       default: '',
     },
+    readOnly: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Array,
       default: () => [
@@ -59,7 +63,8 @@ export default {
             handlers: this.handlers(this),
           },
         },
-        theme: 'rogaluna'
+        theme: 'rogaluna',
+        readOnly: this.readOnly,
       };
 
       this.quill = new Quill(this.$refs.editor, editorOptions);
