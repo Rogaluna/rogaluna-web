@@ -1,6 +1,6 @@
 import SparkMD5 from 'spark-md5';
 
-// 生成 MD5 校验码，需传入字节数组
+// 生成 MD5 校验码，需传入字节数组，需要注意：如果传入 blob ，很有可能会造成编码错误，因为 blob 和二进制字节流不一致
 export const generateMD5 = (data) => {
   return SparkMD5.ArrayBuffer.hash(data);
 };

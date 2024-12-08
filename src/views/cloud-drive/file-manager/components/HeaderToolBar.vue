@@ -31,7 +31,7 @@
 
 
     <div class="breadcrumbs-container" @click="showInput" style="flex-grow: 1; margin: 0 10px;">
-      <v-breadcrumbs v-if="!inputVisible" :items="eventBus.sharedState.path" style="">
+      <v-breadcrumbs v-if="!inputVisible" :items="eventBus.sharedState.path">
         <template v-slot:item="{ item }">
           <v-breadcrumbs-item
             :key="item.text"
@@ -101,16 +101,12 @@ export default {
     RogalunaList
   },
   props: {
-    uploadDot: Boolean,
-    downloadDot: Boolean
+    uploadDot: Boolean
   },
   watch: {
     uploadDot() {
       this.postButtons[0].value = this.uploadDot;
     },
-    downloadDot() {
-      this.postButtons[1].value = this.downloadDot;
-    }
   },
   data() {
     return {
@@ -158,15 +154,7 @@ export default {
             this.eventBus.sharedState.isUploadPanelVisible = true;
           },
           value: this.uploadDot
-        },
-        {
-          text: "下载列表",
-          icon: "#rogaluna-icon-download",
-          onclick: ()=>{
-            this.eventBus.sharedState.isDownloadPanelVisible = true;
-          },
-          value: this.downloadDot
-        },
+        }
       ],
       inputVisible: false,
     }

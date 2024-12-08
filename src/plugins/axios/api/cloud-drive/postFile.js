@@ -46,7 +46,16 @@ const postFileAPI = async (file, parentUid, callback) => {
       const chunk = file.slice(start, end); // 获取当前块
 
       // 生成当前块的 MD5 校验码
-      const chunkMd5Hash = generateMD5(chunk);
+      const chunkMd5Hash = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const arrayBuffer = e.target.result; // 转换为 ArrayBuffer
+          const md5Hash = generateMD5(arrayBuffer);
+          resolve(md5Hash);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(chunk);
+      });
   
       const formData = new FormData();
       formData.append('uid', uuid) // 文件 MD5 校验码

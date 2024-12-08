@@ -2,9 +2,9 @@
   font-family: "xedia"; /* Project id 4511547 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1733171276006') format('woff2'),
-       url('iconfont.woff?t=1733171276006') format('woff'),
-       url('iconfont.ttf?t=1733171276006') format('truetype');
+       url('iconfont.woff2?t=1733680172873') format('woff2'),
+       url('iconfont.woff?t=1733680172873') format('woff'),
+       url('iconfont.ttf?t=1733680172873') format('truetype');
 }
 
 .xedia {
@@ -13,6 +13,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.rogaluna-icon-detail:before {
+  content: "\e6ea";
+}
+
+.rogaluna-icon-rename:before {
+  content: "\e692";
+}
+
+.rogaluna-icon-download_file:before {
+  content: "\e618";
+}
+
+.rogaluna-icon-a-deletefolder:before {
+  content: "\e690";
 }
 
 .rogaluna-icon-color-palette--color-palette-company-office-suppli:before {

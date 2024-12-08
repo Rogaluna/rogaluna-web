@@ -159,6 +159,38 @@ export default {
               this.eventBus.setDir(this.menus.contextObject.uid);
               console.log(`this.menus.contextObject`, this.menus.contextObject);
             }
+          },
+          {
+            label: '下载文件夹',
+            icon: '#rogaluna-icon-download_file',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+          {
+            label: '删除文件夹',
+            icon: '#rogaluna-icon-a-deletefolder',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+          {
+            label: '重命名',
+            icon: '#rogaluna-icon-rename',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+          {
+            label: '详细信息',
+            icon: '#rogaluna-icon-detail',
+            value: '1',
+            handler: () => {
+              
+            }
           }
         ],
         file: [
@@ -173,6 +205,30 @@ export default {
               .then(response => {
                 console.log(response);
               })
+            }
+          },
+          {
+            label: '删除文件',
+            icon: '#rogaluna-icon-delete1',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+          {
+            label: '重命名',
+            icon: '#rogaluna-icon-rename',
+            value: '1',
+            handler: () => {
+              
+            }
+          },
+          {
+            label: '详细信息',
+            icon: '#rogaluna-icon-detail',
+            value: '1',
+            handler: () => {
+              
             }
           }
         ]
