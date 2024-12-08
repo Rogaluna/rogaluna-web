@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      selectedChapter: -1,
       content: '', // 编辑器内容
       handlers: (editor) => {
         const self = this; // 获取外层指针以便在闭包内使用
@@ -52,17 +53,20 @@ export default {
           image() {
             const quill = editor.quill;
 
+            const bookId = self.$route.query.id;
+            const chapterIndex = self.selectedChapter;
+
             self.$rogalunaWidgets.showFileSelector({ accept: 'image/*', multiple: false}, (files) => {
               for (const key of Object.keys(files)) {
                 const file = files[key];
                 
                 // 将图片上传到服务器，获取已上传图片的 url
-                uploadLibraryResourceAPI(file)
+                uploadLibraryResourceAPI(bookId, chapterIndex, file)
                   .then(response => {
                     console.log(`response`, response);
                     // 将 url 写入编辑器光标所在，构成 img
-                    const md5 = response.data;
-                    const url = `/api/library/getResource?id=${md5}`;
+                    const token = response.data;
+                    const url = `/api/library/getResource?token=${token}`;
 
                     // 获取当前光标位置
                     const range = quill.getSelection();
@@ -101,6 +105,8 @@ export default {
     },
     fetchChapterContent(chapterIndex) {
       const bookId = this.$route.query.id;
+      this.selectedChapter = chapterIndex;
+
       getChapterContentAPI(bookId, chapterIndex)
         .then(response => {
           this.content = response;
