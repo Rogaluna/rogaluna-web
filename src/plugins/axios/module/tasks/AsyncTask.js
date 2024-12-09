@@ -1,17 +1,24 @@
 import AxiosTask from "../axiosTask";
 
 class AsyncTask extends AxiosTask {
-  constructor(executeFunction) {
+  constructor(executeFunction = null) {
     super();
 
     if (new.target === AxiosTask) {
       throw new TypeError("无法构造Axios派生类实例");
     }
 
-    if (!executeFunction || typeof executeFunction !== 'function') {
-      throw new TypeError('execute 必须有一个可用的实现');
+    if (executeFunction && typeof executeFunction !== 'function') {
+      throw new TypeError('executeFunction 必须是一个函数');
     }
 
+    this.executeFunction = executeFunction;
+  }
+
+  setExecuteFunction(executeFunction) {
+    if (!executeFunction || typeof executeFunction !== 'function') {
+      throw new TypeError('executeFunction 必须是一个函数');
+    }
     this.executeFunction = executeFunction;
   }
 

@@ -1,8 +1,9 @@
+import Vue from 'vue';
 import AxiosTask from "./axiosTask";
 
 class TaskQueue {
   constructor() {
-    this.queue = [];
+    this.queue = Vue.observable([]);;
     this.isProcessing = false;
   }
 

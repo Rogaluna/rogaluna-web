@@ -5,7 +5,23 @@ import Cookies from 'js-cookie';
 import AsyncTask from "../../module/tasks/AsyncTask";
 import { generateMD5 , generateFileMD5 } from "../../module/functions/generateMD5";
 
-const postFileAPI = async (file, parentUid, callback) => {
+/**
+ * 
+ * @param {File} file 上传的文件 
+ * @param {String} parentUid 上传的目录（目标目录）
+ * @param {Function} startCallback 启动上传前调用的回调函数，
+ * @param {Function} uploadCallback 上传时调用的回调函数，包含 chunkIndex （上传的块索引）、 totalChunks （需要上传的块总量）、 size （当前上传的大小）、 totalSize （需要上传的大小）
+ * @param {Function} mergeCallback 合并块时调用的回调函数， response（合并结果）
+ */
+const postFileAPI = async (file, parentUid, startCallback, uploadCallback, mergecallback) => {
+
+  // 创建 AsyncTask 实例
+  const task = new AsyncTask();
+
+  // 创建任务实例后，执行任务之前调用
+  if (typeof startCallback === "function") {
+    startCallback();
+  }
 
   // 延迟函数
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -80,6 +96,15 @@ const postFileAPI = async (file, parentUid, callback) => {
             }
           });
   
+          if (typeof uploadCallback === "function") {
+            uploadCallback({
+              chunkIndex: chunkIndex, 
+              totalChunks: totalChunks,
+              size: end,
+              totalSize: totalSize
+            });
+          }
+
           console.log(`Chunk ${chunkIndex + 1}/${totalChunks} uploaded successfully`, response.data);
           success = true; // 成功上传后，退出重试循环
         } catch (error) {
@@ -100,14 +125,13 @@ const postFileAPI = async (file, parentUid, callback) => {
     console.log("All chunks uploaded, merging file...");
 
     mergeFileAPI(uuid, totalChunks).then((response)=>{
-      if (typeof callback === "function") {
-        callback(response);
+      if (typeof mergecallback === "function") {
+        mergecallback(response);
       }
     });
   };
 
-  // 创建 AsyncTask 实例并添加到上传队列
-  const task = new AsyncTask(uploadFunction);
+  task.setExecuteFunction(uploadFunction);
 
   // 将任务添加到上传队列并执行
   axiosInstance.uploadQueue.addTask(task);

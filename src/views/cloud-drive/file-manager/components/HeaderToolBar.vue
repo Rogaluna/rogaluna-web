@@ -110,38 +110,36 @@ export default {
   },
   data() {
     return {
-      editablePath: this.eventBus.formatArrayToPath(this.eventBus.sharedState.path),
+      editablePath: this.eventBus.sharedState.path,
       preButtons: [
         {
           text: "返回",
           icon: "#rogaluna-icon-jiantou_xiangzuo",
-          onclick: ()=>{
+          onclick: () => {
             this.eventBus.undo();
           }
         },{
           text: "前进",
           icon: "#rogaluna-icon-jiantou_xiangyou",
-          onclick: ()=>{
+          onclick: () => {
             this.eventBus.redo();
           }
         },{
           text: "上一级",
           icon: "#rogaluna-icon-jiantou_xiangshang",
-          onclick: ()=>{
+          onclick: () => {
             if (this.eventBus.sharedState.path.length > 1) { // 如果不是根目录
               getParentFolderAPI(this.eventBus.sharedState.currentFolderUid)
                 .then(response => {
                   this.eventBus.setDir(response.parentUid);
                 })
-
-              
             }
           }
         },
         {
           text: "返回Root",
           icon: "#rogaluna-icon-home",
-          onclick: ()=>{
+          onclick: () => {
             this.eventBus.setDir(''); //必须重置为空字符串，不能重置为rootUid
           }
         },
@@ -150,7 +148,7 @@ export default {
         {
           text: "上传列表",
           icon: "#rogaluna-icon-upload",
-          onclick: ()=>{
+          onclick: () => {
             this.eventBus.sharedState.isUploadPanelVisible = true;
           },
           value: this.uploadDot

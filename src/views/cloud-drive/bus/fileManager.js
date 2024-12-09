@@ -9,10 +9,11 @@ export const EventBus = new Vue({
     sharedState: {
       isVisible: true,
       isUploadPanelVisible: false,
-      isDownloadPanelVisible: false,
+
+      uploadList: [],
 
       /**
-       * @property {string} path - 当前文件夹的格式化展平路径
+       * @property {Array} path - 当前文件夹的格式化展平路径
        */
       path: [],
 
@@ -73,15 +74,14 @@ export const EventBus = new Vue({
      */
     formatPathToArray(path) {
       // 使用 JavaScript 的 split 方法将路径按照 '/' 分割成数组
-      return path.split('/').map(item => ({ text: item }));
+      return path.split('\\').map(item => ({ text: item }));
     },
 
     /**
      * 设置当前目录并添加到历史记录中。
      * @param {string} newFolderUid - 新的文件夹UID
      */
-    setDir(newFolderUid) { 
-      console.log(newFolderUid);
+    setDir(newFolderUid) {
       this.sharedState.currentFolderUid = newFolderUid;
       this.addHistory(newFolderUid);
     },

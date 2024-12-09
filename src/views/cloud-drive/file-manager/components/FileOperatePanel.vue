@@ -15,6 +15,7 @@
             :headers="headers"
             :items="props.items"
             hide-default-footer
+            :items-per-page="props.items.length"
           >
             <template v-slot:[`item`]="{ item }">
               <rogaluna-tr @click="handleRowClick(item)" @rclick="handleItemRightClick(item)" :menuItems="dispatchMenuOpts(item.type)">
@@ -35,7 +36,7 @@
                   {{ convertType(item.type) }}
                 </td>
                 <td style="text-align: left;">
-                  {{ item.size }}
+                  {{ item.size || "-" }}
                 </td>
               </rogaluna-tr>
             </template>
@@ -68,6 +69,11 @@ import postFileAPI from '@/plugins/axios/api/cloud-drive/postFile';
 import createFolderAPI from '@/plugins/axios/api/cloud-drive/createFolder';
 
 import NewFolderDialog from './NewFolderDialog.vue';
+import DeleteConfirmDialog from './DeleteConfirmDialog.vue';
+import RenameDialog from './RenameDialog.vue';
+import FileDetailDialog from './FileDetailDialog.vue';
+import renameFileAPI from '@/plugins/axios/api/cloud-drive/renameFile';
+import deleteFileAPI from '@/plugins/axios/api/cloud-drive/deleteFile';
 
 export default {
   components: { 
@@ -109,18 +115,27 @@ export default {
             handler: () => {
               
               this.$rogalunaWidgets.showFileSelector({}, (files) => {
-                // debugger
-                // files.forEach((file) => {
-                //   postFileAPI(file, this.eventBus.sharedState.currentFolderUid)
-                //     .then(response => {
-                //       console.log(response);
-                //       this.fetchData();
-                //     })
-                // })
-
                 for (let i = 0; i < files.length; i++) {
                   const file = files[i];
-                  postFileAPI(file, this.eventBus.sharedState.currentFolderUid, (response) => {
+                  const task = {
+                    uuid: Date.now().toString(16) + '-' + Math.random().toString(16).substring(2),
+                    name: file.name,
+                    progress: 0,
+                    size: 0,
+                    totalSize: 0
+                  }
+                  postFileAPI(file, this.eventBus.sharedState.currentFolderUid, () => {
+                    // 上传进行前调用
+                    this.eventBus.sharedState.uploadList.push(task);
+                  }, (upload) => {
+                    task.progress = Math.floor((upload.size / upload.totalSize) * 100);
+                    task.size = upload.size;
+                    task.totalSize = upload.totalSize;
+                  }, (response) => {
+                    const index = this.eventBus.sharedState.uploadList.findIndex(obj => obj.uuid === task.uuid)
+                    if (index !== -1) {
+                      this.eventBus.sharedState.uploadList.splice(index, 1); // 从索引位置移除 1 个元素
+                    }
                     this.fetchData();
                   })
                 }
@@ -157,31 +172,63 @@ export default {
             value: '1',
             handler: () => {
               this.eventBus.setDir(this.menus.contextObject.uid);
-              console.log(`this.menus.contextObject`, this.menus.contextObject);
             }
           },
-          {
-            label: '下载文件夹',
-            icon: '#rogaluna-icon-download_file',
-            value: '1',
-            handler: () => {
+          // {
+          //   label: '下载文件夹',
+          //   icon: '#rogaluna-icon-download_file',
+          //   value: '1',
+          //   handler: () => {
               
-            }
-          },
-          {
-            label: '删除文件夹',
-            icon: '#rogaluna-icon-a-deletefolder',
-            value: '1',
-            handler: () => {
-              
-            }
-          },
+          //   }
+          // },
+          // {
+          //   label: '删除文件夹',
+          //   icon: '#rogaluna-icon-a-deletefolder',
+          //   value: '1',
+          //   handler: () => {
+          //     this.$rogalunaWidgets.showDialog(
+          //       DeleteConfirmDialog,
+          //       {
+          //         initData: {
+          //           message: `删除文件夹[ ${this.menus.contextObject.name} ]及其内部的所有文件？`
+          //         }
+          //       },
+          //       {
+          //         // confirm: () => {
+          //         //   deleteFileAPI(this.menus.contextObject.uid)
+          //         //     .then(response => {
+          //         //       this.fetchData();
+          //         //     })
+          //         // }
+          //       }
+          //     )
+          //   }
+          // },
           {
             label: '重命名',
             icon: '#rogaluna-icon-rename',
             value: '1',
             handler: () => {
-              
+              this.$rogalunaWidgets.showDialog(
+                RenameDialog,
+                {
+                  initData: this.menus.contextObject
+                },
+                {
+                  confirm: (form) => {
+                    const rename = form.rename;
+                    renameFileAPI({
+                      uid: this.menus.contextObject.uid,
+                      name: rename
+                    }).then(response => {
+                      if (response.success) {
+                        this.fetchData();
+                      }
+                    })
+                  }
+                }
+              )
             }
           },
           {
@@ -189,7 +236,13 @@ export default {
             icon: '#rogaluna-icon-detail',
             value: '1',
             handler: () => {
-              
+              this.$rogalunaWidgets.showDialog(
+                FileDetailDialog,
+                {
+                  initData: this.menus.contextObject
+                },
+                {}
+              )
             }
           }
         ],
@@ -203,7 +256,9 @@ export default {
               const targetFileName = this.menus.contextObject.name;
               fetchFileDirectLinkAPI(targetMd5, targetFileName)
               .then(response => {
-                console.log(response);
+                if (response.success) {
+                  this.fetchData();
+                }
               })
             }
           },
@@ -212,7 +267,22 @@ export default {
             icon: '#rogaluna-icon-delete1',
             value: '1',
             handler: () => {
-              
+              this.$rogalunaWidgets.showDialog(
+                DeleteConfirmDialog,
+                {
+                  initData: {
+                    message: `删除文件[ ${this.menus.contextObject.name} ] ？`
+                  }
+                },
+                {
+                  confirm: () => {
+                    deleteFileAPI(this.menus.contextObject.uid)
+                      .then(response => {
+                        this.fetchData();
+                      })
+                  }
+                }
+              )
             }
           },
           {
@@ -220,7 +290,23 @@ export default {
             icon: '#rogaluna-icon-rename',
             value: '1',
             handler: () => {
-              
+              this.$rogalunaWidgets.showDialog(
+                RenameDialog,
+                {
+                  initData: this.menus.contextObject
+                },
+                {
+                  confirm: (form) => {
+                    const rename = form.rename;
+                    renameFileAPI({
+                      uid: this.menus.contextObject.uid,
+                      name: rename
+                    }).then(response => {
+                      console.log(`response`, response);
+                    })
+                  }
+                }
+              )
             }
           },
           {
@@ -228,7 +314,13 @@ export default {
             icon: '#rogaluna-icon-detail',
             value: '1',
             handler: () => {
-              
+              this.$rogalunaWidgets.showDialog(
+                FileDetailDialog,
+                {
+                  initData: this.menus.contextObject
+                },
+                {}
+              )
             }
           }
         ]
@@ -280,7 +372,6 @@ export default {
             this.eventBus.sharedState.currentFolderUid = response.currentFolderUid; // 将当前目录 uid 更新到 bus 中
             this.eventBus.sharedState.path = this.eventBus.formatPathToArray(response.path); // 设置格式化的路径
             this.items = response.data;
-            console.log(`fetchData`, this.items);
             stopLoading();
           })
       })

@@ -2,7 +2,6 @@ import axios from 'axios';
 import TaskQueue from './module/taskQueue';
 import { BASE_HTTP_URL } from './configs/baseUrl';
 
-const downloadQueue = new TaskQueue();
 const uploadQueue = new TaskQueue();
 
 export const axiosInstance = axios.create({
@@ -11,7 +10,6 @@ export const axiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-axiosInstance.downloadQueue = downloadQueue;
 axiosInstance.uploadQueue = uploadQueue;
 
 export default {

@@ -19,12 +19,12 @@
     <v-list dense>
       <!-- 添加上传item -->
       <v-list-item
-        v-for="item in items"
-        :key="item.title"
+        v-for="(item, index) in items"
+        :key="index"
       >
         <v-list-item-content>
           <!-- 第一行：上传名称 -->
-          <v-list-item-title align="left">{{ item.title }}</v-list-item-title>
+          <v-list-item-title align="left">{{ item.name }}</v-list-item-title>
           
           <!-- 第二行：进度条 -->
           <v-progress-linear
@@ -48,17 +48,19 @@ export default {
   inject: ['eventBus'],
   data () {
     return {
-      items: [
-        // 示例数据
-        { title: '文件1.mp4', progress: 50, size: '5MB', totalSize: '10MB' },
-        { title: '文件2.mp3', progress: 70, size: '7MB', totalSize: '10MB' },
-      ],
+      items: this.eventBus.sharedState.uploadList 
+      // [
+      //   // 示例数据
+      //   { name: '文件1.mp4', progress: 50, size: '5MB', totalSize: '10MB' },
+      //   { name: '文件2.mp3', progress: 70, size: '7MB', totalSize: '10MB' },
+      // ],
     }
+  },
+  mounted() {
   },
   methods: {
     closeDrawer() {
       this.eventBus.sharedState.isUploadPanelVisible = false;
-      console.log(`this.eventBus.sharedState.isUploadPanelVisible`, this.eventBus.sharedState.isUploadPanelVisible);
     },
   },
 }

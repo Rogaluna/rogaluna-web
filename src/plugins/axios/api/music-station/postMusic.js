@@ -1,8 +1,6 @@
 import { axiosInstance } from "../../main"
 import { CHUNK_SIZE } from "../../configs/axiosConfigs";
 import Cookies from 'js-cookie';
-import { parseBlob } from 'music-metadata-browser';
-import { Buffer } from 'buffer';
 
 import AsyncTask from "../../module/tasks/AsyncTask";
 import { generateMD5 , generateFileMD5 } from "../../module/functions/generateMD5";
@@ -46,7 +44,16 @@ const postMusicAPI = async (musicFile) => {
       const chunk = musicFile.slice(start, end); // 获取当前块
 
       // 生成当前块的 MD5 校验码
-      const chunkMd5Hash = generateMD5(chunk);
+      const chunkMd5Hash = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const arrayBuffer = e.target.result; // 转换为 ArrayBuffer
+          const md5Hash = generateMD5(arrayBuffer);
+          resolve(md5Hash);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(chunk);
+      });
   
       const formData = new FormData();
       formData.append('uid', uuid); // 音乐文件 MD5 校验码
